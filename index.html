@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hyper-Accurate Political Compass</title>
+    <style>
+        :root {
+            --bg: #121212;
+            --surface: #1e1e1e;
+            --primary: #bb86fc;
+            --text: #e0e0e0;
+            --muted: #a0a0a0;
+            --border: #333;
+            --red: #cf6679;
+            --blue: #3700b3;
+            --green: #03dac6;
+            --yellow: #f6d365;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: var(--surface);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        h1, h2, h3 { margin-top: 0; }
+        .progress-container {
+            width: 100%;
+            background: var(--border);
+            border-radius: 8px;
+            height: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .question-block { display: none; }
+        .question-block.active { display: block; animation: fadeIn 0.3s ease-in; }
+        .statement-btn {
+            display: block;
+            width: 100%;
+            background: #2c2c2c;
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .statement-btn:hover { background: #383838; border-color: var(--primary); }
+        .statement-btn.neutral { text-align: center; color: var(--muted); }
+        
+        #results { display: none; }
+        canvas {
+            display: block;
+            margin: 20px auto;
+            background: #fff;
+            border-radius: 4px;
+            max-width: 100%;
+        }
+        .match-card {
+            background: #2c2c2c;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--primary);
+        }
+        .axis-bar-wrapper { margin-top: 20px; }
+        .axis-labels { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; color: var(--muted); }
+        .axis-bar-bg { width: 100%; height: 12px; background: var(--border); border-radius: 6px; position: relative; overflow: hidden; }
+        .axis-bar-fill { height: 100%; position: absolute; top: 0; left: 50%; border-radius: 6px; transition: width 0.5s, left 0.5s; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="quiz-header">
+        <h1>Political Alignment Test</h1>
+        <div class="progress-container"><div class="progress-bar" id="progress"></div></div>
+        <p id="q-counter" style="color: var(--muted); font-size: 14px;">Question 1 of X</p>
+    </div>
+
+    <div id="quiz-body"></div>
+
+    <div id="results">
+        <h2>Your Results</h2>
+        
+        <canvas id="compassCanvas" width="500" height="500"></canvas>
+        
+        <div class="axis-bar-wrapper">
+            <div class="axis-labels"><span>Globalism</span><span>Diplomatic Axis</span><span>Nationalism</span></div>
+            <div class="axis-bar-bg"><div class="axis-bar-fill" id="bar-diplomatic" style="background: var(--blue);"></div></div>
+        </div>
+        <div class="axis-bar-wrapper">
+            <div class="axis-labels"><span>Progressive</span><span>Cultural Axis</span><span>Traditional</span></div>
+            <div class="axis-bar-bg"><div class="axis-bar-fill" id="bar-cultural" style="background: var(--green);"></div></div>
+        </div>
+
+        <h3 style="margin-top: 30px;">Closest Ideological Matches</h3>
+        <div id="matches-container"></div>
+        <button class="statement-btn neutral" onclick="location.reload()" style="margin-top:20px;">Retake Test</button>
+    </div>
+</div>
+
+<script>
+    // DATA STRUCTURE: E (Economic: -Left, +Right), S (Social: -Libertarian, +Authoritarian)
+    // D (Diplomatic: -Global, +National), C (Cultural: -Progressive, +Traditional)
+    
+    // Add your remaining 70+ questions following this exact object structure.
+    const questions = [
+        {
+            topic: "Taxation & Wealth",
+            options: [
+                { text: "The wealthy should be taxed at much higher rates to fund public services and aggressively reduce income inequality.", scores: {E: -2, S: 0, D: 0, C: 0} },
+                { text: "Taxes are necessary for basic services, but the tax code shouldn't overly burden businesses or high earners.", scores: {E: 0, S: 0, D: 0, C: 0} },
+                { text: "Taxes should be kept as low as possible; wealth distribution should be left to the free market and voluntary charity.", scores: {E: 2, S: 0, D: 0, C: 0} }
+            ]
+        },
+        {
+            topic: "Environmental Regulation",
+            options: [
+                { text: "The government must strictly regulate emissions, even if it hurts corporate profits and slows the economy.", scores: {E: -1, S: 1, D: -1, C: 0} },
+                { text: "We need a practical balance: protect the environment through incentives, but avoid regulations that destroy local jobs.", scores: {E: 0, S: 0, D: 0, C: 0} },
+                { text: "Environmental regulations are government overreach; private property rights and the free market are best equipped to solve climate issues.", scores: {E: 1, S: -1, D: 0, C: 0} }
+            ]
+        },
+        {
+            topic: "Free Speech & Moderation",
+            options: [
+                { text: "The government should actively ban hate speech and dangerous misinformation because they cause real harm to society.", scores: {E: 0, S: 2, D: 0, C: -1} },
+                { text: "Free speech is important, but private platforms should have the right to moderate toxic content as they see fit.", scores: {E: 1, S: 0, D: 0, C: 0} },
+                { text: "All speech must be protected from government or corporate censorship, as long as it doesn't incite direct physical violence.", scores: {E: -1, S: -2, D: 0, C: 0} }
+            ]
+        },
+        {
+            topic: "Right to Repair & Technology",
+            options: [
+                { text: "The government must mandate that all manufacturers provide parts, tools, and manuals so consumers can repair their own hardware.", scores: {E: -1, S: -1, D: 0, C: 0} },
+                { text: "Manufacturers should be encouraged to offer repair options, but forcing them risks exposing proprietary intellectual property.", scores: {E: 0, S: 0, D: 0, C: 0} },
+                { text: "Companies have the absolute right to lock down their hardware and void warranties if unauthorized repairs are attempted.", scores: {E: 2, S: 1, D: 0, C: 0} }
+            ]
+        },
+        {
+            topic: "Foreign Policy & Military",
+            options: [
+                { text: "We have a duty to actively support global democracy, fund international organizations, and intervene to stop abuses abroad.", scores: {E: 0, S: 1, D: -2, C: 0} },
+                { text: "We should maintain a strong military and work with allies, but only intervene in foreign conflicts when directly threatened.", scores: {E: 0, S: 0, D: 0, C: 0} },
+                { text: "We should prioritize our own country's interests, secure our borders, and avoid getting involved in foreign conflicts entirely.", scores: {E: 0, S: 0, D: 2, C: 1} }
+            ]
+        },
+        {
+            topic: "Gun Ownership",
+            options: [
+                { text: "Only law enforcement and the military should have access to firearms, and civilian ownership should be heavily restricted.", scores: {E: 0, S: 2, D: 0, C: 1} },
+                { text: "Gun ownership is acceptable, but it requires strict national background checks, licensing, and mandatory training.", scores: {E: 0, S: 0, D: 0, C: 0} },
+                { text: "Citizens should have the unrestricted right to own firearms for self-defense and protection against government tyranny.", scores: {E: 0, S: -2, D: 0, C: -1} }
+            ]
+        },
+        // ... You can inject the other 24 topics discussed previously right here ...
+        {
+            topic: "Corporate Data Privacy",
+            options: [
+                { text: "Companies should be strictly banned from collecting, trading, or selling user data without explicit, opt-in consent for every action.", scores: {E: -1, S: 1, D: 0, C: 0} },
+                { text: "Data collection is fine as long as privacy policies are transparent and users have a clear way to opt out.", scores: {E: 0, S: 0, D: 0, C: 0} },
+                { text: "User data is a commodity; if people use a free service, the company has the right to monetize their data on the free market.", scores: {E: 2, S: -1, D: 0, C: 0} }
+            ]
+        }
+    ];
+
+    // Reference Profiles for calculating the closest match
+    const profiles = [
+        { name: "Democratic Socialist", type: "US Ideology", E: -1.5, S: -0.5, D: -1.0, C: -1.5 },
+        { name: "Social Democrat", type: "US Ideology", E: -1.0, S: 0.0, D: -0.5, C: -1.0 },
+        { name: "Centrist", type: "US Ideology", E: 0.0, S: 0.0, D: 0.0, C: 0.0 },
+        { name: "Neoliberal", type: "US Ideology", E: 0.8, S: -0.2, D: -1.2, C: -0.8 },
+        { name: "Neoconservative", type: "US Ideology", E: 0.8, S: 1.0, D: 1.5, C: 1.0 },
+        { name: "Paleoconservative", type: "US Ideology", E: 0.5, S: 1.5, D: 1.5, C: 1.8 },
+        { name: "Right-Libertarian", type: "US Ideology", E: 1.5, S: -1.5, D: 0.5, C: -0.2 },
+        { name: "Congressional Progressive Caucus", type: "US Caucus", E: -1.2, S: -0.8, D: -1.0, C: -1.5 },
+        { name: "New Democrat Coalition", type: "US Caucus", E: -0.2, S: 0.0, D: -0.5, C: -0.5 },
+        { name: "Problem Solvers Caucus", type: "US Caucus", E: 0.0, S: 0.0, D: 0.0, C: 0.0 },
+        { name: "Main Street Partnership", type: "US Caucus", E: 0.8, S: 0.5, D: 0.5, C: 0.5 },
+        { name: "House Freedom Caucus", type: "US Caucus", E: 1.5, S: 1.5, D: 1.5, C: 1.8 },
+        { name: "Labour Party (UK)", type: "Int. Party", E: -0.8, S: 0.2, D: -0.2, C: -0.5 },
+        { name: "Liberal Democrats (UK)", type: "Int. Party", E: -0.2, S: -0.8, D: -1.5, C: -1.0 },
+        { name: "Conservative Party (UK)", type: "Int. Party", E: 0.8, S: 0.5, D: 1.0, C: 0.8 }
+    ];
+
+    let currentQ = 0;
+    let userScores = { E: 0, S: 0, D: 0, C: 0 };
+    const maxScorePerAxis = questions.length * 2; // Normalization factor
+
+    function initQuiz() {
+        const body = document.getElementById('quiz-body');
+        questions.forEach((q, index) => {
+            let html = `<div class="question-block" id="q-${index}">
+                <h3>${q.topic}</h3>`;
+            
+            q.options.forEach((opt, oIndex) => {
+                html += `<button class="statement-btn" onclick="answer(${index}, ${opt.scores.E}, ${opt.scores.S}, ${opt.scores.D}, ${opt.scores.C})">${opt.text}</button>`;
+            });
+            html += `<button class="statement-btn neutral" onclick="answer(${index}, 0, 0, 0, 0)">No preference / Unsure</button>
+            </div>`;
+            body.innerHTML += html;
+        });
+        showQuestion(0);
+    }
+
+    function showQuestion(index) {
+        document.querySelectorAll('.question-block').forEach(el => el.classList.remove('active'));
+        document.getElementById(`q-${index}`).classList.add('active');
+        document.getElementById('q-counter').innerText = `Question ${index + 1} of ${questions.length}`;
+        document.getElementById('progress').style.width = `${((index) / questions.length) * 100}%`;
+    }
+
+    function answer(qIndex, e, s, d, c) {
+        userScores.E += e;
+        userScores.S += s;
+        userScores.D += d;
+        userScores.C += c;
+        
+        if (qIndex + 1 < questions.length) {
+            showQuestion(qIndex + 1);
+        } else {
+            document.getElementById('progress').style.width = '100%';
+            showResults();
+        }
+    }
+
+    function showResults() {
+        document.getElementById('quiz-header').style.display = 'none';
+        document.getElementById('quiz-body').style.display = 'none';
+        document.getElementById('results').style.display = 'block';
+        
+        // Normalize scores to a -2.0 to 2.0 scale for calculation
+        const normE = (userScores.E / maxScorePerAxis) * 4;
+        const normS = (userScores.S / maxScorePerAxis) * 4;
+        const normD = (userScores.D / maxScorePerAxis) * 4;
+        const normC = (userScores.C / maxScorePerAxis) * 4;
+
+        drawCompass(normE, normS);
+        updateBars(normD, normC);
+        calculateMatches(normE, normS, normD, normC);
+    }
+
+    function drawCompass(e, s) {
+        const canvas = document.getElementById('compassCanvas');
+        const ctx = canvas.getContext('2d');
+        const size = canvas.width;
+        const center = size / 2;
+        
+        // Background quadrants
+        ctx.fillStyle = "#ffb3b3"; ctx.fillRect(0, 0, center, center); // Auth Left
+        ctx.fillStyle = "#b3b3ff"; ctx.fillRect(center, 0, center, center); // Auth Right
+        ctx.fillStyle = "#b3ffb3"; ctx.fillRect(0, center, center, center); // Lib Left
+        ctx.fillStyle = "#ffffb3"; ctx.fillRect(center, center, center, center); // Lib Right
+        
+        // Grid lines
+        ctx.strokeStyle = "#fff";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(center, 0); ctx.lineTo(center, size);
+        ctx.moveTo(0, center); ctx.lineTo(size, center);
+        ctx.stroke();
+
+        // Labels
+        ctx.fillStyle = "#333";
+        ctx.font = "bold 14px Arial";
+        ctx.fillText("AUTHORITARIAN", center - 50, 20);
+        ctx.fillText("LIBERTARIAN", center - 40, size - 10);
+        ctx.fillText("LEFT", 10, center - 10);
+        ctx.fillText("RIGHT", size - 50, center - 10);
+
+        // Plot User (Scale -2 to 2 onto 0 to size)
+        const xPos = center + (e / 2) * center;
+        const yPos = center - (s / 2) * center; // Invert S because higher Auth should go UP the Y axis
+        
+        ctx.beginPath();
+        ctx.arc(xPos, yPos, 8, 0, 2 * Math.PI);
+        ctx.fillStyle = "#000";
+        ctx.fill();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "#fff";
+        ctx.stroke();
+    }
+
+    function updateBars(d, c) {
+        // Map -2 to 2 range to a 0% to 100% width/position
+        const setBar = (id, val) => {
+            const bar = document.getElementById(id);
+            const percent = ((val + 2) / 4) * 100; // Normalizes to 0-100
+            if(val < 0) {
+                bar.style.left = `${percent}%`;
+                bar.style.width = `${50 - percent}%`;
+            } else {
+                bar.style.left = '50%';
+                bar.style.width = `${percent - 50}%`;
+            }
+        };
+        setBar('bar-diplomatic', d);
+        setBar('bar-cultural', c);
+    }
+
+    function calculateMatches(e, s, d, c) {
+        // Calculate 4D Euclidean distance to find nearest matches
+        profiles.forEach(p => {
+            p.distance = Math.sqrt(
+                Math.pow(e - p.E, 2) + 
+                Math.pow(s - p.S, 2) + 
+                Math.pow(d - p.D, 2) + 
+                Math.pow(c - p.C, 2)
+            );
+        });
+
+        // Sort by closest distance
+        profiles.sort((a, b) => a.distance - b.distance);
+        
+        const container = document.getElementById('matches-container');
+        // Grab the top match from each category
+        const topIdeology = profiles.find(p => p.type === 'US Ideology');
+        const topCaucus = profiles.find(p => p.type === 'US Caucus');
+        const topInt = profiles.find(p => p.type === 'Int. Party');
+
+        [topIdeology, topCaucus, topInt].forEach(match => {
+            container.innerHTML += `
+                <div class="match-card">
+                    <strong style="color: var(--primary); display:block; font-size:12px;">${match.type}</strong>
+                    <span style="font-size: 18px; font-weight: bold;">${match.name}</span>
+                </div>
+            `;
+        });
+    }
+
+    // Initialize
+    initQuiz();
+</script>
+</body>
+</html>
