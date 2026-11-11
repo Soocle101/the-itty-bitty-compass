@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hyper-Accurate Political Compass</title>
+    <title>Comprehensive Political Compass (100 Questions)</title>
     <style>
         :root {
             --bg: #121212;
@@ -15,7 +15,6 @@
             --red: #cf6679;
             --blue: #3700b3;
             --green: #03dac6;
-            --yellow: #f6d365;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -96,20 +95,19 @@
 
 <div class="container">
     <div id="quiz-header">
-        <h1>Political Alignment Test</h1>
+        <h1>Comprehensive Political Compass</h1>
         <div class="progress-container"><div class="progress-bar" id="progress"></div></div>
-        <p id="q-counter" style="color: var(--muted); font-size: 14px;">Question 1 of X</p>
+        <p id="q-counter" style="color: var(--muted); font-size: 14px;">Question 1 of 100</p>
     </div>
 
     <div id="quiz-body"></div>
 
     <div id="results">
         <h2>Your Results</h2>
-        
         <canvas id="compassCanvas" width="500" height="500"></canvas>
         
         <div class="axis-bar-wrapper">
-            <div class="axis-labels"><span>Globalism</span><span>Diplomatic Axis</span><span>Nationalism</span></div>
+            <div class="axis-labels"><span>Globalist</span><span>Diplomatic Axis</span><span>Nationalist</span></div>
             <div class="axis-bar-bg"><div class="axis-bar-fill" id="bar-diplomatic" style="background: var(--blue);"></div></div>
         </div>
         <div class="axis-bar-wrapper">
@@ -117,121 +115,460 @@
             <div class="axis-bar-bg"><div class="axis-bar-fill" id="bar-cultural" style="background: var(--green);"></div></div>
         </div>
 
-        <h3 style="margin-top: 30px;">Closest Ideological Matches</h3>
+        <h3 style="margin-top: 30px;">Closest Matches</h3>
         <div id="matches-container"></div>
         <button class="statement-btn neutral" onclick="location.reload()" style="margin-top:20px;">Retake Test</button>
     </div>
 </div>
 
 <script>
-    // DATA STRUCTURE: E (Economic: -Left, +Right), S (Social: -Libertarian, +Authoritarian)
-    // D (Diplomatic: -Global, +National), C (Cultural: -Progressive, +Traditional)
-    
-    // Add your remaining 70+ questions following this exact object structure.
-    const questions = [
-        {
-            topic: "Taxation & Wealth",
-            options: [
-                { text: "The wealthy should be taxed at much higher rates to fund public services and aggressively reduce income inequality.", scores: {E: -2, S: 0, D: 0, C: 0} },
-                { text: "Taxes are necessary for basic services, but the tax code shouldn't overly burden businesses or high earners.", scores: {E: 0, S: 0, D: 0, C: 0} },
-                { text: "Taxes should be kept as low as possible; wealth distribution should be left to the free market and voluntary charity.", scores: {E: 2, S: 0, D: 0, C: 0} }
-            ]
-        },
-        {
-            topic: "Environmental Regulation",
-            options: [
-                { text: "The government must strictly regulate emissions, even if it hurts corporate profits and slows the economy.", scores: {E: -1, S: 1, D: -1, C: 0} },
-                { text: "We need a practical balance: protect the environment through incentives, but avoid regulations that destroy local jobs.", scores: {E: 0, S: 0, D: 0, C: 0} },
-                { text: "Environmental regulations are government overreach; private property rights and the free market are best equipped to solve climate issues.", scores: {E: 1, S: -1, D: 0, C: 0} }
-            ]
-        },
-        {
-            topic: "Free Speech & Moderation",
-            options: [
-                { text: "The government should actively ban hate speech and dangerous misinformation because they cause real harm to society.", scores: {E: 0, S: 2, D: 0, C: -1} },
-                { text: "Free speech is important, but private platforms should have the right to moderate toxic content as they see fit.", scores: {E: 1, S: 0, D: 0, C: 0} },
-                { text: "All speech must be protected from government or corporate censorship, as long as it doesn't incite direct physical violence.", scores: {E: -1, S: -2, D: 0, C: 0} }
-            ]
-        },
-        {
-            topic: "Right to Repair & Technology",
-            options: [
-                { text: "The government must mandate that all manufacturers provide parts, tools, and manuals so consumers can repair their own hardware.", scores: {E: -1, S: -1, D: 0, C: 0} },
-                { text: "Manufacturers should be encouraged to offer repair options, but forcing them risks exposing proprietary intellectual property.", scores: {E: 0, S: 0, D: 0, C: 0} },
-                { text: "Companies have the absolute right to lock down their hardware and void warranties if unauthorized repairs are attempted.", scores: {E: 2, S: 1, D: 0, C: 0} }
-            ]
-        },
-        {
-            topic: "Foreign Policy & Military",
-            options: [
-                { text: "We have a duty to actively support global democracy, fund international organizations, and intervene to stop abuses abroad.", scores: {E: 0, S: 1, D: -2, C: 0} },
-                { text: "We should maintain a strong military and work with allies, but only intervene in foreign conflicts when directly threatened.", scores: {E: 0, S: 0, D: 0, C: 0} },
-                { text: "We should prioritize our own country's interests, secure our borders, and avoid getting involved in foreign conflicts entirely.", scores: {E: 0, S: 0, D: 2, C: 1} }
-            ]
-        },
-        {
-            topic: "Gun Ownership",
-            options: [
-                { text: "Only law enforcement and the military should have access to firearms, and civilian ownership should be heavily restricted.", scores: {E: 0, S: 2, D: 0, C: 1} },
-                { text: "Gun ownership is acceptable, but it requires strict national background checks, licensing, and mandatory training.", scores: {E: 0, S: 0, D: 0, C: 0} },
-                { text: "Citizens should have the unrestricted right to own firearms for self-defense and protection against government tyranny.", scores: {E: 0, S: -2, D: 0, C: -1} }
-            ]
-        },
-        // ... You can inject the other 24 topics discussed previously right here ...
-        {
-            topic: "Corporate Data Privacy",
-            options: [
-                { text: "Companies should be strictly banned from collecting, trading, or selling user data without explicit, opt-in consent for every action.", scores: {E: -1, S: 1, D: 0, C: 0} },
-                { text: "Data collection is fine as long as privacy policies are transparent and users have a clear way to opt out.", scores: {E: 0, S: 0, D: 0, C: 0} },
-                { text: "User data is a commodity; if people use a free service, the company has the right to monetize their data on the free market.", scores: {E: 2, S: -1, D: 0, C: 0} }
-            ]
-        }
-    ];
-
-    // Reference Profiles for calculating the closest match
-    const profiles = [
-        { name: "Democratic Socialist", type: "US Ideology", E: -1.5, S: -0.5, D: -1.0, C: -1.5 },
-        { name: "Social Democrat", type: "US Ideology", E: -1.0, S: 0.0, D: -0.5, C: -1.0 },
-        { name: "Centrist", type: "US Ideology", E: 0.0, S: 0.0, D: 0.0, C: 0.0 },
-        { name: "Neoliberal", type: "US Ideology", E: 0.8, S: -0.2, D: -1.2, C: -0.8 },
-        { name: "Neoconservative", type: "US Ideology", E: 0.8, S: 1.0, D: 1.5, C: 1.0 },
-        { name: "Paleoconservative", type: "US Ideology", E: 0.5, S: 1.5, D: 1.5, C: 1.8 },
-        { name: "Right-Libertarian", type: "US Ideology", E: 1.5, S: -1.5, D: 0.5, C: -0.2 },
-        { name: "Congressional Progressive Caucus", type: "US Caucus", E: -1.2, S: -0.8, D: -1.0, C: -1.5 },
-        { name: "New Democrat Coalition", type: "US Caucus", E: -0.2, S: 0.0, D: -0.5, C: -0.5 },
-        { name: "Problem Solvers Caucus", type: "US Caucus", E: 0.0, S: 0.0, D: 0.0, C: 0.0 },
-        { name: "Main Street Partnership", type: "US Caucus", E: 0.8, S: 0.5, D: 0.5, C: 0.5 },
-        { name: "House Freedom Caucus", type: "US Caucus", E: 1.5, S: 1.5, D: 1.5, C: 1.8 },
-        { name: "Labour Party (UK)", type: "Int. Party", E: -0.8, S: 0.2, D: -0.2, C: -0.5 },
-        { name: "Liberal Democrats (UK)", type: "Int. Party", E: -0.2, S: -0.8, D: -1.5, C: -1.0 },
-        { name: "Conservative Party (UK)", type: "Int. Party", E: 0.8, S: 0.5, D: 1.0, C: 0.8 }
+    // Data format: [Topic, [ [Statement, E, S, D, C], ... ]]
+    // E (Economic): -Left, +Right
+    // S (Social/Authority): -Libertarian, +Authoritarian
+    // D (Diplomatic): -Globalist, +Nationalist
+    // C (Cultural): -Progressive, +Traditional
+    const rawQuestions = [
+        ["Income Inequality", [
+            ["The wealthy must be heavily taxed to redistribute wealth and fund public services.", -2, 1, 0, 0],
+            ["Taxes are needed, but shouldn't punish success or destroy business growth.", 0, 0, 0, 0],
+            ["Taxes should be flat or abolished; the market naturally rewards hard work.", 2, -1, 0, 0]
+        ]],
+        ["Corporate Taxes", [
+            ["Corporations are greedy and must be taxed heavily to pay their fair share to society.", -2, 1, 0, 0],
+            ["Corporate taxes should exist but remain competitive so businesses don't leave.", 0, 0, 0, 0],
+            ["Corporate taxes should be zero to maximize job creation and economic growth.", 2, -1, 0, 0]
+        ]],
+        ["Capital Gains", [
+            ["Money made from investments should be taxed higher than money made from working.", -2, 0, 0, 0],
+            ["Investment income should be taxed at standard rates.", 0, 0, 0, 0],
+            ["Capital gains taxes discourage investing and should be eliminated entirely.", 2, 0, 0, 0]
+        ]],
+        ["Inheritance & Estate Tax", [
+            ["Generational wealth creates oligarchies; large estates should be heavily taxed upon death.", -2, 1, 0, -1],
+            ["A modest tax on only the most massive estates is acceptable.", 0, 0, 0, 0],
+            ["The estate tax is government theft of money that was already taxed when earned.", 2, -1, 0, 1]
+        ]],
+        ["Tariffs & Trade", [
+            ["We must work toward totally open global free trade with no tariffs.", 1, 0, -2, 0],
+            ["Trade is good, but we need some rules to protect workers and the environment.", 0, 0, -1, 0],
+            ["We need heavy tariffs on foreign goods to protect our own factories and workers.", -1, 1, 2, 0]
+        ]],
+        ["Minimum Wage", [
+            ["The government must guarantee a high living wage tied to inflation for all jobs.", -2, 1, 0, 0],
+            ["The minimum wage should exist but vary based on the local cost of living.", 0, 0, 0, 0],
+            ["There should be no minimum wage; pay should be decided only by the employer and employee.", 2, -1, 0, 0]
+        ]],
+        ["Labor Unions", [
+            ["The government should actively force companies to recognize unions and empower workers.", -2, 1, 0, 0],
+            ["Unions are fine, but workers shouldn't be forced to join them to get a job.", 0, 0, 0, 0],
+            ["Unions are corrupt monopolies that protect bad workers; the market is better without them.", 2, -1, 0, 0]
+        ]],
+        ["Right to Work Laws", [
+            ["'Right to Work' laws are corporate scams to bust unions and should be federally banned.", -2, 1, 0, 0],
+            ["States should decide their own union and employment laws.", 0, 0, 0, 0],
+            ["Every worker has the absolute right to refuse union membership without losing their job.", 2, -1, 0, 0]
+        ]],
+        ["Universal Basic Income (UBI)", [
+            ["The government should give every citizen a monthly check to eradicate poverty.", -2, 1, 0, -1],
+            ["UBI might be needed if AI takes jobs, but we shouldn't do it yet.", 0, 0, 0, 0],
+            ["UBI is a socialist handout that will destroy the incentive to work and cause hyperinflation.", 2, -1, 0, 1]
+        ]],
+        ["Social Security", [
+            ["Social Security must be expanded and fully funded by taxing the rich more.", -2, 1, 0, 0],
+            ["We should tweak retirement ages and taxes slightly to keep the current system running.", 0, 0, 0, 0],
+            ["Social Security is a Ponzi scheme and should be privatized or phased out.", 2, -1, 0, 0]
+        ]],
+        ["Medicare & Healthcare", [
+            ["Healthcare is a human right; the government should provide a single-payer system for everyone.", -2, 1, 0, 0],
+            ["We need public safety nets for the poor, but people should be able to buy private insurance.", 0, 0, 0, 0],
+            ["Healthcare should be a totally free market to drive down costs through competition.", 2, -1, 0, 0]
+        ]],
+        ["Big Pharma Pricing", [
+            ["The government must strictly cap the prices of prescription drugs by law.", -2, 2, 0, 0],
+            ["The government should negotiate prices, but still allow companies to make a profit.", 0, 0, 0, 0],
+            ["Price controls cause shortages; let the market and competition set drug prices.", 2, -1, 0, 0]
+        ]],
+        ["Intellectual Property", [
+            ["Information and medicine should be free; copyright and patent laws should be abolished.", -2, -2, 0, -1],
+            ["We need patents to reward inventors, but they currently last too long.", 0, 0, 0, 0],
+            ["Intellectual property is absolute property and must be strictly protected forever.", 2, 1, 0, 1]
+        ]],
+        ["Antitrust & Monopolies", [
+            ["The government must aggressively break up large corporations to protect workers and small businesses.", -2, 2, 0, 0],
+            ["We only need to break up companies if they are actively harming consumers with high prices.", 0, 0, 0, 0],
+            ["Monopolies only exist because of government regulation; completely deregulate the market.", 2, -2, 0, 0]
+        ]],
+        ["Bank Bailouts", [
+            ["Banks that fail should be nationalized and run by the government for the public good.", -2, 2, 0, 0],
+            ["Bailouts are only acceptable if the collapse would destroy the entire national economy.", 0, 0, 0, 0],
+            ["No company is too big to fail. If a bank makes bad choices, it must go bankrupt.", 2, -2, 0, 0]
+        ]],
+        ["Cryptocurrency", [
+            ["Crypto is a scam used for crime; the government should ban it and use a Central Bank Digital Currency.", -1, 2, 0, 0],
+            ["Crypto should be legal but regulated exactly like traditional stocks and banking.", 0, 0, 0, 0],
+            ["Crypto and decentralized money are essential tools to escape government banking tyranny.", 2, -2, 0, 0]
+        ]],
+        ["The Gold Standard", [
+            ["The government needs total control over money printing to fund social programs.", -2, 2, 0, 0],
+            ["The current fiat system managed by a central bank is fine if kept in check.", 0, 0, 0, 0],
+            ["Money must be backed by gold or hard assets to stop the government from inflating our savings away.", 2, -2, 0, 1]
+        ]],
+        ["Inflation", [
+            ["Inflation is caused by corporate greed and price-gouging, which must be made illegal.", -2, 2, 0, 0],
+            ["Inflation is a complex mix of supply chain issues and spending that needs balanced management.", 0, 0, 0, 0],
+            ["Inflation is a hidden tax caused purely by the government printing too much money.", 2, -2, 0, 0]
+        ]],
+        ["Rent Control", [
+            ["The government must implement strict national rent control to guarantee affordable housing.", -2, 2, 0, 0],
+            ["Some local renter protections are okay, but strict rent control stops new apartments from being built.", 0, 0, 0, 0],
+            ["Rent control destroys the housing market; property owners can charge whatever they want.", 2, -2, 0, 0]
+        ]],
+        ["Zoning Laws", [
+            ["The government must mandate high-density public housing in all neighborhoods.", -2, 2, 0, 0],
+            ["Local communities should vote on what kind of buildings fit their neighborhood's character.", 0, 0, 0, 1],
+            ["Zoning laws violate property rights; if I own land, I can build whatever I want on it.", 2, -2, 0, 0]
+        ]],
+        ["Homelessness", [
+            ["Homelessness is a failure of capitalism; the government must provide free homes for all without conditions.", -2, 1, 0, -1],
+            ["We need a mix of shelters and mental health services, but public camping shouldn't be allowed.", 0, 0, 0, 0],
+            ["Public camping must be strictly criminalized; individuals are responsible for their own housing.", 2, 2, 0, 1]
+        ]],
+        ["Public Transit", [
+            ["Cars should be heavily taxed to fund massive, free public transit networks across the country.", -2, 2, 0, -1],
+            ["Public transit is useful in cities, but rural areas still need well-funded highways.", 0, 0, 0, 0],
+            ["All roads and trains should be privatized and funded purely by user tolls, not taxes.", 2, -2, 0, 0]
+        ]],
+        ["Carbon Tax", [
+            ["We must enforce a massive global carbon tax on all businesses to stop climate change.", -2, 2, -2, 0],
+            ["A small carbon tax could help fund green tech without destroying the economy.", 0, 0, 0, 0],
+            ["Carbon taxes are just a scam to steal money and control the energy sector.", 2, -2, 1, 0]
+        ]],
+        ["Fracking & Drilling", [
+            ["All fossil fuel extraction, including fracking, must be immediately outlawed globally.", -2, 2, -1, 0],
+            ["We need fossil fuels for now, but should safely transition away from them over time.", 0, 0, 0, 0],
+            ["Drill everywhere; energy independence and cheap gas are more important than climate fears.", 2, -1, 2, 0]
+        ]],
+        ["Nuclear Energy", [
+            ["Nuclear energy is too dangerous and all plants should be shut down.", -1, 1, 0, 0],
+            ["Nuclear is a necessary, clean bridge-fuel while we build wind and solar.", 0, 0, 0, 0],
+            ["Nuclear is the best energy source; we must deregulate the industry and build hundreds of plants.", 2, -1, 0, 0]
+        ]],
+        ["Electric Vehicles (EVs)", [
+            ["The government must ban the sale of gas-powered cars by 2030 to save the planet.", -2, 2, 0, 0],
+            ["The government should offer tax credits for EVs but not ban gas cars entirely.", 0, 0, 0, 0],
+            ["EV mandates are government tyranny; the free market should decide what cars we drive.", 2, -2, 0, 0]
+        ]],
+        ["Plastic Bans", [
+            ["Single-use plastics should be globally banned and heavily criminalized.", -2, 2, -1, 0],
+            ["We should encourage recycling and alternative materials, but outright bans hurt poor consumers.", 0, 0, 0, 0],
+            ["Banning plastic is virtue-signaling nonsense; businesses should use whatever materials are cheapest.", 2, -2, 0, 0]
+        ]],
+        ["Meat & Agriculture", [
+            ["Factory farming must be banned and meat heavily taxed to force people toward plant-based diets.", -2, 2, 0, -1],
+            ["We should improve animal welfare standards but leave meat affordable.", 0, 0, 0, 0],
+            ["The government has no right to tell farmers how to operate or citizens what to eat.", 2, -2, 0, 1]
+        ]],
+        ["National Parks", [
+            ["Public lands should be massively expanded and completely protected from any human development.", -1, 1, 0, 0],
+            ["National Parks are good, but some public land should be leased for resource extraction.", 0, 0, 0, 0],
+            ["The government shouldn't own land; all public lands should be sold to private developers.", 2, -2, 0, 0]
+        ]],
+        ["Free Speech on Social Media", [
+            ["The government must aggressively fine platforms that allow hate speech and misinformation.", -1, 2, 0, -1],
+            ["Platforms are private companies and have the right to ban whoever they want.", 0, 0, 0, 0],
+            ["Social media is the modern public square; platforms should be legally barred from censoring users.", 1, 1, 0, 1]
+        ]],
+        ["Hate Speech Laws", [
+            ["Hate speech is violence; the government must arrest people who use offensive slurs.", -2, 2, 0, -2],
+            ["We should condemn hate speech culturally, but criminalizing words is a slippery slope.", 0, 0, 0, 0],
+            ["There is no such thing as 'hate speech'; all speech is absolutely protected.", 2, -2, 0, 1]
+        ]],
+        ["Defamation Laws", [
+            ["It should be very easy to sue people and media outlets for saying offensive or damaging things.", 0, 2, 0, 1],
+            ["Current laws striking a balance between protecting reputation and free speech are fine.", 0, 0, 0, 0],
+            ["Defamation laws shouldn't exist; people should be free to say or publish literally anything.", 0, -2, 0, -1]
+        ]],
+        ["Whistleblowers", [
+            ["People who leak classified government secrets are traitors and must be imprisoned or executed.", 0, 2, 1, 1],
+            ["Whistleblowers need legal channels, but dumping classified documents is dangerous.", 0, 0, 0, 0],
+            ["Whistleblowers are heroes; exposing government secrets is always justified to fight tyranny.", 0, -2, -1, -1]
+        ]],
+        ["Net Neutrality", [
+            ["The internet is a public utility; the government must strictly forbid ISPs from throttling traffic.", -2, 1, 0, 0],
+            ["Some rules are okay, but ISPs need flexibility to manage network congestion.", 0, 0, 0, 0],
+            ["The government has no business regulating the internet; let ISPs run their networks as they see fit.", 2, -2, 0, 0]
+        ]],
+        ["Government Surveillance", [
+            ["The government needs total access to our emails and cameras to keep us safe from terrorism.", 0, 2, 1, 1],
+            ["Targeted surveillance is necessary, but only with a strict warrant from a judge.", 0, 0, 0, 0],
+            ["All mass surveillance programs must be immediately destroyed; privacy is an absolute right.", 0, -2, 0, -1]
+        ]],
+        ["Facial Recognition", [
+            ["Police should use live facial recognition everywhere to instantly catch criminals.", 0, 2, 0, 1],
+            ["It can be used carefully in major investigations, but shouldn't be used for public tracking.", 0, 0, 0, 0],
+            ["Facial recognition is a dystopian nightmare and must be globally outlawed.", 0, -2, 0, -1]
+        ]],
+        ["Gun Background Checks", [
+            ["Every single firearm transaction, even between family members, must be registered with the government.", 0, 2, 0, 0],
+            ["Commercial gun sales need background checks, but private gifts shouldn't be overly regulated.", 0, 0, 0, 0],
+            ["Background checks are unconstitutional; any citizen can buy any weapon anonymously.", 0, -2, 0, 0]
+        ]],
+        ["Assault Weapons Ban", [
+            ["All semi-automatic rifles must be forcefully confiscated and destroyed by the government.", 0, 2, 0, 1],
+            ["We need stricter age limits and waiting periods, but a total ban is unrealistic.", 0, 0, 0, 0],
+            ["Civilians have the absolute right to own military-grade weapons to defend against tyranny.", 0, -2, 0, -1]
+        ]],
+        ["Concealed Carry", [
+            ["Carrying a weapon in public should be a felony for anyone except on-duty police.", 0, 2, 0, 1],
+            ["Concealed carry is fine if the person passes a strict training and licensing course.", 0, 0, 0, 0],
+            ["'Constitutional Carry': anyone should be able to carry a hidden gun anywhere without a permit.", 0, -2, 0, -1]
+        ]],
+        ["Stand Your Ground", [
+            ["If attacked, you must attempt to flee; using lethal force should result in a murder charge.", 0, 2, 0, -1],
+            ["Lethal force is justified inside your home, but public altercations require more restraint.", 0, 0, 0, 0],
+            ["You have the absolute right to use lethal force anywhere if you feel threatened.", 0, -2, 0, 1]
+        ]],
+        ["Police Funding", [
+            ["We must abolish the police entirely and replace them with unarmed social workers.", -2, -2, 0, -2],
+            ["Police need adequate funding, but also better training and civilian oversight.", 0, 0, 0, 0],
+            ["We must massively increase police funding and give them military equipment to crush crime.", 2, 2, 0, 2]
+        ]],
+        ["Qualified Immunity", [
+            ["Police officers must be completely immune from lawsuits so they aren't afraid to do their jobs.", 0, 2, 0, 1],
+            ["Officers need some protection, but should be sued for extreme, clear-cut abuses.", 0, 0, 0, 0],
+            ["Abolish qualified immunity entirely; police must be personally sued for any mistake they make.", 0, -2, 0, -1]
+        ]],
+        ["Civil Asset Forfeiture", [
+            ["Police should be able to seize cash and property from suspected criminals to fund the department.", 0, 2, 0, 1],
+            ["Asset seizure should only happen after a criminal conviction in court.", 0, 0, 0, 0],
+            ["Civil asset forfeiture is literal state-sponsored robbery and must be banned.", 0, -2, 0, -1]
+        ]],
+        ["Private Prisons", [
+            ["Prisons should be run as for-profit businesses to save taxpayer money.", 2, 1, 0, 1],
+            ["We should phase them out gradually, as the profit motive incentivizes keeping people locked up.", 0, 0, 0, 0],
+            ["Private prisons are slavery; they must be instantly outlawed.", -2, -1, 0, -1]
+        ]],
+        ["Death Penalty", [
+            ["The death penalty should be expanded and used frequently to permanently remove bad people.", 0, 2, 0, 2],
+            ["It should be incredibly rare and used only for the most undeniable, horrific serial killers.", 0, 0, 0, 0],
+            ["The state does not have the moral authority to kill its citizens; abolish it completely.", 0, -2, 0, -2]
+        ]],
+        ["Solitary Confinement", [
+            ["Solitary is a necessary tool to keep prison guards safe from violent inmates.", 0, 2, 0, 1],
+            ["It should only be used for a few days at a time to prevent permanent psychological damage.", 0, 0, 0, 0],
+            ["Solitary confinement is literal torture and violates basic human rights.", 0, -2, 0, -1]
+        ]],
+        ["Cash Bail", [
+            ["Strict cash bail keeps criminals off the streets; if you can't pay, you wait in jail.", 0, 2, 0, 1],
+            ["Violent offenders should be held without bail, but non-violent people shouldn't rot in jail just for being poor.", 0, 0, 0, 0],
+            ["Abolish the cash bail system entirely; no one should be jailed before a trial.", 0, -2, 0, -1]
+        ]],
+        ["Mandatory Minimums", [
+            ["Judges should be forced to give long, inflexible prison sentences to ensure tough-on-crime uniformity.", 0, 2, 0, 1],
+            ["Guidelines are helpful, but judges need to look at the context of each crime.", 0, 0, 0, 0],
+            ["Mandatory minimums are authoritarian garbage that destroy lives over minor offenses.", 0, -2, 0, -1]
+        ]],
+        ["Drug Decriminalization", [
+            ["All drugs must be completely legalized, sold in stores, and taxed.", -1, -2, 0, -2],
+            ["Marijuana should be legal, but hard drugs should be treated as a medical issue, not a crime.", 0, 0, 0, 0],
+            ["All drug use is a moral failing and must be met with severe prison time to protect society.", 1, 2, 0, 2]
+        ]],
+        ["Prostitution", [
+            ["Sex work should be fully legalized, regulated, and unionized.", -1, -2, 0, -2],
+            ["We shouldn't arrest the sex workers, but we should criminalize the pimps and buyers.", 0, 0, 0, 0],
+            ["Prostitution destroys the moral fabric of society and must be aggressively outlawed.", 1, 2, 0, 2]
+        ]],
+        ["Gambling", [
+            ["Gambling is a vice that ruins families; the government must ban all casinos and sports betting.", 0, 2, 0, 2],
+            ["Gambling should be legal but strictly regulated with resources for addicts.", 0, 0, 0, 0],
+            ["Adults can spend their money however they want; deregulate the entire gambling industry.", 0, -2, 0, -2]
+        ]],
+        ["Alcohol & Tobacco Ages", [
+            ["Alcohol and tobacco should be completely illegal for everyone.", 0, 2, 0, 2],
+            ["The age limit of 21 is a good balance for public health.", 0, 0, 0, 0],
+            ["If you are 18 and can die in a war, the government has no right to stop you from having a beer.", 0, -2, 0, -2]
+        ]],
+        ["Pornography", [
+            ["Pornography degrades society and should be federally banned.", 0, 2, 0, 2],
+            ["Adults can watch it, but we need strict age-verification laws to protect children.", 0, 0, 0, 0],
+            ["The government has zero right to tell adults what media they can consume in private.", 0, -2, 0, -2]
+        ]],
+        ["Abortion Access", [
+            ["Abortion is murder and must be banned entirely, with no exceptions.", 0, 2, 0, 2],
+            ["Abortion should be legal early on, or in cases of rape/health risks, but restricted later.", 0, 0, 0, 0],
+            ["The government has no right to control a woman's body; abortion should be legal at any time.", 0, -2, 0, -2]
+        ]],
+        ["Euthanasia (Assisted Suicide)", [
+            ["Assisted suicide is a sin and must be prosecuted as murder, even if the person is suffering.", 0, 2, 0, 2],
+            ["It should be allowed only for terminally ill patients in severe pain with doctor approval.", 0, 0, 0, 0],
+            ["Every person has the absolute right to end their own life whenever and however they choose.", 0, -2, 0, -2]
+        ]],
+        ["Same-Sex Marriage", [
+            ["Marriage is strictly between a man and a woman; the government must ban all other unions.", 0, 2, 0, 2],
+            ["Gay marriage is settled law and should be respected.", 0, 0, 0, 0],
+            ["The government shouldn't be involved in marriage at all; abolish all state marriage licenses.", 0, -2, 0, -2]
+        ]],
+        ["Transgender Medical Care for Minors", [
+            ["The government must strictly ban puberty blockers and transition surgeries for anyone under 18.", 0, 2, 0, 2],
+            ["It should require extensive psychological evaluations and parental consent.", 0, 0, 0, 0],
+            ["Minors should have unrestricted access to gender-affirming care as a basic human right.", 0, -2, 0, -2]
+        ]],
+        ["Gender in Sports", [
+            ["Transgender women must be legally banned from competing in women's sports to protect fairness.", 0, 1, 0, 2],
+            ["Sports leagues should decide their own testosterone rules, not the government.", 0, 0, 0, 0],
+            ["Sports must be completely desegregated; anyone should play in any league regardless of birth sex.", 0, -1, 0, -2]
+        ]],
+        ["Affirmative Action", [
+            ["We must enforce racial quotas in hiring and colleges to correct historical injustices.", -2, 1, 0, -2],
+            ["Diversity is good, but we should focus on helping low-income people rather than strictly race.", 0, 0, 0, 0],
+            ["Affirmative action is just reverse racism; all hiring must be 100% colorblind meritocracy.", 2, -1, 0, 2]
+        ]],
+        ["School Vouchers", [
+            ["Public money belongs in public schools; vouchers for private schools destroy the system.", -2, 1, 0, -1],
+            ["We need strong public schools, but kids trapped in failing districts need some escape options.", 0, 0, 0, 0],
+            ["The education system should be fully privatized; parents should take their tax money to any school.", 2, -2, 0, 1]
+        ]],
+        ["Student Debt", [
+            ["The government must cancel all student debt and make all colleges completely free.", -2, 1, 0, -2],
+            ["We should lower interest rates and target relief for the poorest, but not blanket cancellation.", 0, 0, 0, 0],
+            ["You took the loan, you pay it back. Taxpayers shouldn't bail out gender studies degrees.", 2, -1, 0, 2]
+        ]],
+        ["Military Spending", [
+            ["We must drastically cut the military budget and use the money for domestic social programs.", -2, -1, -2, -1],
+            ["We need a strong military, but the Pentagon needs a serious audit to stop wasteful spending.", 0, 0, 0, 0],
+            ["We must massively increase military spending to ensure absolute global dominance.", 2, 2, 2, 2]
+        ]],
+        ["Foreign Intervention", [
+            ["We must actively use our military to overthrow dictators and spread our values globally.", 0, 2, -2, 0],
+            ["We should only use force when we or our direct allies are actively attacked.", 0, 0, 0, 0],
+            ["Bring every soldier home immediately and close all foreign bases; let the world handle itself.", 0, -2, 2, 0]
+        ]],
+        ["NATO & Alliances", [
+            ["We must deeply integrate our military into global alliances like NATO.", 0, 0, -2, -1],
+            ["NATO is useful, but other countries need to pay their fair share.", 0, 0, 0, 0],
+            ["NATO is a trap that will drag us into World War 3; we must withdraw immediately.", 0, 0, 2, 1]
+        ]],
+        ["United Nations", [
+            ["We should surrender some national sovereignty to the UN to solve global crises.", 0, 1, -2, -2],
+            ["The UN is a decent forum for talking, but shouldn't dictate our domestic laws.", 0, 0, 0, 0],
+            ["The UN is a corrupt globalist cabal; we must defund it and kick them out of the country.", 0, -1, 2, 2]
+        ]],
+        ["Foreign Aid", [
+            ["We have a moral duty to send billions in aid to uplift impoverished nations.", -1, 0, -2, -1],
+            ["Foreign aid is a useful diplomatic tool, but we must track where the money goes.", 0, 0, 0, 0],
+            ["Not one single penny of our taxes should go to foreign countries while we have problems at home.", 2, 0, 2, 2]
+        ]],
+        ["Border Wall", [
+            ["Borders are an imaginary construct; we should have open borders for all.", -2, -2, -2, -2],
+            ["We need border security, but a giant wall is an expensive and ineffective waste of money.", 0, 0, 0, 0],
+            ["We must build a massive, militarized wall and heavily guard it to stop all illegal entry.", 2, 2, 2, 2]
+        ]],
+        ["Path to Citizenship", [
+            ["Anyone who crosses the border should be granted immediate amnesty and voting rights.", -2, -1, -2, -2],
+            ["Undocumented immigrants with clean records should have a long, heavily fined path to legality.", 0, 0, 0, 0],
+            ["No amnesty ever; every single undocumented immigrant must be hunted down and deported.", 2, 2, 2, 2]
+        ]],
+        ["Official Language", [
+            ["The government should conduct business in multiple languages to accommodate all cultures.", -1, -1, -1, -2],
+            ["English is the default, but emergency services and ballots should have translations.", 0, 0, 0, 0],
+            ["The country must declare one official language and refuse to provide services in any other.", 1, 2, 2, 2]
+        ]],
+        ["Electoral College", [
+            ["The Electoral College is an archaic tool of white supremacy and must be abolished for a popular vote.", -1, -1, 0, -2],
+            ["The Electoral College is flawed, but a pure popular vote would let three cities rule the country.", 0, 0, 0, 0],
+            ["The Electoral College is brilliant and essential to protect rural areas from mob rule.", 1, 1, 0, 2]
+        ]],
+        ["Voter ID Laws", [
+            ["Voter ID laws are racist voter suppression; anyone should be able to vote without an ID.", -1, -2, 0, -2],
+            ["Showing a free, easily obtained ID to vote is a reasonable security measure.", 0, 0, 0, 0],
+            ["Voting should require strict biometric proof of citizenship to stop massive fraud.", 1, 2, 0, 2]
+        ]],
+        ["Mail-In Voting", [
+            ["The government should automatically mail a ballot to every living person to maximize turnout.", -1, -1, 0, -2],
+            ["Mail-in voting is fine for the elderly or military, but requires signature verification.", 0, 0, 0, 0],
+            ["Mail-in voting is totally corrupt; all voting must be in-person, on paper, on one single day.", 1, 2, 0, 2]
+        ]],
+        ["Campaign Finance", [
+            ["Corporations are not people; all political donations should be heavily capped and strictly monitored.", -2, 2, 0, -1],
+            ["We need transparency so we know who is donating, but limits shouldn't be too extreme.", 0, 0, 0, 0],
+            ["Money is free speech; billionaires and corporations can spend unlimited amounts on elections.", 2, -2, 0, 1]
+        ]],
+        ["Supreme Court Term Limits", [
+            ["The Supreme Court is corrupt; we must pack the court with more judges and enforce term limits.", -2, 2, 0, -2],
+            ["Term limits might be a good idea, but packing the court destroys its legitimacy.", 0, 0, 0, 0],
+            ["Lifetime appointments are necessary to keep judges immune from political pressure.", 2, -1, 0, 2]
+        ]],
+        ["Space Exploration", [
+            ["Space is a waste of money; tax the space billionaires and fix the Earth first.", -2, 2, 0, -1],
+            ["Government agencies like NASA should lead exploration with some private contractors.", 0, 0, 0, 0],
+            ["Privatize space completely; let corporations claim and mine asteroids for profit.", 2, -2, 0, 0]
+        ]],
+        ["AI & Autonomous Weapons", [
+            ["The government must strictly ban the development of AI because it threatens human existence.", -1, 2, 0, 1],
+            ["AI needs some ethical regulations, especially regarding military use.", 0, 0, 0, 0],
+            ["AI is the future; deregulate tech companies and deploy AI weapons to maintain military dominance.", 2, -2, 2, 0]
+        ]],
+        ["AI Copyright & Art", [
+            ["AI companies stole art to train their models and must be sued into oblivion.", -1, 2, 0, 1],
+            ["AI is a new tool; we need new laws to figure out how to compensate original creators.", 0, 0, 0, 0],
+            ["AI training is fair use; copyright laws shouldn't hold back technological progress.", 2, -2, 0, -1]
+        ]],
+        ["Right to Repair", [
+            ["The government must force Apple and John Deere to let people repair their own devices.", -1, -1, 0, -1],
+            ["Companies should offer parts, but we shouldn't force them to give away security blueprints.", 0, 0, 0, 0],
+            ["When you buy a product with software, you don't own it. Companies can lock it down completely.", 2, 2, 0, 1]
+        ]],
+        ["Corporate Data Harvesting", [
+            ["It must be highly illegal for tech companies to track my data and sell it to advertisers.", -1, 2, 0, -1],
+            ["Companies can collect data, but I should have an easy button to opt out.", 0, 0, 0, 0],
+            ["If I use a free app, I am the product. Companies can do whatever they want with my data.", 2, -2, 0, 1]
+        ]],
+        ["Minimum Voting Age", [
+            ["16-year-olds work and pay taxes; they should be allowed to vote.", -1, -1, 0, -2],
+            ["18 is the legal age of adulthood and is the correct voting age.", 0, 0, 0, 0],
+            ["Voting should be restricted to property owners over the age of 25.", 2, 2, 0, 2]
+        ]],
+        ["Military Draft", [
+            ["The draft is literal slavery; the government has no right to force me to die in a war.", -1, -2, -1, -1],
+            ["The draft is a horrible necessity that should only be used if the homeland is invaded.", 0, 0, 0, 0],
+            ["We need mandatory military service for all 18-year-olds to instill discipline and patriotism.", 1, 2, 2, 2]
+        ]],
+        ["Universal Childcare", [
+            ["The government must provide free, high-quality childcare for all working parents.", -2, 1, 0, -2],
+            ["We should offer tax credits to help families pay for daycares.", 0, 0, 0, 0],
+            ["Childcare is a personal responsibility; if you can't afford kids, don't have them.", 2, -1, 0, 2]
+        ]]
     ];
 
     let currentQ = 0;
     let userScores = { E: 0, S: 0, D: 0, C: 0 };
-    const maxScorePerAxis = questions.length * 2; // Normalization factor
+    const maxScorePerAxis = rawQuestions.length * 2; 
 
     function initQuiz() {
         const body = document.getElementById('quiz-body');
-        questions.forEach((q, index) => {
-            let html = `<div class="question-block" id="q-${index}">
-                <h3>${q.topic}</h3>`;
+        let html = '';
+        rawQuestions.forEach((qData, index) => {
+            const topic = qData[0];
+            const options = qData[1];
             
-            q.options.forEach((opt, oIndex) => {
-                html += `<button class="statement-btn" onclick="answer(${index}, ${opt.scores.E}, ${opt.scores.S}, ${opt.scores.D}, ${opt.scores.C})">${opt.text}</button>`;
+            html += `<div class="question-block" id="q-${index}">
+                <h3>${topic}</h3>`;
+            
+            options.forEach((opt) => {
+                html += `<button class="statement-btn" onclick="answer(${index}, ${opt[1]}, ${opt[2]}, ${opt[3]}, ${opt[4]})">${opt[0]}</button>`;
             });
             html += `<button class="statement-btn neutral" onclick="answer(${index}, 0, 0, 0, 0)">No preference / Unsure</button>
             </div>`;
-            body.innerHTML += html;
         });
+        body.innerHTML = html;
         showQuestion(0);
     }
 
     function showQuestion(index) {
         document.querySelectorAll('.question-block').forEach(el => el.classList.remove('active'));
         document.getElementById(`q-${index}`).classList.add('active');
-        document.getElementById('q-counter').innerText = `Question ${index + 1} of ${questions.length}`;
-        document.getElementById('progress').style.width = `${((index) / questions.length) * 100}%`;
+        document.getElementById('q-counter').innerText = `Question ${index + 1} of ${rawQuestions.length}`;
+        document.getElementById('progress').style.width = `${((index) / rawQuestions.length) * 100}%`;
     }
 
     function answer(qIndex, e, s, d, c) {
@@ -240,7 +577,7 @@
         userScores.D += d;
         userScores.C += c;
         
-        if (qIndex + 1 < questions.length) {
+        if (qIndex + 1 < rawQuestions.length) {
             showQuestion(qIndex + 1);
         } else {
             document.getElementById('progress').style.width = '100%';
@@ -248,12 +585,32 @@
         }
     }
 
+    const profiles = [
+        { name: "Democratic Socialist", type: "US Ideology", E: -1.5, S: 0.5, D: -1.0, C: -1.5 },
+        { name: "Social Democrat", type: "US Ideology", E: -1.0, S: 0.0, D: -0.5, C: -1.0 },
+        { name: "Centrist", type: "US Ideology", E: 0.0, S: 0.0, D: 0.0, C: 0.0 },
+        { name: "Neoliberal", type: "US Ideology", E: 0.8, S: 0.2, D: -1.2, C: -0.8 },
+        { name: "Neoconservative", type: "US Ideology", E: 0.8, S: 1.0, D: 1.5, C: 1.0 },
+        { name: "Paleoconservative", type: "US Ideology", E: 0.5, S: 1.5, D: 1.5, C: 1.8 },
+        { name: "Right-Libertarian", type: "US Ideology", E: 1.5, S: -1.5, D: 0.5, C: -0.2 },
+        { name: "Anarcho-Capitalist", type: "US Ideology", E: 2.0, S: -2.0, D: 0.0, C: 0.0 },
+        { name: "Congressional Progressive Caucus", type: "US Caucus", E: -1.2, S: 0.2, D: -1.0, C: -1.5 },
+        { name: "New Democrat Coalition", type: "US Caucus", E: -0.2, S: 0.0, D: -0.5, C: -0.5 },
+        { name: "Problem Solvers Caucus", type: "US Caucus", E: 0.0, S: 0.0, D: 0.0, C: 0.0 },
+        { name: "Main Street Partnership", type: "US Caucus", E: 0.8, S: 0.5, D: 0.5, C: 0.5 },
+        { name: "House Freedom Caucus", type: "US Caucus", E: 1.5, S: 1.5, D: 1.5, C: 1.8 },
+        { name: "Labour Party (UK)", type: "Int. Party", E: -0.8, S: 0.2, D: -0.2, C: -0.5 },
+        { name: "Liberal Democrats (UK)", type: "Int. Party", E: -0.2, S: -0.5, D: -1.5, C: -1.0 },
+        { name: "Conservative Party (UK)", type: "Int. Party", E: 0.8, S: 0.5, D: 1.0, C: 0.8 },
+        { name: "SPD (Germany)", type: "Int. Party", E: -0.7, S: 0.1, D: -1.0, C: -0.6 },
+        { name: "AfD (Germany)", type: "Int. Party", E: 1.0, S: 1.8, D: 1.8, C: 2.0 }
+    ];
+
     function showResults() {
         document.getElementById('quiz-header').style.display = 'none';
         document.getElementById('quiz-body').style.display = 'none';
         document.getElementById('results').style.display = 'block';
         
-        // Normalize scores to a -2.0 to 2.0 scale for calculation
         const normE = (userScores.E / maxScorePerAxis) * 4;
         const normS = (userScores.S / maxScorePerAxis) * 4;
         const normD = (userScores.D / maxScorePerAxis) * 4;
@@ -270,13 +627,11 @@
         const size = canvas.width;
         const center = size / 2;
         
-        // Background quadrants
-        ctx.fillStyle = "#ffb3b3"; ctx.fillRect(0, 0, center, center); // Auth Left
-        ctx.fillStyle = "#b3b3ff"; ctx.fillRect(center, 0, center, center); // Auth Right
-        ctx.fillStyle = "#b3ffb3"; ctx.fillRect(0, center, center, center); // Lib Left
-        ctx.fillStyle = "#ffffb3"; ctx.fillRect(center, center, center, center); // Lib Right
+        ctx.fillStyle = "#ffb3b3"; ctx.fillRect(0, 0, center, center);
+        ctx.fillStyle = "#b3b3ff"; ctx.fillRect(center, 0, center, center);
+        ctx.fillStyle = "#b3ffb3"; ctx.fillRect(0, center, center, center);
+        ctx.fillStyle = "#ffffb3"; ctx.fillRect(center, center, center, center);
         
-        // Grid lines
         ctx.strokeStyle = "#fff";
         ctx.lineWidth = 2;
         ctx.beginPath();
@@ -284,7 +639,6 @@
         ctx.moveTo(0, center); ctx.lineTo(size, center);
         ctx.stroke();
 
-        // Labels
         ctx.fillStyle = "#333";
         ctx.font = "bold 14px Arial";
         ctx.fillText("AUTHORITARIAN", center - 50, 20);
@@ -292,9 +646,8 @@
         ctx.fillText("LEFT", 10, center - 10);
         ctx.fillText("RIGHT", size - 50, center - 10);
 
-        // Plot User (Scale -2 to 2 onto 0 to size)
         const xPos = center + (e / 2) * center;
-        const yPos = center - (s / 2) * center; // Invert S because higher Auth should go UP the Y axis
+        const yPos = center - (s / 2) * center; 
         
         ctx.beginPath();
         ctx.arc(xPos, yPos, 8, 0, 2 * Math.PI);
@@ -306,10 +659,9 @@
     }
 
     function updateBars(d, c) {
-        // Map -2 to 2 range to a 0% to 100% width/position
         const setBar = (id, val) => {
             const bar = document.getElementById(id);
-            const percent = ((val + 2) / 4) * 100; // Normalizes to 0-100
+            const percent = ((val + 2) / 4) * 100;
             if(val < 0) {
                 bar.style.left = `${percent}%`;
                 bar.style.width = `${50 - percent}%`;
@@ -323,21 +675,15 @@
     }
 
     function calculateMatches(e, s, d, c) {
-        // Calculate 4D Euclidean distance to find nearest matches
         profiles.forEach(p => {
             p.distance = Math.sqrt(
-                Math.pow(e - p.E, 2) + 
-                Math.pow(s - p.S, 2) + 
-                Math.pow(d - p.D, 2) + 
-                Math.pow(c - p.C, 2)
+                Math.pow(e - p.E, 2) + Math.pow(s - p.S, 2) + Math.pow(d - p.D, 2) + Math.pow(c - p.C, 2)
             );
         });
 
-        // Sort by closest distance
         profiles.sort((a, b) => a.distance - b.distance);
         
         const container = document.getElementById('matches-container');
-        // Grab the top match from each category
         const topIdeology = profiles.find(p => p.type === 'US Ideology');
         const topCaucus = profiles.find(p => p.type === 'US Caucus');
         const topInt = profiles.find(p => p.type === 'Int. Party');
@@ -352,7 +698,6 @@
         });
     }
 
-    // Initialize
     initQuiz();
 </script>
 </body>
