@@ -31,6 +31,8 @@
             --accent-amber-light: #fbbf24;
             --accent-purple: #8b5cf6;
             --accent-purple-light: #a78bfa;
+            --accent-rose: #f43f5e;
+            --accent-rose-light: #fb7185;
             --accent-red: #ef4444;
             --btn-bg: #1f2430;
             --btn-hover: #282f3e;
@@ -369,7 +371,7 @@
         }
 
         /* ========================================================= */
-        /* RESULTS VIEW — UNBIASED PALETTE & EASY NAVIGATION         */
+        /* RESULTS VIEW — UNBIASED PALETTE & FRIEND COMPARISON       */
         /* ========================================================= */
         #results-view { display: none; }
 
@@ -493,7 +495,7 @@
         }
         .section-title { font-size: 16px; font-weight: 700; margin: 0; color: #ffffff; }
 
-        /* US Spectrum & Consistency */
+        /* US Spectrum & Friend Marker */
         .spectrum-track {
             position: relative;
             height: 15px;
@@ -511,7 +513,21 @@
             box-shadow: 0 0 8px rgba(0,0,0,0.95);
             transform: translateX(-50%);
             transition: left 0.4s ease;
+            z-index: 3;
+        }
+        .spectrum-FriendMarker {
+            position: absolute;
+            top: -6px;
+            width: 5px;
+            height: 27px;
+            background: var(--accent-rose);
+            border: 1px solid #fff;
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(244, 63, 94, 0.9);
+            transform: translateX(-50%);
+            transition: left 0.4s ease;
             z-index: 2;
+            display: none;
         }
         .spectrum-MedianMarker {
             position: absolute;
@@ -621,6 +637,14 @@
             text-shadow: 0 1px 3px rgba(0,0,0,0.95);
         }
         .landmark-label.figure-label { color: #fde68a; font-weight: 600; }
+        .compass-svg-overlay {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+        }
         .compass-dot {
             position: absolute;
             width: 16px;
@@ -631,10 +655,47 @@
             transform: translate(-50%, -50%);
             box-shadow: 0 0 14px rgba(96, 165, 250, 0.95);
             transition: left 0.4s ease, top 0.4s ease;
+            z-index: 5;
+        }
+        .compass-friend-dot {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: var(--accent-rose);
+            border: 3px solid #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 14px rgba(244, 63, 94, 0.95);
+            transition: left 0.4s ease, top 0.4s ease;
             z-index: 4;
+            display: none;
+        }
+        .compass-friend-tag {
+            position: absolute;
+            font-size: 10px;
+            font-weight: 800;
+            color: #fff;
+            background: var(--accent-rose);
+            padding: 1px 6px;
+            border-radius: 4px;
+            transform: translate(-50%, -22px);
+            white-space: nowrap;
+            z-index: 5;
+            display: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.6);
         }
         .compass-caption { margin-top: 12px; font-size: 12.5px; color: var(--text-muted); text-align: center; }
         .compass-caption strong { color: var(--text-main); }
+        .compass-legend {
+            display: none;
+            gap: 14px;
+            margin-top: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #e5e7eb;
+        }
+        .legend-chip { display: inline-flex; align-items: center; gap: 6px; }
+        .legend-swatch { width: 10px; height: 10px; border-radius: 50%; border: 2px solid #fff; display: inline-block; }
 
         /* Color-Coded 4-Axis Scales */
         .scale-block {
@@ -648,9 +709,118 @@
         .scale-header { display: flex; justify-content: space-between; align-items: baseline; font-size: 12.5px; margin-bottom: 6px; }
         .scale-pole { color: #d1d5db; font-size: 12px; font-weight: 600; }
         .scale-title { font-weight: 800; color: #ffffff; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.04em; }
-        .scale-bar-bg { width: 100%; height: 9px; background: #141720; border-radius: 99px; overflow: hidden; margin-bottom: 7px; }
+        .scale-bar-bg { width: 100%; height: 9px; background: #141720; border-radius: 99px; overflow: hidden; margin-bottom: 7px; position: relative; }
         .scale-bar-fill { height: 100%; border-radius: 99px; }
         .scale-exp { font-size: 12.5px; color: #cbd5e1; margin: 0; line-height: 1.48; }
+
+        /* ========================================================= */
+        /* COMPARE WITH A FRIEND CARD                                */
+        /* ========================================================= */
+        .friend-input-row {
+            display: grid;
+            grid-template-columns: 160px 1fr auto;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        @media (max-width: 640px) {
+            .friend-input-row { grid-template-columns: 1fr; }
+        }
+        .friend-input {
+            background: #12151e;
+            border: 1px solid var(--card-border);
+            color: #fff;
+            padding: 11px 14px;
+            border-radius: 9px;
+            font-size: 13.5px;
+            outline: none;
+            transition: border-color 0.15s ease;
+        }
+        .friend-input:focus { border-color: var(--accent-blue-light); }
+        .friend-btn {
+            background: linear-gradient(135deg, #e11d48, #f43f5e);
+            color: #fff;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 9px;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: opacity 0.15s ease;
+        }
+        .friend-btn:hover { opacity: 0.92; }
+        .friend-error {
+            font-size: 12.5px;
+            color: #fca5a5;
+            margin-bottom: 10px;
+            display: none;
+        }
+        #friend-comparison-panel { display: none; margin-top: 16px; }
+        .friend-summary-banner {
+            background: radial-gradient(circle at right top, rgba(244, 63, 94, 0.16), rgba(59, 130, 246, 0.12));
+            border: 1px solid rgba(244, 63, 94, 0.35);
+            border-radius: 11px;
+            padding: 16px 18px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .friend-compat-badge {
+            font-size: 22px;
+            font-weight: 800;
+            color: #fb7185;
+        }
+        .friend-axis-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        @media (max-width: 640px) { .friend-axis-grid { grid-template-columns: 1fr; } }
+        .friend-axis-card {
+            background: var(--card-alt);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 13px 15px;
+        }
+        .friend-axis-top {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12.5px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        .friend-dual-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11.5px;
+            margin-bottom: 6px;
+        }
+        .friend-dual-bar-row:last-child { margin-bottom: 0; }
+        .friend-who-label {
+            width: 72px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .friend-bar-track {
+            flex: 1;
+            height: 7px;
+            background: #141720;
+            border-radius: 99px;
+            overflow: hidden;
+        }
+        .friend-pct-val {
+            width: 36px;
+            text-align: right;
+            font-weight: 700;
+            color: #d1d5db;
+        }
 
         /* Topic Stance Breakdown Grid */
         .cat-breakdown-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
@@ -694,9 +864,11 @@
         .div-stance-box { border-radius: 8px; padding: 11px 13px; font-size: 13px; line-height: 1.48; }
         .div-stance-box.user-box { background: rgba(59, 130, 246, 0.10); border: 1px solid rgba(59, 130, 246, 0.30); color: #e5e7eb; }
         .div-stance-box.party-box { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.09); color: #cbd5e1; }
+        .div-stance-box.friend-box { background: rgba(244, 63, 94, 0.10); border: 1px solid rgba(244, 63, 94, 0.32); color: #ffe4e6; }
         .div-stance-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; display: block; }
         .div-stance-box.user-box .div-stance-label { color: #60a5fa; }
         .div-stance-box.party-box .div-stance-label { color: #9ca3af; }
+        .div-stance-box.friend-box .div-stance-label { color: #fb7185; }
         .div-axis-note { margin-top: 8px; font-size: 12px; color: var(--text-muted); }
         .div-axis-note strong { color: #d1d5db; }
 
@@ -938,8 +1110,8 @@
                     US caucus placements reflect DW-NOMINATE congressional roll-call patterns, while international party placements are calibrated to Chapel Hill Expert Survey (CHES) coordinates.
                 </div>
                 <div class="method-box">
-                    <strong>4. Policy Divergence & Heterodox Detection</strong>
-                    No voter agrees with their party 100% of the time. The results dashboard pinpoints the exact policy topics where your answers broke ranks with your #1 matched ideology or caucus.
+                    <strong>4. Friend Comparison & Disagreement Engine</strong>
+                    Paste a friend's shared link to plot both of your positions side-by-side on the 2D compass, compare all 4 axes, and see the exact policy topics where the two of you disagree.
                 </div>
             </div>
         </div>
@@ -983,6 +1155,7 @@
         <nav class="results-sticky-nav">
             <a class="jump-link" href="#sec-overview">Overview</a>
             <a class="jump-link" href="#sec-compass">Compass & 4 Axes</a>
+            <a class="jump-link" href="#sec-compare">Compare Friend</a>
             <a class="jump-link" href="#sec-domains">10 Domains</a>
             <a class="jump-link" href="#sec-divergences">Disagreements</a>
             <a class="jump-link" href="#sec-matches">Matches & Leaders</a>
@@ -1026,7 +1199,8 @@
             </div>
             <div class="spectrum-track">
                 <div class="spectrum-MedianMarker" title="Empirical Median US Voter (48/100)"></div>
-                <div class="spectrum-ReadoutMarker" id="us-spectrum-marker" style="left: 50%;"></div>
+                <div class="spectrum-FriendMarker" id="us-spectrum-friend-marker" title="Friend's Position"></div>
+                <div class="spectrum-ReadoutMarker" id="us-spectrum-marker" style="left: 50%;" title="Your Position"></div>
             </div>
             <div class="spectrum-labels">
                 <span>Left</span>
@@ -1060,15 +1234,51 @@
                         <span class="c-label left">Economic Left</span>
                         <span class="c-label right">Economic Right</span>
                         <div id="landmarks-layer"></div>
+                        <svg class="compass-svg-overlay" id="compass-svg-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+                        <div class="compass-friend-dot" id="compass-friend-dot" style="left:50%; top:50%;"></div>
+                        <div class="compass-friend-tag" id="compass-friend-tag">Friend</div>
                         <div class="compass-dot" id="compass-dot" style="left:50%; top:50%;" title="Your Position"></div>
                     </div>
                     <div class="compass-caption" id="compass-caption"></div>
+                    <div class="compass-legend" id="compass-legend">
+                        <span class="legend-chip"><span class="legend-swatch" style="background:#60a5fa;"></span> You</span>
+                        <span class="legend-chip"><span class="legend-swatch" style="background:#f43f5e;"></span> <span id="legend-friend-name">Friend</span></span>
+                    </div>
                 </div>
                 <div id="scales-container"></div>
             </div>
         </div>
 
-        <!-- 4. Policy Domain Breakdown -->
+        <!-- 4. COMPARE WITH A FRIEND CARD (NEW) -->
+        <div class="card" id="sec-compare">
+            <div class="section-header">
+                <h3 class="section-title">Compare With a Friend on the 2D Compass</h3>
+                <span style="font-size: 12px; color: var(--text-muted);">Paste a friend's shared result link below</span>
+            </div>
+            <div class="friend-input-row">
+                <input type="text" class="friend-input" id="friend-name-input" placeholder="Friend's Name (opt.)" maxlength="22">
+                <input type="text" class="friend-input" id="friend-url-input" placeholder="Paste friend's shared URL (e.g. https://.../?e=72&s=80&a=64&d=75...)">
+                <button class="friend-btn" onclick="applyFriendComparisonFromInput()">Plot & Compare</button>
+            </div>
+            <div class="friend-error" id="friend-error-msg">Could not find valid Political Inventory coordinates (?e=...&s=...&a=...&d=...) in that link.</div>
+
+            <div id="friend-comparison-panel">
+                <div class="friend-summary-banner">
+                    <div>
+                        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #fda4af; font-weight: 700;">SIDE-BY-SIDE COMPARISON ACTIVE</div>
+                        <div style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 2px;" id="friend-headline-text">You vs. Friend</div>
+                        <div style="font-size: 13px; color: #cbd5e1; margin-top: 2px;" id="friend-subline-text">Plotted on the 2D Compass and PNG Scorecard</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="friend-compat-badge" id="friend-compat-score">85% Match</div>
+                        <button class="util-btn" onclick="clearFriendComparison()" style="padding: 4px 10px; font-size: 11.5px; margin-top: 4px;">✕ Remove Friend</button>
+                    </div>
+                </div>
+                <div class="friend-axis-grid" id="friend-axis-grid"></div>
+            </div>
+        </div>
+
+        <!-- 5. Policy Domain Breakdown -->
         <div class="card" id="sec-domains">
             <div class="section-header">
                 <h3 class="section-title">Your Stance Across All 10 Policy Domains</h3>
@@ -1077,20 +1287,21 @@
             <div class="cat-breakdown-grid" id="cat-breakdown-grid"></div>
         </div>
 
-        <!-- 5. Policy Disagreement & Heterodox Views Breakdown -->
+        <!-- 6. Policy Disagreement & Heterodox Views Breakdown -->
         <div class="card" id="sec-divergences">
             <div class="section-header">
-                <h3 class="section-title">Where You Differ From Your #1 Match</h3>
+                <h3 class="section-title">Where You Differ From Your #1 Match (or Friend)</h3>
                 <div style="display:flex; gap:6px; flex-wrap:wrap;">
                     <button class="util-btn active-tab" id="div-mode-ideology" onclick="setDivergenceTarget('ideology')" style="padding: 4px 10px; font-size: 12px;">vs. #1 Ideology</button>
                     <button class="util-btn" id="div-mode-caucus" onclick="setDivergenceTarget('caucus')" style="padding: 4px 10px; font-size: 12px;">vs. #1 US Caucus</button>
+                    <button class="util-btn" id="div-mode-friend" onclick="setDivergenceTarget('friend')" style="padding: 4px 10px; font-size: 12px; display:none; border-color: rgba(244,63,94,0.45); color:#fda4af;">vs. Friend</button>
                 </div>
             </div>
             <p class="divergence-intro" id="divergence-intro-text"></p>
             <div id="divergence-list"></div>
         </div>
 
-        <!-- 6. Consolidated Tabbed Match Explorer -->
+        <!-- 7. Consolidated Tabbed Match Explorer -->
         <div class="card" id="sec-matches">
             <div class="section-header">
                 <h3 class="section-title">Ideological, Caucus, Leader & International Matches</h3>
@@ -1122,11 +1333,11 @@
             </div>
         </div>
 
-        <!-- 7. Share & Export Visual Scorecard -->
+        <!-- 8. Share & Export Visual Scorecard -->
         <div class="card" id="sec-share">
             <div class="section-header">
                 <h3 class="section-title">Share Your Results & Download Visual Scorecard</h3>
-                <span style="font-size: 12px; color: var(--text-muted);">Shared links display this full dashboard</span>
+                <span style="font-size: 12px; color: var(--text-muted);">Shared links display this full dashboard (including active friend comparisons)</span>
             </div>
             <div class="share-grid">
                 <button class="share-action-btn" id="btn-copy-link" onclick="copyShareLink()">🔗 Copy Interactive Results Link</button>
@@ -1135,7 +1346,7 @@
                 <button class="share-action-btn" onclick="nativeShare()">📤 Share via Device / Social</button>
             </div>
             <div class="scorecard-preview-wrap">
-                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Live Visual Scorecard Preview (Auto-fits long party names without clipping)</div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Live Visual Scorecard Preview (Automatically includes your friend's dot when comparing)</div>
                 <canvas id="scorecard-canvas" width="1200" height="650"></canvas>
             </div>
         </div>
@@ -1158,25 +1369,21 @@ let currentIndex = 0;
 let answers = new Array(QUESTION_BANK.length).fill(null);
 let priorities = new Array(QUESTION_BANK.length).fill(false);
 let shuffleSeed = Math.floor(Math.random() * 900000) + 100000;
-let currentDisplayedOrder = [0, 1, 2]; // Maps visual slot [0,1,2] -> true statement index in QUESTION_BANK
+let currentDisplayedOrder = [0, 1, 2];
 let mapOverlayMode = "both";
 let divergenceTargetMode = "ideology";
 let lastComputedResult = null;
+let friendComparison = null; // Holds { name, econLeft, socialProg, civilLib, diploGlobal, answers, topMatch }
 
 // ============================================================================
-// DETERMINISTIC BLIND STATEMENT SHUFFLER (ELIMINATES ORDER BIAS)
+// DETERMINISTIC BLIND STATEMENT SHUFFLER
 // ============================================================================
 const PERMUTATIONS_3 = [
-    [0, 1, 2],
-    [0, 2, 1],
-    [1, 0, 2],
-    [1, 2, 0],
-    [2, 0, 1],
-    [2, 1, 0]
+    [0, 1, 2], [0, 2, 1], [1, 0, 2],
+    [1, 2, 0], [2, 0, 1], [2, 1, 0]
 ];
 
 function getShuffledIndicesForQuestion(qIndex) {
-    // Deterministic hash combining session seed and question index
     const hash = Math.abs(((qIndex + 1) * 2654435761 + shuffleSeed) | 0);
     return PERMUTATIONS_3[hash % 6];
 }
@@ -1229,9 +1436,7 @@ function getSavedState() {
             return { ...parsed, answeredCount };
         }
         return null;
-    } catch (e) {
-        return null;
-    }
+    } catch (e) { return null; }
 }
 
 function saveProgressToStorage() {
@@ -1255,9 +1460,7 @@ function getSavedCompletedResult() {
         const parsed = JSON.parse(raw);
         if (!parsed || typeof parsed.econLeft !== "number") return null;
         return parsed;
-    } catch (e) {
-        return null;
-    }
+    } catch (e) { return null; }
 }
 
 function saveCompletedResultToStorage(payload) {
@@ -1388,6 +1591,7 @@ function showMainHomeWithoutClearing() {
     if (window.history.replaceState) {
         window.history.replaceState({}, document.title, window.location.pathname);
     }
+    friendComparison = null;
     checkHomeActionButtons();
     hideAllViews();
     document.getElementById("home-view").style.display = "block";
@@ -1401,6 +1605,7 @@ function startNewQuiz() {
         window.history.replaceState({}, document.title, window.location.pathname);
     }
     clearSavedStorage();
+    friendComparison = null;
     currentIndex = 0;
     answers.fill(null);
     priorities.fill(false);
@@ -1450,7 +1655,6 @@ function renderQuestion() {
     box.innerHTML = "";
     const letters = ["A", "B", "C"];
 
-    // Get blind shuffled order for this question
     currentDisplayedOrder = getShuffledIndicesForQuestion(currentIndex);
 
     currentDisplayedOrder.forEach((trueStmtIdx, visualSlotIdx) => {
@@ -1501,7 +1705,6 @@ document.addEventListener("keydown", (e) => {
     if (!quizVisible) return;
     if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
 
-    // Map keys 1/2/3 to the currently displayed visual slot (A/B/C) -> true statement index
     if (e.key === "1" || e.key === "a" || e.key === "A") { e.preventDefault(); selectAnswer(currentDisplayedOrder[0]); }
     else if (e.key === "2" || e.key === "b" || e.key === "B") { e.preventDefault(); selectAnswer(currentDisplayedOrder[1]); }
     else if (e.key === "3" || e.key === "c" || e.key === "C") { e.preventDefault(); selectAnswer(currentDisplayedOrder[2]); }
@@ -1593,25 +1796,345 @@ function switchMatchTab(tabName) {
 }
 
 // ============================================================================
-// POLICY DISAGREEMENT & HETERODOX VIEWS ENGINE
+// COMPARE WITH A FRIEND ENGINE (URL PARSER, 2D OVERLAY & AXIS COMPARISON)
+// ============================================================================
+function getTopIdeologyForCoords(e, s, a, d) {
+    const maxDist = 200;
+    const ideologies = PROFILES.filter(p => p.group === "ideology").map(p => {
+        const dist = Math.sqrt(
+            Math.pow(e - p.e, 2) * 1.35 +
+            Math.pow(s - p.s, 2) * 1.35 +
+            Math.pow(a - p.a, 2) * 0.65 +
+            Math.pow(d - p.d, 2) * 0.65
+        );
+        const matchPct = Math.max(8, Math.min(99, Math.round((1 - dist / maxDist) * 100)));
+        return { ...p, matchPct };
+    }).sort((x, y) => y.matchPct - x.matchPct);
+    return ideologies[0];
+}
+
+function parseFriendInputString(rawStr) {
+    if (!rawStr || !rawStr.trim()) return null;
+    let queryPart = rawStr.trim();
+    const qMarkIdx = queryPart.indexOf("?");
+    if (qMarkIdx !== -1) {
+        queryPart = queryPart.slice(qMarkIdx);
+    } else if (!queryPart.startsWith("e=") && !queryPart.includes("&s=")) {
+        return null;
+    }
+    const params = new URLSearchParams(queryPart);
+    if (!params.has("e") || !params.has("s")) return null;
+
+    const e = Math.max(0, Math.min(100, parseInt(params.get("e"), 10)));
+    const s = Math.max(0, Math.min(100, parseInt(params.get("s"), 10)));
+    const a = params.has("a") ? Math.max(0, Math.min(100, parseInt(params.get("a"), 10))) : 50;
+    const d = params.has("d") ? Math.max(0, Math.min(100, parseInt(params.get("d"), 10))) : 50;
+    if (isNaN(e) || isNaN(s)) return null;
+
+    let friendAns = null;
+    if (params.has("ans")) {
+        friendAns = decodeAnswersCompact(params.get("ans"), QUESTION_BANK.length);
+    }
+    return { econLeft: e, socialProg: s, civilLib: a, diploGlobal: d, answers: friendAns };
+}
+
+function applyFriendComparisonFromInput() {
+    const urlInput = document.getElementById("friend-url-input").value;
+    const nameInput = document.getElementById("friend-name-input").value.trim() || "Friend";
+    const errEl = document.getElementById("friend-error-msg");
+
+    const parsed = parseFriendInputString(urlInput);
+    if (!parsed) {
+        errEl.style.display = "block";
+        return;
+    }
+    errEl.style.display = "none";
+
+    friendComparison = {
+        name: nameInput,
+        ...parsed,
+        topMatch: getTopIdeologyForCoords(parsed.econLeft, parsed.socialProg, parsed.civilLib, parsed.diploGlobal)
+    };
+
+    syncUrlWithFriendParams();
+    renderFriendComparisonUI();
+    renderDivergences();
+    drawScorecardCanvas(lastComputedResult);
+}
+
+function clearFriendComparison() {
+    friendComparison = null;
+    document.getElementById("friend-url-input").value = "";
+    document.getElementById("friend-error-msg").style.display = "none";
+    if (divergenceTargetMode === "friend") {
+        divergenceTargetMode = "ideology";
+        document.getElementById("div-mode-ideology").classList.add("active-tab");
+        document.getElementById("div-mode-friend").classList.remove("active-tab");
+    }
+    syncUrlWithFriendParams();
+    renderFriendComparisonUI();
+    renderDivergences();
+    drawScorecardCanvas(lastComputedResult);
+}
+
+function syncUrlWithFriendParams() {
+    if (!window.history.replaceState || !lastComputedResult) return;
+    const params = new URLSearchParams(window.location.search);
+    if (friendComparison) {
+        params.set("fe", friendComparison.econLeft);
+        params.set("fs", friendComparison.socialProg);
+        params.set("fa", friendComparison.civilLib);
+        params.set("fd", friendComparison.diploGlobal);
+        params.set("fn", friendComparison.name);
+        if (friendComparison.answers) {
+            params.set("fans", encodeAnswersCompact(friendComparison.answers));
+        }
+    } else {
+        params.delete("fe");
+        params.delete("fs");
+        params.delete("fa");
+        params.delete("fd");
+        params.delete("fn");
+        params.delete("fans");
+    }
+    window.history.replaceState({}, document.title, window.location.pathname + "?" + params.toString());
+}
+
+function renderFriendComparisonUI() {
+    if (!lastComputedResult) return;
+    const u = lastComputedResult;
+    const fDot = document.getElementById("compass-friend-dot");
+    const fTag = document.getElementById("compass-friend-tag");
+    const svgOverlay = document.getElementById("compass-svg-overlay");
+    const legendEl = document.getElementById("compass-legend");
+    const specFriendMarker = document.getElementById("us-spectrum-friend-marker");
+    const panelEl = document.getElementById("friend-comparison-panel");
+    const divFriendBtn = document.getElementById("div-mode-friend");
+
+    if (!friendComparison) {
+        fDot.style.display = "none";
+        fTag.style.display = "none";
+        svgOverlay.innerHTML = "";
+        legendEl.style.display = "none";
+        specFriendMarker.style.display = "none";
+        panelEl.style.display = "none";
+        divFriendBtn.style.display = "none";
+        return;
+    }
+
+    const f = friendComparison;
+    const ux = Math.max(4, Math.min(96, 100 - u.econLeft));
+    const uy = Math.max(4, Math.min(96, 100 - u.socialProg));
+    const fx = Math.max(4, Math.min(96, 100 - f.econLeft));
+    const fy = Math.max(4, Math.min(96, 100 - f.socialProg));
+
+    // Plot Friend Dot, Tag, and Dashed Connector Line on 2D Compass
+    fDot.style.left = `${fx}%`;
+    fDot.style.top = `${fy}%`;
+    fDot.style.display = "block";
+
+    fTag.textContent = f.name;
+    fTag.style.left = `${fx}%`;
+    fTag.style.top = `${fy}%`;
+    fTag.style.display = "block";
+
+    svgOverlay.innerHTML = `
+        <line x1="${ux}" y1="${uy}" x2="${fx}" y2="${fy}"
+              stroke="#fb7185" stroke-width="0.9" stroke-dasharray="2.2,1.8" opacity="0.85" />
+    `;
+
+    document.getElementById("legend-friend-name").textContent = `${f.name} (${f.econLeft}/100 Econ, ${f.socialProg}/100 Soc)`;
+    legendEl.style.display = "flex";
+
+    // Plot Friend Marker on US Spectrum Bar
+    const fUsLeft = Math.round(f.econLeft * 0.55 + f.socialProg * 0.45);
+    specFriendMarker.style.left = `${100 - fUsLeft}%`;
+    specFriendMarker.title = `${f.name}'s US Spectrum Position (${fUsLeft}/100)`;
+    specFriendMarker.style.display = "block";
+
+    // Calculate 4-Axis Ideological Similarity % between User and Friend
+    const dist = Math.sqrt(
+        Math.pow(u.econLeft - f.econLeft, 2) * 1.35 +
+        Math.pow(u.socialProg - f.socialProg, 2) * 1.35 +
+        Math.pow(u.civilLib - f.civilLib, 2) * 0.65 +
+        Math.pow(u.diploGlobal - f.diploGlobal, 2) * 0.65
+    );
+    const compatPct = Math.max(5, Math.min(99, Math.round((1 - dist / 200) * 100)));
+
+    document.getElementById("friend-headline-text").textContent =
+        `You (${u.topMatch.name}) vs. ${f.name} (${f.topMatch.name})`;
+    document.getElementById("friend-subline-text").textContent =
+        `Your US Score: ${u.usLeftScore}/100 · ${f.name}'s US Score: ${fUsLeft}/100`;
+    document.getElementById("friend-compat-score").textContent = `${compatPct}% Ideological Alignment`;
+
+    const axisPairs = [
+        { title: "Economic Left Score", uVal: u.econLeft, fVal: f.econLeft, uColor: "#3b82f6" },
+        { title: "Social Progressive Score", uVal: u.socialProg, fVal: f.socialProg, uColor: "#10b981" },
+        { title: "Civil Libertarian Score", uVal: u.civilLib, fVal: f.civilLib, uColor: "#f59e0b" },
+        { title: "Globalist / International Score", uVal: u.diploGlobal, fVal: f.diploGlobal, uColor: "#8b5cf6" }
+    ];
+
+    document.getElementById("friend-axis-grid").innerHTML = axisPairs.map(ap => {
+        const diff = Math.abs(ap.uVal - ap.fVal);
+        return `
+            <div class="friend-axis-card">
+                <div class="friend-axis-top">
+                    <span>${ap.title}</span>
+                    <span style="color:var(--text-muted); font-weight:600;">Gap: ${diff} pts</span>
+                </div>
+                <div class="friend-dual-bar-row">
+                    <span class="friend-who-label" style="color:#60a5fa;">You</span>
+                    <div class="friend-bar-track">
+                        <div style="width:${ap.uVal}%; height:100%; background:${ap.uColor}; border-radius:99px;"></div>
+                    </div>
+                    <span class="friend-pct-val">${ap.uVal}%</span>
+                </div>
+                <div class="friend-dual-bar-row">
+                    <span class="friend-who-label" style="color:#fb7185;">${f.name}</span>
+                    <div class="friend-bar-track">
+                        <div style="width:${ap.fVal}%; height:100%; background:#f43f5e; border-radius:99px;"></div>
+                    </div>
+                    <span class="friend-pct-val">${ap.fVal}%</span>
+                </div>
+            </div>
+        `;
+    }).join("");
+
+    panelEl.style.display = "block";
+    divFriendBtn.style.display = "inline-block";
+    divFriendBtn.textContent = `vs. ${f.name}`;
+}
+
+// ============================================================================
+// POLICY DISAGREEMENT & HETERODOX VIEWS ENGINE (SUPPORTS IDEOLOGY, CAUCUS & FRIEND)
 // ============================================================================
 function setDivergenceTarget(mode) {
     divergenceTargetMode = mode;
     document.getElementById("div-mode-ideology").classList.toggle("active-tab", mode === "ideology");
     document.getElementById("div-mode-caucus").classList.toggle("active-tab", mode === "caucus");
+    document.getElementById("div-mode-friend").classList.toggle("active-tab", mode === "friend");
     renderDivergences();
 }
 
 function renderDivergences() {
     if (!lastComputedResult) return;
-    const targetProfile = divergenceTargetMode === "ideology"
-        ? lastComputedResult.topMatch
-        : lastComputedResult.topCaucus;
-
     const introEl = document.getElementById("divergence-intro-text");
     const listEl = document.getElementById("divergence-list");
 
     const hasDetailedAnswers = answers.some(a => a !== null && a >= 0);
+
+    // Direct Question-by-Question Friend Comparison Mode
+    if (divergenceTargetMode === "friend" && friendComparison) {
+        const f = friendComparison;
+        if (!hasDetailedAnswers) {
+            introEl.innerHTML = `Take or preview the test questions to see your exact statement-by-statement disagreements with <strong>${f.name}</strong>.`;
+            listEl.innerHTML = "";
+            return;
+        }
+        const friendHasAnswers = Array.isArray(f.answers) && f.answers.some(a => a !== null && a >= 0);
+        const fVec = [
+            ((50 - f.econLeft) / 50) * 2,
+            ((50 - f.socialProg) / 50) * 2,
+            ((50 - f.civilLib) / 50) * 2,
+            ((50 - f.diploGlobal) / 50) * 2
+        ];
+        const axisNames = ["Economic Policy", "Social & Cultural Values", "Civil Liberties & Order", "Foreign & Trade Policy"];
+        const diffs = [];
+
+        QUESTION_BANK.forEach((q, qIdx) => {
+            const uIdx = answers[qIdx];
+            if (uIdx === null || uIdx < 0) return;
+            const stmts = q[3];
+            let fIdx = -1;
+
+            if (friendHasAnswers && f.answers[qIdx] !== null && f.answers[qIdx] >= 0) {
+                fIdx = f.answers[qIdx];
+            } else {
+                // Estimate friend's stance from their 4D coordinates if their link didn't include &ans=
+                let bestD = Infinity;
+                stmts.forEach((st, idx) => {
+                    const d = Math.sqrt(
+                        Math.pow(st[1] - fVec[0], 2) * 1.35 +
+                        Math.pow(st[2] - fVec[1], 2) * 1.35 +
+                        Math.pow(st[3] - fVec[2], 2) * 0.65 +
+                        Math.pow(st[4] - fVec[3], 2) * 0.65
+                    );
+                    if (d < bestD) { bestD = d; fIdx = idx; }
+                });
+            }
+
+            if (fIdx >= 0 && uIdx !== fIdx) {
+                const uStmt = stmts[uIdx];
+                const fStmt = stmts[fIdx];
+                const axisDeltas = [
+                    Math.abs(uStmt[1] - fStmt[1]) * 1.25,
+                    Math.abs(uStmt[2] - fStmt[2]) * 1.25,
+                    Math.abs(uStmt[3] - fStmt[3]) * 0.9,
+                    Math.abs(uStmt[4] - fStmt[4]) * 0.9
+                ];
+                const totalDivergence = Math.sqrt(
+                    axisDeltas[0]*axisDeltas[0] + axisDeltas[1]*axisDeltas[1] +
+                    axisDeltas[2]*axisDeltas[2] + axisDeltas[3]*axisDeltas[3]
+                ) * (priorities[qIdx] ? 1.35 : 1.0);
+
+                let maxAxisIdx = 0;
+                for (let k = 1; k < 4; k++) {
+                    if (axisDeltas[k] > axisDeltas[maxAxisIdx]) maxAxisIdx = k;
+                }
+                diffs.push({
+                    category: q[0],
+                    topic: q[1],
+                    userText: uStmt[0],
+                    partyText: fStmt[0],
+                    divergence: totalDivergence,
+                    isPriority: priorities[qIdx],
+                    primaryAxis: axisNames[maxAxisIdx],
+                    isMajor: Math.abs(uIdx - fIdx) === 2
+                });
+            }
+        });
+
+        diffs.sort((a, b) => b.divergence - a.divergence);
+        const topDiffs = diffs.slice(0, 6);
+
+        if (topDiffs.length === 0) {
+            introEl.innerHTML = `You and <strong>${f.name}</strong> chose identical stances across the policy questions!`;
+            listEl.innerHTML = "";
+            return;
+        }
+        introEl.innerHTML = `You and <strong>${f.name}</strong> differed on <strong>${diffs.length} policy topics</strong>. Here are your biggest head-to-head disagreements:`;
+        listEl.innerHTML = topDiffs.map(d => `
+            <div class="divergence-card">
+                <div class="div-top-row">
+                    <div class="div-topic-wrap">
+                        <span class="div-cat-tag">${d.category}</span>
+                        <span class="div-topic-title">${d.topic}${d.isPriority ? " ★" : ""}</span>
+                    </div>
+                    <span class="div-badge ${d.isMajor ? "major" : "moderate"}">
+                        ${d.isMajor ? "Opposite Pole Split" : "Policy Mechanism Split"}
+                    </span>
+                </div>
+                <div class="div-compare-grid">
+                    <div class="div-stance-box user-box">
+                        <span class="div-stance-label">Your Chosen Stance</span>
+                        ${d.userText}
+                    </div>
+                    <div class="div-stance-box friend-box">
+                        <span class="div-stance-label">${f.name}'s Stance</span>
+                        ${d.partyText}
+                    </div>
+                </div>
+                <div class="div-axis-note">Primary axis of difference: <strong>${d.primaryAxis}</strong></div>
+            </div>
+        `).join("");
+        return;
+    }
+
+    // Standard Ideology or Caucus Disagreement Mode
+    const targetProfile = divergenceTargetMode === "ideology"
+        ? lastComputedResult.topMatch
+        : lastComputedResult.topCaucus;
+
     if (!hasDetailedAnswers) {
         introEl.innerHTML = `Take or preview the test questions to see your exact statement-by-statement disagreements with <strong>${targetProfile.name}</strong>.`;
         listEl.innerHTML = "";
@@ -1778,13 +2301,15 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
     if (window.history.replaceState) {
         const cParam = (catScores || []).join(".");
         const ansEncoded = encodeAnswersCompact(answers);
-        const params = `?e=${econLeft}&s=${socialProg}&a=${civilLib}&d=${diploGlobal}&c=${cParam}&ans=${ansEncoded}`;
+        let params = `?e=${econLeft}&s=${socialProg}&a=${civilLib}&d=${diploGlobal}&c=${cParam}&ans=${ansEncoded}`;
+        if (friendComparison) {
+            params += `&fe=${friendComparison.econLeft}&fs=${friendComparison.socialProg}&fa=${friendComparison.civilLib}&fd=${friendComparison.diploGlobal}&fn=${encodeURIComponent(friendComparison.name)}`;
+        }
         window.history.replaceState({}, document.title, window.location.pathname + params);
     }
 
     document.getElementById("shared-banner").style.display = isFromSharedUrl ? "flex" : "none";
 
-    // 1. US Spectrum Composite & Empirical Pew Typology Match
     const usLeftScore = Math.round(econLeft * 0.55 + socialProg * 0.45);
     const usRightPos = 100 - usLeftScore;
     document.getElementById("us-spectrum-marker").style.left = `${usRightPos}%`;
@@ -1811,7 +2336,6 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
     document.getElementById("consistency-benchmark-text").innerHTML =
         getConsistencyDiagnostic(econLeft, socialProg);
 
-    // 2. 2D Political Compass
     const dotX = Math.max(4, Math.min(96, 100 - econLeft));
     const dotY = Math.max(4, Math.min(96, 100 - socialProg));
     const dot = document.getElementById("compass-dot");
@@ -1823,7 +2347,6 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
 
     renderLandmarks();
 
-    // 3. Distinct Color-Coded 4-Axis Scales
     const scalesData = [
         { key: "econ", name: "Economic Axis", leftName: "Public / Left", rightName: "Market / Right", leftPct: econLeft, grad: "linear-gradient(90deg, #2563eb, #60a5fa)" },
         { key: "social", name: "Social & Cultural Axis", leftName: "Progressive", rightName: "Traditional", leftPct: socialProg, grad: "linear-gradient(90deg, #059669, #34d399)" },
@@ -1845,7 +2368,6 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
         </div>
     `).join("");
 
-    // 4. Neutral Political Spectrum Color Coding on Domain Cards (No Traffic-Light Green/Red Bias)
     if (!catScores || catScores.length !== CATEGORY_META.length) {
         catScores = CATEGORY_META.map(() => usLeftScore);
     }
@@ -1883,7 +2405,6 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
         `;
     }).join("");
 
-    // 5. Euclidean Distance Matching Across All Profiles
     const maxDist = 200;
     const scoredProfiles = PROFILES.map(p => {
         const dist = Math.sqrt(
@@ -1969,6 +2490,7 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
         });
     }
 
+    renderFriendComparisonUI();
     renderDivergences();
     drawScorecardCanvas(lastComputedResult);
 
@@ -1978,7 +2500,7 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
 }
 
 // ============================================================================
-// 2D COMPASS LANDMARKS (SMART BOUNDARY-SAFE LABELS)
+// 2D COMPASS LANDMARKS
 // ============================================================================
 function setMapOverlay(mode) {
     mapOverlayMode = mode;
@@ -2029,7 +2551,7 @@ function renderLandmarks() {
 }
 
 // ============================================================================
-// OVERFLOW-PROOF SCORECARD CANVAS GENERATOR (1200x650)
+// OVERFLOW-PROOF SCORECARD CANVAS GENERATOR (SUPPORTS FRIEND DOT OVERLAY)
 // ============================================================================
 function fitCanvasText(ctx, text, maxWidth) {
     if (ctx.measureText(text).width <= maxWidth) return text;
@@ -2086,6 +2608,13 @@ function drawScorecardCanvas(res) {
     const markerX = leftX + ((100 - res.usLeftScore) / 100) * leftW;
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(markerX - 3, 190, 6, 25);
+
+    if (friendComparison) {
+        const fUs = Math.round(friendComparison.econLeft * 0.55 + friendComparison.socialProg * 0.45);
+        const fMarkerX = leftX + ((100 - fUs) / 100) * leftW;
+        ctx.fillStyle = "#f43f5e";
+        ctx.fillRect(fMarkerX - 3, 190, 6, 25);
+    }
 
     const axes = [
         { label: `Economic Left (${res.econLeft}%) vs. Right (${100 - res.econLeft}%)`, pct: res.econLeft, y: 248, color: "#3b82f6" },
@@ -2232,6 +2761,36 @@ function drawScorecardCanvas(res) {
     const ux = boxX + ((100 - res.econLeft) / 100) * boxSize;
     const uy = boxY + ((100 - res.socialProg) / 100) * boxSize;
 
+    // Draw Friend Dot + Connector Line on Canvas if active
+    if (friendComparison) {
+        const fCx = boxX + ((100 - friendComparison.econLeft) / 100) * boxSize;
+        const fCy = boxY + ((100 - friendComparison.socialProg) / 100) * boxSize;
+
+        ctx.save();
+        ctx.strokeStyle = "#fb7185";
+        ctx.lineWidth = 2.5;
+        ctx.setLineDash([6, 5]);
+        ctx.beginPath();
+        ctx.moveTo(ux, uy);
+        ctx.lineTo(fCx, fCy);
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.beginPath();
+        ctx.arc(fCx, fCy, 10, 0, Math.PI * 2);
+        ctx.fillStyle = "#f43f5e";
+        ctx.fill();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "#ffffff";
+        ctx.stroke();
+
+        ctx.fillStyle = "#fda4af";
+        ctx.font = "bold 12px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
+        ctx.textAlign = fCx > boxX + boxSize * 0.75 ? "right" : "left";
+        ctx.fillText(friendComparison.name, fCx + (fCx > boxX + boxSize * 0.75 ? -14 : 14), fCy + 4);
+        ctx.textAlign = "left";
+    }
+
     ctx.beginPath();
     ctx.arc(ux, uy, 11, 0, Math.PI * 2);
     ctx.fillStyle = "#60a5fa";
@@ -2264,18 +2823,21 @@ function copyShareLink() {
 function copyTextSummary() {
     if (!lastComputedResult) return;
     const r = lastComputedResult;
-    const text = [
+    const lines = [
         `🧭 Global Political Inventory Results`,
         `Primary Alignment: ${r.topMatch.name} (${r.usLabel} · ${r.usLeftScore}/100)`,
         `• Economic: ${r.econLeft}/100 Left | Social: ${r.socialProg}/100 Progressive`,
         `• Civil Liberties: ${r.civilLib}/100 Libertarian | Diplomatic: ${r.diploGlobal}/100 Globalist`,
         `• Closest US Caucus: ${r.topCaucus.name} (${r.topCaucus.matchPct}%)`,
         `• Closest Political Figure: ${r.topFigure.name} (${r.topFigure.matchPct}%)`,
-        `• Closest Intl Party: ${r.topIntl.name} (${r.topIntl.matchPct}%)`,
-        `View my full interactive compass & policy divergences: ${window.location.href}`
-    ].join("\n");
+        `• Closest Intl Party: ${r.topIntl.name} (${r.topIntl.matchPct}%)`
+    ];
+    if (friendComparison) {
+        lines.push(`• Compared with ${friendComparison.name}: ${friendComparison.topMatch.name} (Econ ${friendComparison.econLeft}/100, Social ${friendComparison.socialProg}/100)`);
+    }
+    lines.push(`View my full interactive compass: ${window.location.href}`);
 
-    navigator.clipboard.writeText(text).then(() => {
+    navigator.clipboard.writeText(lines.join("\n")).then(() => {
         const btn = document.getElementById("btn-copy-summary");
         const old = btn.textContent;
         btn.textContent = "✅ Copied Text Summary!";
@@ -2323,6 +2885,24 @@ function nativeShare() {
         if (params.has("ans")) {
             const decoded = decodeAnswersCompact(params.get("ans"), QUESTION_BANK.length);
             if (decoded) answers = decoded;
+        }
+        // Check if URL also includes a Friend Comparison overlay
+        if (params.has("fe") && params.has("fs")) {
+            const fe = Math.max(0, Math.min(100, parseInt(params.get("fe"), 10) || 50));
+            const fs = Math.max(0, Math.min(100, parseInt(params.get("fs"), 10) || 50));
+            const fa = params.has("fa") ? Math.max(0, Math.min(100, parseInt(params.get("fa"), 10))) : 50;
+            const fd = params.has("fd") ? Math.max(0, Math.min(100, parseInt(params.get("fd"), 10))) : 50;
+            const fn = params.get("fn") || "Friend";
+            const fans = params.has("fans") ? decodeAnswersCompact(params.get("fans"), QUESTION_BANK.length) : null;
+            friendComparison = {
+                name: fn,
+                econLeft: fe,
+                socialProg: fs,
+                civilLib: fa,
+                diploGlobal: fd,
+                answers: fans,
+                topMatch: getTopIdeologyForCoords(fe, fs, fa, fd)
+            };
         }
         computeAndDisplayResults({ econLeft: e, socialProg: s, civilLib: a, diploGlobal: d, catScores }, true, false);
         return;
