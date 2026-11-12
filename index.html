@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Political Inventory — US & Global Empirical Political Compass</title>
-    <meta name="description" content="Take the 105-question empirical political compass test. Toggle between the US Political Lens and Global/International Lens to see where you sit in American vs. world politics.">
+    <title>Global Political Inventory — US & Country Parliament Political Compass</title>
+    <meta name="description" content="Take the 105-question empirical political compass test. Toggle between the US Political Lens and specific national parliaments (UK, Canada, Germany, France, Australia).">
 
     <!-- Open Graph / Discord / iMessage / Social Link Embeds -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Global Political Inventory — US & International Political Compass">
-    <meta property="og:description" content="View my 4-axis political coordinates across both the US Spectrum and Global Overton Window, 2D compass placement, key policy disagreements, and party matches.">
+    <meta property="og:description" content="View my 4-axis political coordinates across the US Spectrum and UK, Canadian, German, French, and Australian parliaments.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Global Political Inventory — US & Global Political Compass">
-    <meta name="twitter:description" content="105 policy trade-offs mapped across US and International lenses, congressional caucuses, global parties, and political figures.">
+    <meta name="twitter:description" content="105 policy trade-offs mapped across US and International lenses, congressional caucuses, global parliaments, and political figures.">
     <meta name="theme-color" content="#3b82f6">
 
     <style>
@@ -371,17 +371,16 @@
         }
 
         /* ========================================================= */
-        /* RESULTS VIEW — US vs. GLOBAL LENS SWITCHER                */
+        /* RESULTS VIEW — US vs. GLOBAL & COUNTRY SELECTOR           */
         /* ========================================================= */
         #results-view { display: none; }
 
-        /* Dual Lens Switcher Banner */
         .lens-switcher-bar {
             background: #131722;
             border: 1px solid #2d3548;
             border-radius: 14px;
             padding: 12px 16px;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -389,22 +388,9 @@
             gap: 12px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.45);
         }
-        .lens-switcher-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-        .lens-switcher-title {
-            font-size: 13px;
-            font-weight: 800;
-            color: #ffffff;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-        }
-        .lens-switcher-sub {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
+        .lens-switcher-info { display: flex; flex-direction: column; gap: 2px; }
+        .lens-switcher-title { font-size: 13px; font-weight: 800; color: #ffffff; text-transform: uppercase; letter-spacing: 0.06em; }
+        .lens-switcher-sub { font-size: 12px; color: var(--text-muted); }
         .lens-pills-wrap {
             display: flex;
             background: #0d1017;
@@ -434,6 +420,50 @@
             background: linear-gradient(135deg, #7c3aed, #8b5cf6);
             color: #ffffff;
             box-shadow: 0 2px 10px rgba(139, 92, 246, 0.45);
+        }
+
+        /* Country Selector Sub-Bar inside Global Lens */
+        .country-selector-bar {
+            display: none;
+            background: rgba(124, 58, 237, 0.08);
+            border: 1px solid rgba(139, 92, 246, 0.35);
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .country-bar-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #ddd6fe;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .country-pills-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .country-pill {
+            background: #161924;
+            border: 1px solid #32394e;
+            color: #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .country-pill:hover { color: #fff; border-color: #a78bfa; }
+        .country-pill.active {
+            background: rgba(139, 92, 246, 0.28);
+            color: #ffffff;
+            border-color: #a78bfa;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
         }
 
         .results-sticky-nav {
@@ -1104,13 +1134,13 @@
             <div class="eyebrow">EMPIRICAL POLITICAL INVENTORY</div>
             <h1 class="hero-title">Global Political Inventory</h1>
             <p class="hero-sub">
-                A comprehensive, blind-shuffled 105-item policy assessment. Toggle seamlessly between the <strong>US Political Lens</strong> and the <strong>Global / International Lens</strong> to see where you sit in American politics versus the international Overton window.
+                A comprehensive, blind-shuffled 105-item policy assessment. Toggle seamlessly between the <strong>US Political Lens</strong> and specific <strong>National Parliaments (UK, Canada, Germany, France, Australia)</strong> to see where you sit in American versus international politics.
             </p>
             <div class="stats-strip">
                 <div class="stat-pill"><span class="stat-num">105</span><span class="stat-label">Policy Trade-Offs</span></div>
-                <div class="stat-pill"><span class="stat-num">2 Lenses</span><span class="stat-label">US vs. Global View</span></div>
+                <div class="stat-pill"><span class="stat-num">6 Nations</span><span class="stat-label">US + 5 Parliaments</span></div>
                 <div class="stat-pill"><span class="stat-num">4</span><span class="stat-label">Unbundled Axes</span></div>
-                <div class="stat-pill"><span class="stat-num">45+</span><span class="stat-label">Parties & Figures</span></div>
+                <div class="stat-pill"><span class="stat-num">75+</span><span class="stat-label">Parties & Figures</span></div>
             </div>
             <div class="cta-row">
                 <button class="resume-cta" id="resume-btn" onclick="resumeSavedQuiz()">▶ Resume Saved Progress</button>
@@ -1134,8 +1164,8 @@
             </div>
             <div class="method-grid">
                 <div class="method-box">
-                    <strong>1. Dual US vs. Global Overton Window Lenses</strong>
-                    Switch between the <em>US Political Lens</em> (benchmarked to Pew Typologies & Congressional Caucuses) and the <em>Global Lens</em> (calibrated to Western European/Commonwealth party baselines).
+                    <strong>1. US Congress + 5 National Parliaments</strong>
+                    Switch between the <em>US Political Lens</em> and specific national parliaments (<em>UK, Canada, Germany, France, Australia</em>) to see your exact party match and Overton window shift in each country.
                 </div>
                 <div class="method-box">
                     <strong>2. Blind Statement Shuffling + 2x Priority</strong>
@@ -1187,7 +1217,7 @@
     <!-- ========================================== -->
     <div id="results-view">
 
-        <!-- US vs. GLOBAL LENS SWITCHER BAR (NEW) -->
+        <!-- US vs. GLOBAL LENS SWITCHER BAR -->
         <div class="lens-switcher-bar">
             <div class="lens-switcher-info">
                 <span class="lens-switcher-title" id="active-lens-heading">🇺🇸 Active View: US Political Lens</span>
@@ -1195,7 +1225,20 @@
             </div>
             <div class="lens-pills-wrap">
                 <button class="lens-pill-btn active-us" id="lens-btn-us" onclick="setPerspectiveLens('us')">🇺🇸 US Political View</button>
-                <button class="lens-pill-btn" id="lens-btn-global" onclick="setPerspectiveLens('global')">🌍 Global / International View</button>
+                <button class="lens-pill-btn" id="lens-btn-global" onclick="setPerspectiveLens('global')">🌍 Global / Parliament View</button>
+            </div>
+        </div>
+
+        <!-- COUNTRY PARLIAMENT SELECTOR SUB-BAR (VISIBLE IN GLOBAL LENS) -->
+        <div class="country-selector-bar" id="country-selector-bar">
+            <span class="country-bar-label">Select Parliament / Nation:</span>
+            <div class="country-pills-row">
+                <button class="country-pill active" id="country-btn-all" onclick="setGlobalCountry('all')">🌍 All Global</button>
+                <button class="country-pill" id="country-btn-uk" onclick="setGlobalCountry('uk')">🇬🇧 United Kingdom</button>
+                <button class="country-pill" id="country-btn-ca" onclick="setGlobalCountry('ca')">🇨🇦 Canada</button>
+                <button class="country-pill" id="country-btn-de" onclick="setGlobalCountry('de')">🇩🇪 Germany</button>
+                <button class="country-pill" id="country-btn-fr" onclick="setGlobalCountry('fr')">🇫🇷 France</button>
+                <button class="country-pill" id="country-btn-au" onclick="setGlobalCountry('au')">🇦🇺 Australia</button>
             </div>
         </div>
 
@@ -1239,7 +1282,7 @@
             </div>
         </div>
 
-        <!-- 2. Political Spectrum & Overton Window Benchmark (Dynamic US vs. Global) -->
+        <!-- 2. Political Spectrum & Overton Window Benchmark -->
         <div class="card">
             <div class="section-header">
                 <h3 class="section-title" id="spectrum-card-title">US Political Spectrum & Empirical Voter Benchmark</h3>
@@ -1355,13 +1398,13 @@
         <!-- 7. Consolidated Tabbed Match Explorer -->
         <div class="card" id="sec-matches">
             <div class="section-header">
-                <h3 class="section-title">Ideological, Caucus, Leader & International Matches</h3>
-                <span style="font-size: 12px; color: var(--text-muted);">Automatically highlights your active lens</span>
+                <h3 class="section-title">Ideological, Caucus, Leader & Parliamentary Matches</h3>
+                <span style="font-size: 12px; color: var(--text-muted);" id="matches-subtitle-note">Switch tabs or view all side-by-side</span>
             </div>
             <div class="match-tabs-bar">
                 <button class="match-tab-btn active" id="tab-btn-ideologies" onclick="switchMatchTab('ideologies')">🧭 Ideologies (6)</button>
                 <button class="match-tab-btn" id="tab-btn-caucuses" onclick="switchMatchTab('caucuses')">🏛️ US Caucuses & Parties (6)</button>
-                <button class="match-tab-btn" id="tab-btn-international" onclick="switchMatchTab('international')">🌍 International Parties (6)</button>
+                <button class="match-tab-btn" id="tab-btn-international" onclick="switchMatchTab('international')">🌍 International Parties</button>
                 <button class="match-tab-btn" id="tab-btn-figures" onclick="switchMatchTab('figures')">👤 Political Leaders (6)</button>
                 <button class="match-tab-btn" id="tab-btn-all" onclick="switchMatchTab('all')">📋 Show All</button>
             </div>
@@ -1375,7 +1418,7 @@
                 <div class="match-grid-2col" id="list-caucuses"></div>
             </div>
             <div id="panel-international" style="display:none;">
-                <div class="match-panel-title">Closest International Parties</div>
+                <div class="match-panel-title" id="intl-panel-heading">Closest International Parties</div>
                 <div class="match-grid-2col" id="list-international"></div>
             </div>
             <div id="panel-figures" style="display:none;">
@@ -1388,7 +1431,7 @@
         <div class="card" id="sec-share">
             <div class="section-header">
                 <h3 class="section-title">Share Your Results & Download Visual Scorecard</h3>
-                <span style="font-size: 12px; color: var(--text-muted);">Scorecard updates automatically for US vs. Global Lens</span>
+                <span style="font-size: 12px; color: var(--text-muted);">Scorecard updates automatically for US vs. Country Parliament Lens</span>
             </div>
             <div class="share-grid">
                 <button class="share-action-btn" id="btn-copy-link" onclick="copyShareLink()">🔗 Copy Interactive Results Link</button>
@@ -1397,7 +1440,7 @@
                 <button class="share-action-btn" onclick="nativeShare()">📤 Share via Device / Social</button>
             </div>
             <div class="scorecard-preview-wrap">
-                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Live Visual Scorecard Preview (Reflects your active US or Global Lens + Friend comparison)</div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Live Visual Scorecard Preview (Reflects your active US or Country Parliament Lens + Friend comparison)</div>
                 <canvas id="scorecard-canvas" width="1200" height="650"></canvas>
             </div>
         </div>
@@ -1422,20 +1465,110 @@ let priorities = new Array(QUESTION_BANK.length).fill(false);
 let shuffleSeed = Math.floor(Math.random() * 900000) + 100000;
 let currentDisplayedOrder = [0, 1, 2];
 let perspectiveLens = "us"; // 'us' or 'global'
+let selectedCountry = "all"; // 'all', 'uk', 'ca', 'de', 'fr', 'au'
 let mapOverlayMode = "lens";
 let divergenceTargetMode = "ideology";
 let lastComputedResult = null;
 let friendComparison = null;
 
+// ============================================================================
+// COUNTRY-SPECIFIC PARLIAMENTARY DATABASES (UK, CANADA, GERMANY, FRANCE, AUSTRALIA)
+// Coordinates: [e: EconLeft(0-100), s: SocialProg(0-100), a: CivilLib(0-100), d: Global(0-100)]
+// ============================================================================
+const COUNTRY_PARLIAMENTS = {
+    all: {
+        name: "All Global Democracies",
+        flag: "🌍",
+        parliamentName: "Western European & Commonwealth Parliaments",
+        medianRaw: 58,
+        shiftNote: "In Western Europe, Canada, and Australia—where universal healthcare and statutory paid leave are baseline center-right/center norms—the median voter sits ~8 points to the left of the US median."
+    },
+    uk: {
+        name: "United Kingdom",
+        flag: "🇬🇧",
+        parliamentName: "UK House of Commons (Westminster)",
+        medianRaw: 57,
+        shiftNote: "In British politics, state-funded healthcare (the NHS) and stricter firearm laws are consensus positions across both Labour and the Conservatives, placing the UK economic center roughly 7 points to the left of the US.",
+        parties: [
+            { name: "Labour Party (UK)", short: "Labour", sub: "UK Center-Left Governing Party", e: 66, s: 74, a: 46, d: 74, desc: "Britain's main center-left party: supports public investment in the NHS, green energy transition (GB Energy), workers' rights, and NATO security." },
+            { name: "Conservative & Unionist Party", short: "Conservatives", sub: "UK Center-Right Party (Tories)", e: 30, s: 34, a: 38, d: 42, desc: "Britain's traditional center-right party: favors lower taxes, private enterprise, stricter immigration enforcement, and traditional institutions." },
+            { name: "Liberal Democrats (UK)", short: "Lib Dems", sub: "UK Social-Liberal Centrist Party", e: 56, s: 78, a: 64, d: 86, desc: "Centrist social-liberal party advocating proportional representation, civil liberties, closer European ties, and public service investment." },
+            { name: "Reform UK", short: "Reform UK", sub: "UK National-Populist Right Party", e: 26, s: 16, a: 34, d: 12, desc: "Right-wing populist party campaigning on freezing non-essential immigration, scrapping Net Zero mandates, and cutting income and business taxes." },
+            { name: "Green Party of England & Wales", short: "UK Greens", sub: "UK Eco-Socialist / Progressive Left", e: 82, s: 90, a: 68, d: 84, desc: "Left-wing environmentalist party backing wealth taxes, public ownership of water/rail utilities, rent controls, and rapid decarbonization." },
+            { name: "Scottish National Party (SNP)", short: "SNP", sub: "Scottish Social-Democratic Party", e: 72, s: 82, a: 56, d: 82, desc: "Center-left social-democratic party advocating Scottish independence within the EU, free university tuition, and progressive taxation." }
+        ]
+    },
+    ca: {
+        name: "Canada",
+        flag: "🇨🇦",
+        parliamentName: "House of Commons of Canada (Ottawa)",
+        medianRaw: 58,
+        shiftNote: "In Canadian federal politics, single-payer provincial Medicare, bilingualism, and stronger social safety nets shift the Canadian center ~8 points to the left of the US.",
+        parties: [
+            { name: "Liberal Party of Canada (LPC)", short: "LPC (Liberals)", sub: "Canadian Center-Left / Centrist Governing Party", e: 58, s: 78, a: 48, d: 82, desc: "Canada's traditional governing centrist/center-left party: backs carbon pricing, national childcare, multiculturalism, and regulated market trade." },
+            { name: "Conservative Party of Canada (CPC)", short: "CPC (Tories)", sub: "Canadian Center-Right Party", e: 26, s: 32, a: 46, d: 44, desc: "Main opposition center-right party: campaigns on axing the carbon tax, resource & pipeline development, fiscal restraint, and tougher crime laws." },
+            { name: "New Democratic Party (NDP)", short: "NDP", sub: "Canadian Social-Democratic Left", e: 78, s: 86, a: 58, d: 78, desc: "Canada's social-democratic labor party: champions universal pharmacare, dental care, affordable public housing, union protections, and wealth taxes." },
+            { name: "Bloc Québécois", short: "Bloc Québécois", sub: "Quebec Social-Democratic & Cultural Nationalist", e: 70, s: 66, a: 44, d: 42, desc: "Combines social-democratic economic and environmental policies with Quebec sovereignty, French-language protection, and state secularism (laïcité)." },
+            { name: "Green Party of Canada", short: "CA Greens", sub: "Canadian Eco-Progressive Party", e: 72, s: 86, a: 64, d: 82, desc: "Focuses on phasing out oil-sands expansion, guaranteed livable income, electoral reform, and ecological sustainability." },
+            { name: "People's Party of Canada (PPC)", short: "PPC", sub: "Canadian Right-Populist / Libertarian-Nationalist", e: 14, s: 18, a: 66, d: 14, desc: "Anti-establishment right-wing party advocating sharp reductions in immigration, ending corporate subsidies, opposing vaccine mandates, and free-market health options." }
+        ]
+    },
+    de: {
+        name: "Germany",
+        flag: "🇩🇪",
+        parliamentName: "German Bundestag (Berlin)",
+        medianRaw: 59,
+        shiftNote: "Germany's 'Social Market Economy' (Soziale Marktwirtschaft)—featuring statutory health insurance, worker representation on corporate boards, and strong unions—places the German center ~9 points left of the US.",
+        parties: [
+            { name: "CDU / CSU (Christian Democrats)", short: "CDU/CSU", sub: "German Center-Right Christian-Democratic Bloc", e: 36, s: 34, a: 40, d: 56, desc: "Germany's traditional center-right governing bloc: upholds the social market economy, fiscal discipline ('debt brake'), NATO/EU anchors, and stricter border controls." },
+            { name: "SPD (Social Democratic Party)", short: "SPD", sub: "German Center-Left Labour Party", e: 68, s: 74, a: 50, d: 76, desc: "Germany's oldest center-left party: defends collective bargaining, minimum wage increases, statutory pensions, and European integration." },
+            { name: "Bündnis 90 / Die Grünen (Greens)", short: "Grüne", sub: "German Eco-Progressive Center-Left", e: 70, s: 88, a: 58, d: 86, desc: "Combines rapid renewable energy transition and progressive civil/social rights with strong pro-European and pro-NATO foreign policy." },
+            { name: "FDP (Free Democratic Party)", short: "FDP", sub: "German Classical-Liberal / Market-Right", e: 22, s: 66, a: 80, d: 72, desc: "Pro-market classical liberal party advocating lower taxes, strict debt limits, digital civil liberties, deregulation, and technological openness." },
+            { name: "AfD (Alternative for Germany)", short: "AfD", sub: "German National-Populist Right", e: 28, s: 10, a: 26, d: 10, desc: "Hard-right nationalist party campaigning on halting asylum migration, restoring national sovereignty over EU mandates, and ending climate taxes." },
+            { name: "Die Linke (The Left)", short: "Die Linke", sub: "German Democratic-Socialist Left", e: 88, s: 88, a: 66, d: 78, desc: "Democratic-socialist party demanding billionaire wealth taxes, national rent caps, public ownership of infrastructure, and anti-militarism." },
+            { name: "BSW (Bündnis Sahra Wagenknecht)", short: "BSW", sub: "Left-Conservative / Economic Populist", e: 76, s: 34, a: 42, d: 28, desc: "Cross-pressured populist party combining left-wing economic welfare and higher wages with restrictive immigration rules and skepticism of foreign military aid." }
+        ]
+    },
+    fr: {
+        name: "France",
+        flag: "🇫🇷",
+        parliamentName: "French National Assembly (Paris)",
+        medianRaw: 61,
+        shiftNote: "France's dirigiste economic tradition—with high public spending, a 35-hour statutory workweek, and strong state utilities—places the French economic median ~11 points left of the US.",
+        parties: [
+            { name: "Renaissance / Ensemble (Macron)", short: "Renaissance", sub: "French Market-Liberal Centrist Bloc", e: 42, s: 68, a: 44, d: 86, desc: "Technocratic centrist bloc combining pro-business labor/pension reforms and deep EU integration with secular, socially liberal governance." },
+            { name: "National Rally (Rassemblement National)", short: "RN", sub: "French National-Populist Right", e: 44, s: 16, a: 26, d: 12, desc: "Sovereigntist right-wing party prioritizing 'national preference' in welfare/housing, strict immigration cuts, law and order, and protectionism." },
+            { name: "La France Insoumise (LFI)", short: "LFI", sub: "French Eco-Socialist Left", e: 88, s: 86, a: 60, d: 74, desc: "Left-wing populist movement advocating a 60-year retirement age, price controls on essentials, heavy wealth taxation, and a 6th Republic." },
+            { name: "Socialist Party (Parti Socialiste)", short: "PS", sub: "French Mainstream Social-Democratic Left", e: 72, s: 80, a: 54, d: 80, desc: "Traditional center-left social-democratic party backing public hospitals, progressive taxation, labor unions, and pro-European cooperation." },
+            { name: "Les Républicains (LR)", short: "LR", sub: "French Gaullist Center-Right", e: 26, s: 26, a: 34, d: 38, desc: "Traditional Gaullist conservative party advocating public spending cuts, pro-business tax relief, strict secularism, and firm policing." },
+            { name: "Les Écologistes (EELV)", short: "EELV Greens", sub: "French Green / Eco-Progressive Left", e: 78, s: 90, a: 66, d: 84, desc: "Environmentalist left party championing biodiversity, wealth redistribution, social justice, and civil liberties." }
+        ]
+    },
+    au: {
+        name: "Australia",
+        flag: "🇦🇺",
+        parliamentName: "Australian Federal Parliament (Canberra)",
+        medianRaw: 55,
+        shiftNote: "Australia's compulsory voting system pulls major parties toward the pragmatic center—where universal Medicare, compulsory superannuation, and award wages sit ~5 points left of the US median.",
+        parties: [
+            { name: "Australian Labor Party (ALP)", short: "Labor (ALP)", sub: "Australian Center-Left Governing Party", e: 64, s: 72, a: 48, d: 72, desc: "Australia's trade-union-linked center-left party: supports Medicare strengthening, renewable energy investment, award wage protections, and AUKUS/allied security." },
+            { name: "Liberal-National Coalition (LNP)", short: "Coalition (LNP)", sub: "Australian Center-Right Governing Bloc", e: 28, s: 32, a: 38, d: 44, desc: "Mainstream center-right alliance combining urban free-enterprise Liberals and rural Nationals—backing lower taxes, resource exports, nuclear energy, and border security." },
+            { name: "Australian Greens", short: "AU Greens", sub: "Australian Eco-Socialist / Progressive Left", e: 82, s: 90, a: 64, d: 84, desc: "Progressive left party campaigning on halting new coal and gas projects, including dental/mental health in Medicare, rent freezes, and taxing corporate super-profits." },
+            { name: "Teal Independents", short: "Teal Ind.", sub: "Market-Liberal & Pro-Climate Centrists", e: 38, s: 76, a: 62, d: 78, desc: "Centrist movement in affluent urban seats combining fiscal conservatism and pro-business economics with ambitious climate targets and integrity reforms." },
+            { name: "Pauline Hanson's One Nation", short: "One Nation", sub: "Australian National-Populist Right", e: 34, s: 14, a: 30, d: 12, desc: "Right-wing populist party campaigning on sharp immigration reductions, opposing Net Zero climate mandates, and economic nationalism." }
+        ]
+    }
+};
+
 // Global Party Family Typologies (Chapel Hill Expert Survey / Comparative Manifesto Baseline)
 const GLOBAL_FAMILIES = [
-    { name: "Democratic Socialist / Eco-Socialist Left (~9% of Western Electorates)", e: 86, s: 88, desc: "Represented by parties like La France Insoumise, Die Linke, and the Red-Green Alliance—advocating public ownership, wealth taxes, and rapid decarbonization." },
+    { name: "Democratic Socialist / Eco-Socialist Left (~9% of Western Electorates)", e: 86, s: 88, desc: "Represented by parties like La France Insoumise, Die Linke, and the Australian/UK Greens—advocating public ownership, wealth taxes, and rapid decarbonization." },
     { name: "Green / Left-Libertarian (~10% of Western Electorates)", e: 74, s: 88, desc: "Represented by European and Commonwealth Green parties—combining environmental transition and social progressivism with civil liberties." },
     { name: "Social Democratic / Labour Mainstream (~22% of Western Electorates)", e: 66, s: 74, desc: "The traditional center-left governing bloc (UK Labour, German SPD, Canadian NDP, Australian ALP) supporting universal healthcare, collective bargaining, and regulated markets." },
-    { name: "Social Liberal / Centrist Reform (~14% of Western Electorates)", e: 54, s: 76, desc: "Represented by UK Liberal Democrats, Canadian Liberals, and Dutch D66—favoring internationalism, civil rights, and regulated market economies." },
+    { name: "Social Liberal / Centrist Reform (~14% of Western Electorates)", e: 54, s: 76, desc: "Represented by UK Liberal Democrats, Canadian Liberals, and Australian Teals—favoring internationalism, civil rights, and regulated market economies." },
     { name: "Market-Liberal / Technocratic Center-Right (~12% of Western Electorates)", e: 36, s: 66, desc: "Represented by French Renaissance and German FDP—combining free trade, deregulation, and fiscal restraint with socially liberal norms." },
-    { name: "Christian Democratic / Mainstream Conservative (~20% of Western Electorates)", e: 30, s: 34, desc: "The traditional center-right governing bloc (German CDU, UK Conservatives, Canadian CPC) pairing market enterprise with cultural stability and security alliances." },
-    { name: "National Populist / Sovereigntist Right (~13% of Western Electorates)", e: 34, s: 16, desc: "Represented by National Rally, Reform UK, Fratelli d'Italia, and AfD—prioritizing strict border enforcement, national sovereignty, and cultural traditionalism." }
+    { name: "Christian Democratic / Mainstream Conservative (~20% of Western Electorates)", e: 30, s: 34, desc: "The traditional center-right governing bloc (German CDU, UK Conservatives, Canadian CPC, Australian LNP) pairing market enterprise with cultural stability and security alliances." },
+    { name: "National Populist / Sovereigntist Right (~13% of Western Electorates)", e: 34, s: 16, desc: "Represented by National Rally, Reform UK, AfD, and One Nation—prioritizing strict border enforcement, national sovereignty, and cultural traditionalism." }
 ];
 
 // ============================================================================
@@ -1486,27 +1619,26 @@ function decodeAnswersCompact(str, totalLen) {
 }
 
 // ============================================================================
-// US vs. GLOBAL OVERTON WINDOW CONVERSION HELPERS
+// US vs. COUNTRY-SPECIFIC OVERTON WINDOW CONVERSION HELPERS
 // ============================================================================
-function getUsAndGlobalSpectrumData(econLeft, socialProg) {
-    // Raw composite (0 = Max Right, 100 = Max Left)
+function getUsAndGlobalSpectrumData(econLeft, socialProg, countryKey = "all") {
     const rawComposite = Math.round(econLeft * 0.55 + socialProg * 0.45);
+    const cMeta = COUNTRY_PARLIAMENTS[countryKey] || COUNTRY_PARLIAMENTS.all;
+    const shiftAmount = cMeta.medianRaw - 50; // e.g. 58 - 50 = 8 pts shift
 
-    // In the US, the economic Overton window sits slightly to the right (Median = 48).
-    // In Western Europe / Commonwealth democracies, universal healthcare & paid leave are baseline center-right/center status quo,
-    // placing the developed Global Median at ~58 on our raw policy scale.
-    // Therefore, relative to a Global 50/100 center, a user's score shifts ~8 points toward the Right/Center.
     const usScore = rawComposite;
-    const globalRelativeScore = Math.max(0, Math.min(100, Math.round(rawComposite - 8)));
+    const globalRelativeScore = Math.max(0, Math.min(100, Math.round(rawComposite - shiftAmount)));
 
+    const prefix = countryKey === "all" ? "Global" : cMeta.name;
     const getLabel = (sc, isGlobal) => {
-        if (sc >= 80) return isGlobal ? "Global Far Left / Socialist" : "US Far Left";
-        if (sc >= 62) return isGlobal ? "Global Left / Social Democratic" : "US Left / Progressive";
-        if (sc >= 53) return isGlobal ? "Global Center-Left" : "US Center-Left / Liberal";
-        if (sc <= 20) return isGlobal ? "Global Far Right" : "US Far Right";
-        if (sc <= 38) return isGlobal ? "Global Right / Conservative" : "US Right / Conservative";
-        if (sc <= 47) return isGlobal ? "Global Center-Right / Market Liberal" : "US Center-Right";
-        return isGlobal ? "Global Centrist / Social Liberal" : "US Center / Moderate";
+        const p = isGlobal ? prefix : "US";
+        if (sc >= 80) return isGlobal ? `${p} Far Left / Socialist` : "US Far Left";
+        if (sc >= 62) return isGlobal ? `${p} Left / Social Democratic` : "US Left / Progressive";
+        if (sc >= 53) return isGlobal ? `${p} Center-Left` : "US Center-Left / Liberal";
+        if (sc <= 20) return isGlobal ? `${p} Far Right` : "US Far Right";
+        if (sc <= 38) return isGlobal ? `${p} Right / Conservative` : "US Right / Conservative";
+        if (sc <= 47) return isGlobal ? `${p} Center-Right / Market Liberal` : "US Center-Right";
+        return isGlobal ? `${p} Centrist / Social Liberal` : "US Center / Moderate";
     };
 
     return {
@@ -1514,8 +1646,30 @@ function getUsAndGlobalSpectrumData(econLeft, socialProg) {
         usLabel: getLabel(usScore, false),
         globalScore: globalRelativeScore,
         globalLabel: getLabel(globalRelativeScore, true),
-        rawComposite
+        rawComposite,
+        countryMeta: cMeta,
+        shiftAmount
     };
+}
+
+function getScoredInternationalParties(econLeft, socialProg, civilLib, diploGlobal, countryKey = "all") {
+    const maxDist = 200;
+    let sourcePool = [];
+    if (countryKey !== "all" && COUNTRY_PARLIAMENTS[countryKey] && COUNTRY_PARLIAMENTS[countryKey].parties) {
+        sourcePool = COUNTRY_PARLIAMENTS[countryKey].parties;
+    } else {
+        sourcePool = PROFILES.filter(p => p.group === "international");
+    }
+    return sourcePool.map(p => {
+        const dist = Math.sqrt(
+            Math.pow(econLeft - p.e, 2) * 1.35 +
+            Math.pow(socialProg - p.s, 2) * 1.35 +
+            Math.pow(civilLib - p.a, 2) * 0.65 +
+            Math.pow(diploGlobal - p.d, 2) * 0.65
+        );
+        const matchPct = Math.max(8, Math.min(99, Math.round((1 - dist / maxDist) * 100)));
+        return { ...p, matchPct };
+    }).sort((a, b) => b.matchPct - a.matchPct);
 }
 
 // ============================================================================
@@ -1871,23 +2025,18 @@ function getConsistencyDiagnostic(econLeft, socialProg) {
 }
 
 // ============================================================================
-// US vs. GLOBAL PERSPECTIVE LENS SWITCHER
+// US vs. GLOBAL PERSPECTIVE LENS & COUNTRY SELECTOR
 // ============================================================================
 function setPerspectiveLens(lens) {
     perspectiveLens = lens === "global" ? "global" : "us";
-    const usBtn = document.getElementById("lens-btn-us");
-    const glBtn = document.getElementById("lens-btn-global");
-    usBtn.className = "lens-pill-btn" + (perspectiveLens === "us" ? " active-us" : "");
-    glBtn.className = "lens-pill-btn" + (perspectiveLens === "global" ? " active-global" : "");
+    document.getElementById("lens-btn-us").className = "lens-pill-btn" + (perspectiveLens === "us" ? " active-us" : "");
+    document.getElementById("lens-btn-global").className = "lens-pill-btn" + (perspectiveLens === "global" ? " active-global" : "");
+    document.getElementById("country-selector-bar").style.display = perspectiveLens === "global" ? "flex" : "none";
 
     if (perspectiveLens === "us") {
-        document.getElementById("active-lens-heading").textContent = "🇺🇸 Active View: US Political Lens";
-        document.getElementById("active-lens-subtitle").textContent = "Calibrated to the US Electorate, Congressional Caucuses & Pew Typologies";
         switchMatchTab("caucuses");
         if (divergenceTargetMode === "intl") setDivergenceTarget("caucus");
     } else {
-        document.getElementById("active-lens-heading").textContent = "🌍 Active View: Global / International Lens";
-        document.getElementById("active-lens-subtitle").textContent = "Calibrated to Western European / Commonwealth Party Baselines & CHES Data";
         switchMatchTab("international");
         if (divergenceTargetMode === "caucus") setDivergenceTarget("intl");
     }
@@ -1896,20 +2045,72 @@ function setPerspectiveLens(lens) {
     applyActiveLensToResultsUI();
 }
 
+function setGlobalCountry(countryCode) {
+    selectedCountry = COUNTRY_PARLIAMENTS[countryCode] ? countryCode : "all";
+    ["all", "uk", "ca", "de", "fr", "au"].forEach(c => {
+        const btn = document.getElementById(`country-btn-${c}`);
+        if (btn) btn.classList.toggle("active", c === selectedCountry);
+    });
+    if (perspectiveLens !== "global") {
+        setPerspectiveLens("global");
+        return;
+    }
+    syncUrlLensParam();
+    applyActiveLensToResultsUI();
+}
+
 function syncUrlLensParam() {
     if (!window.history.replaceState || !lastComputedResult) return;
     const params = new URLSearchParams(window.location.search);
     params.set("lens", perspectiveLens);
+    if (selectedCountry !== "all") params.set("country", selectedCountry);
+    else params.delete("country");
     window.history.replaceState({}, document.title, window.location.pathname + "?" + params.toString());
 }
 
 function applyActiveLensToResultsUI() {
     if (!lastComputedResult) return;
     const r = lastComputedResult;
-    const specData = getUsAndGlobalSpectrumData(r.econLeft, r.socialProg);
+    const specData = getUsAndGlobalSpectrumData(r.econLeft, r.socialProg, selectedCountry);
+    const cMeta = specData.countryMeta;
+
+    // Re-score international parties for the currently selected country (or All Global)
+    const activeIntlList = getScoredInternationalParties(r.econLeft, r.socialProg, r.civilLib, r.diploGlobal, selectedCountry);
+    r.topIntl = activeIntlList[0];
+    r.globalLabel = specData.globalLabel;
+    r.globalLeftScore = specData.globalScore;
+
+    // Update the International Parties tab list
+    const renderList = (arr, limit, accentHex, barGrad) => arr.slice(0, limit).map((item, idx) => `
+        <div class="match-item">
+            <div class="match-rank">${idx + 1}</div>
+            <div class="match-content">
+                <div class="match-top">
+                    <span class="match-name">${item.name}</span>
+                    <span class="match-pct" style="color:${accentHex};">${item.matchPct}%</span>
+                </div>
+                <div class="match-sub">${item.sub}</div>
+                <p class="match-desc">${item.desc}</p>
+                <div class="match-bar-bg">
+                    <div class="match-bar-fill" style="width: ${item.matchPct}%; background:${barGrad};"></div>
+                </div>
+            </div>
+        </div>
+    `).join("");
+
+    document.getElementById("list-international").innerHTML =
+        renderList(activeIntlList, 7, "#a78bfa", "linear-gradient(90deg, #7c3aed, #a78bfa)");
+    document.getElementById("tab-btn-international").textContent =
+        `${cMeta.flag} ${selectedCountry === "all" ? "International Parties" : cMeta.name + " Parties"} (${activeIntlList.length})`;
+    document.getElementById("intl-panel-heading").textContent =
+        `Closest Parties in ${cMeta.parliamentName}`;
+
+    document.getElementById("country-selector-bar").style.display = perspectiveLens === "global" ? "flex" : "none";
 
     if (perspectiveLens === "us") {
-        // US Lens Header & Glance Strip
+        document.getElementById("active-lens-heading").textContent = "🇺🇸 Active View: US Political Lens";
+        document.getElementById("active-lens-subtitle").textContent = "Calibrated to the US Electorate, Congressional Caucuses & Pew Typologies";
+
         document.getElementById("primary-eyebrow").textContent = "PRIMARY ALIGNMENT · 🇺🇸 US POLITICAL LENS";
         document.getElementById("primary-name").textContent = r.topMatch.name;
         document.getElementById("primary-family").textContent = `${specData.usLabel} (${specData.usScore}/100 in US) · ${r.topMatch.family}`;
@@ -1927,20 +2128,19 @@ function applyActiveLensToResultsUI() {
         document.getElementById("glance-intl").textContent = r.topIntl.name;
         document.getElementById("glance-intl-pct").textContent = `${r.topIntl.matchPct}%`;
 
-        // US Spectrum Bar
         document.getElementById("spectrum-card-title").textContent = "US Political Spectrum & Empirical Voter Benchmark";
         document.getElementById("spectrum-card-badge").textContent = "Calibrated to US Electorate Polling (Median = 48)";
-        document.getElementById("spectrum-median-marker").style.left = "52%"; // 100 - 48
+        document.getElementById("spectrum-median-marker").style.left = "52%";
         document.getElementById("us-spectrum-marker").style.left = `${100 - specData.usScore}%`;
         document.getElementById("spectrum-left-label").textContent = "US Left (100)";
         document.getElementById("spectrum-center-label").textContent = "US Voter Median (48)";
         document.getElementById("spectrum-right-label").textContent = "US Right (0)";
 
         document.getElementById("us-spectrum-text").innerHTML =
-            `In the United States: <strong>${specData.usLabel} (${specData.usScore}/100)</strong> · In Global/International Politics: <strong>${specData.globalLabel} (${specData.globalScore}/100)</strong>`;
+            `In the United States: <strong>${specData.usLabel} (${specData.usScore}/100)</strong> · In ${cMeta.name}: <strong>${specData.globalLabel} (${specData.globalScore}/100)</strong>`;
 
         document.getElementById("overton-shift-text").innerHTML =
-            `<strong>US vs. Global Overton Window Comparison:</strong> Because the US economic center sits ~8 points to the right of Western Europe, your raw policy score places you at <strong>${specData.usScore}/100 (${specData.usLabel})</strong> in America vs. <strong>${specData.globalScore}/100 (${specData.globalLabel})</strong> internationally.`;
+            `<strong>US vs. Global Overton Window Comparison:</strong> Because the US economic center sits ~${specData.shiftAmount} points to the right of Western Europe/Commonwealth nations, your raw policy score places you at <strong>${specData.usScore}/100 (${specData.usLabel})</strong> in America vs. <strong>${specData.globalScore}/100 (${specData.globalLabel})</strong> internationally.`;
 
         const pewSorted = PEW_TYPOLOGIES.map(pt => {
             const d = Math.sqrt(Math.pow(r.econLeft - pt.e, 2) + Math.pow(r.socialProg - pt.s, 2));
@@ -1950,38 +2150,40 @@ function applyActiveLensToResultsUI() {
         document.getElementById("pew-benchmark-text").innerHTML =
             `<strong>Pew Research US Typology Match: ${bestPew.name}</strong> — ${bestPew.desc}`;
     } else {
-        // GLOBAL / INTERNATIONAL LENS Header & Glance Strip
-        document.getElementById("primary-eyebrow").textContent = "PRIMARY ALIGNMENT · 🌍 GLOBAL / INTERNATIONAL LENS";
-        document.getElementById("primary-name").textContent = r.topIntl.name;
-        document.getElementById("primary-family").textContent = `${specData.globalLabel} (${specData.globalScore}/100 Global) · ${r.topIntl.sub}`;
-        document.getElementById("primary-desc").textContent = `${r.topIntl.desc} Internationally, your policy choices align with the ${r.topMatch.name} tradition.`;
+        document.getElementById("active-lens-heading").textContent = `${cMeta.flag} Active View: ${cMeta.name} (${cMeta.parliamentName})`;
+        document.getElementById("active-lens-subtitle").textContent = `Calibrated to ${cMeta.name} Parliamentary Parties & Overton Window`;
 
-        document.getElementById("glance-col1-label").textContent = "Closest Global Party";
+        document.getElementById("primary-eyebrow").textContent = `PRIMARY ALIGNMENT · ${cMeta.flag} ${cMeta.name.toUpperCase()} LENS`;
+        document.getElementById("primary-name").textContent = r.topIntl.name;
+        document.getElementById("primary-family").textContent = `${specData.globalLabel} (${specData.globalScore}/100 in ${cMeta.name}) · ${r.topIntl.sub}`;
+        document.getElementById("primary-desc").textContent = `${r.topIntl.desc} Within ${cMeta.parliamentName}, your policy coordinates align most closely with ${r.topIntl.name} (${r.topIntl.matchPct}% match).`;
+
+        document.getElementById("glance-col1-label").textContent = `#1 Party in ${cMeta.name}`;
         document.getElementById("glance-caucus").textContent = r.topIntl.name;
         document.getElementById("glance-caucus-pct").textContent = `${r.topIntl.matchPct}%`;
 
-        document.getElementById("glance-col2-label").textContent = "Global Ideological Family";
-        document.getElementById("glance-figure").textContent = r.topMatch.name;
-        document.getElementById("glance-figure-pct").textContent = `${r.topMatch.matchPct}%`;
+        const secondParty = activeIntlList[1] || r.topMatch;
+        document.getElementById("glance-col2-label").textContent = `#2 Party in ${cMeta.name}`;
+        document.getElementById("glance-figure").textContent = secondParty.name;
+        document.getElementById("glance-figure-pct").textContent = `${secondParty.matchPct}%`;
 
         document.getElementById("glance-col3-label").textContent = "US Caucus Counterpart";
         document.getElementById("glance-intl").textContent = r.topCaucus.name;
         document.getElementById("glance-intl-pct").textContent = `${r.topCaucus.matchPct}%`;
 
-        // Global Spectrum Bar
-        document.getElementById("spectrum-card-title").textContent = "Global / International Spectrum & Overton Window Benchmark";
-        document.getElementById("spectrum-card-badge").textContent = "Calibrated to Western European & Commonwealth Baselines";
+        document.getElementById("spectrum-card-title").textContent = `${cMeta.flag} ${cMeta.name} Political Spectrum & Overton Window Benchmark`;
+        document.getElementById("spectrum-card-badge").textContent = `Calibrated to ${cMeta.parliamentName}`;
         document.getElementById("spectrum-median-marker").style.left = "50%";
         document.getElementById("us-spectrum-marker").style.left = `${100 - specData.globalScore}%`;
-        document.getElementById("spectrum-left-label").textContent = "Global Left (100)";
-        document.getElementById("spectrum-center-label").textContent = "Developed World Median (50)";
-        document.getElementById("spectrum-right-label").textContent = "Global Right (0)";
+        document.getElementById("spectrum-left-label").textContent = `${cMeta.name} Left (100)`;
+        document.getElementById("spectrum-center-label").textContent = `${cMeta.name} Voter Median (50)`;
+        document.getElementById("spectrum-right-label").textContent = `${cMeta.name} Right (0)`;
 
         document.getElementById("us-spectrum-text").innerHTML =
-            `Internationally: <strong>${specData.globalLabel} (${specData.globalScore}/100)</strong> · In the United States: <strong>${specData.usLabel} (${specData.usScore}/100)</strong>`;
+            `In ${cMeta.name}: <strong>${specData.globalLabel} (${specData.globalScore}/100)</strong> · In the United States: <strong>${specData.usLabel} (${specData.usScore}/100)</strong>`;
 
         document.getElementById("overton-shift-text").innerHTML =
-            `<strong>Global vs. US Overton Window Shift:</strong> In Western Europe, Canada, and Australia—where universal healthcare and paid leave are baseline center-right/center norms—your position shifts from <strong>${specData.usScore}/100 (${specData.usLabel})</strong> in the US to <strong>${specData.globalScore}/100 (${specData.globalLabel})</strong> internationally.`;
+            `<strong>${cMeta.name} vs. US Overton Window Shift:</strong> ${cMeta.shiftNote} Your position shifts from <strong>${specData.usScore}/100 (${specData.usLabel})</strong> in the US to <strong>${specData.globalScore}/100 (${specData.globalLabel})</strong> in ${cMeta.name}.`;
 
         const glSorted = GLOBAL_FAMILIES.map(gf => {
             const d = Math.sqrt(Math.pow(r.econLeft - gf.e, 2) + Math.pow(r.socialProg - gf.s, 2));
@@ -1991,6 +2193,9 @@ function applyActiveLensToResultsUI() {
         document.getElementById("pew-benchmark-text").innerHTML =
             `<strong>International Party Family Match (CHES): ${bestGl.name}</strong> — ${bestGl.desc}`;
     }
+
+    document.getElementById("div-mode-intl").textContent =
+        `vs. #1 ${selectedCountry === "all" ? "Global" : cMeta.name} Party`;
 
     renderLandmarks();
     renderFriendComparisonUI();
@@ -2167,7 +2372,7 @@ function renderFriendComparisonUI() {
     document.getElementById("legend-friend-name").textContent = `${f.name} (${f.econLeft}/100 Econ, ${f.socialProg}/100 Soc)`;
     legendEl.style.display = "flex";
 
-    const fSpec = getUsAndGlobalSpectrumData(f.econLeft, f.socialProg);
+    const fSpec = getUsAndGlobalSpectrumData(f.econLeft, f.socialProg, selectedCountry);
     const activeFriendSpecScore = perspectiveLens === "global" ? fSpec.globalScore : fSpec.usScore;
     specFriendMarker.style.left = `${100 - activeFriendSpecScore}%`;
     specFriendMarker.title = `${f.name}'s Position (${activeFriendSpecScore}/100)`;
@@ -2184,7 +2389,7 @@ function renderFriendComparisonUI() {
     document.getElementById("friend-headline-text").textContent =
         `You (${u.topMatch.name}) vs. ${f.name} (${f.topMatch.name})`;
     document.getElementById("friend-subline-text").textContent =
-        `US Score: You ${u.usLeftScore}/100 vs. ${f.name} ${fSpec.usScore}/100 · Global Score: You ${u.globalLeftScore}/100 vs. ${f.name} ${fSpec.globalScore}/100`;
+        `US Score: You ${u.usLeftScore}/100 vs. ${f.name} ${fSpec.usScore}/100 · ${fSpec.countryMeta.name}: You ${u.globalLeftScore}/100 vs. ${f.name} ${fSpec.globalScore}/100`;
     document.getElementById("friend-compat-score").textContent = `${compatPct}% Ideological Alignment`;
 
     const axisPairs = [
@@ -2226,7 +2431,7 @@ function renderFriendComparisonUI() {
 }
 
 // ============================================================================
-// POLICY DISAGREEMENT & HETERODOX VIEWS ENGINE (IDEOLOGY, US CAUCUS, GLOBAL PARTY, FRIEND)
+// POLICY DISAGREEMENT & HETERODOX VIEWS ENGINE
 // ============================================================================
 function setDivergenceTarget(mode) {
     divergenceTargetMode = mode;
@@ -2520,6 +2725,7 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
         const cParam = (catScores || []).join(".");
         const ansEncoded = encodeAnswersCompact(answers);
         let params = `?e=${econLeft}&s=${socialProg}&a=${civilLib}&d=${diploGlobal}&c=${cParam}&ans=${ansEncoded}&lens=${perspectiveLens}`;
+        if (selectedCountry !== "all") params += `&country=${selectedCountry}`;
         if (friendComparison) {
             params += `&fe=${friendComparison.econLeft}&fs=${friendComparison.socialProg}&fa=${friendComparison.civilLib}&fd=${friendComparison.diploGlobal}&fn=${encodeURIComponent(friendComparison.name)}`;
         }
@@ -2528,7 +2734,7 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
 
     document.getElementById("shared-banner").style.display = isFromSharedUrl ? "flex" : "none";
 
-    const specData = getUsAndGlobalSpectrumData(econLeft, socialProg);
+    const specData = getUsAndGlobalSpectrumData(econLeft, socialProg, selectedCountry);
 
     document.getElementById("consistency-benchmark-text").innerHTML =
         getConsistencyDiagnostic(econLeft, socialProg);
@@ -2615,7 +2821,7 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
     const ideologies = scoredProfiles.filter(p => p.group === "ideology").sort((a,b) => b.matchPct - a.matchPct);
     const figures = scoredProfiles.filter(p => p.group === "figure").sort((a,b) => b.matchPct - a.matchPct);
     const caucuses = scoredProfiles.filter(p => p.group === "caucus").sort((a,b) => b.matchPct - a.matchPct);
-    const intl = scoredProfiles.filter(p => p.group === "international").sort((a,b) => b.matchPct - a.matchPct);
+    const intl = getScoredInternationalParties(econLeft, socialProg, civilLib, diploGlobal, selectedCountry);
 
     const topMatch = ideologies[0];
     document.getElementById("primary-tags").innerHTML = (topMatch.pillars || []).map(tag =>
@@ -2644,7 +2850,6 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
     document.getElementById("list-ideologies").innerHTML = renderList(ideologies, 6, "#60a5fa", "linear-gradient(90deg, #2563eb, #60a5fa)");
     document.getElementById("list-caucuses").innerHTML = renderList(caucuses, 6, "#34d399", "linear-gradient(90deg, #059669, #34d399)");
     document.getElementById("list-figures").innerHTML = renderList(figures, 6, "#fbbf24", "linear-gradient(90deg, #d97706, #fbbf24)");
-    document.getElementById("list-international").innerHTML = renderList(intl, 6, "#a78bfa", "linear-gradient(90deg, #7c3aed, #a78bfa)");
 
     lastComputedResult = {
         topMatch,
@@ -2685,7 +2890,7 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
 }
 
 // ============================================================================
-// 2D COMPASS LANDMARKS (SUPPORTS LENS-SPECIFIC US vs. GLOBAL LANDMARKS)
+// 2D COMPASS LANDMARKS (SUPPORTS COUNTRY-SPECIFIC PARLIAMENT LANDMARKS)
 // ============================================================================
 function setMapOverlay(mode) {
     mapOverlayMode = mode;
@@ -2694,6 +2899,27 @@ function setMapOverlay(mode) {
         if (btn) btn.classList.toggle("active-tab", m === mode);
     });
     renderLandmarks();
+}
+
+function getCountryPartyLandmarks(countryCode) {
+    if (countryCode !== "all" && COUNTRY_PARLIAMENTS[countryCode] && COUNTRY_PARLIAMENTS[countryCode].parties) {
+        return COUNTRY_PARLIAMENTS[countryCode].parties.map(p => ({
+            label: p.short || p.name,
+            e: p.e,
+            s: p.s,
+            type: "intl"
+        }));
+    }
+    return [
+        { label: "Die Linke / LFI", e: 86, s: 86, type: "intl" },
+        { label: "EU Greens", e: 74, s: 88, type: "intl" },
+        { label: "UK Labour / SPD", e: 66, s: 74, type: "intl" },
+        { label: "LibDems / LPC", e: 56, s: 76, type: "intl" },
+        { label: "Renaissance", e: 40, s: 68, type: "intl" },
+        { label: "FDP / ACT", e: 22, s: 64, type: "intl" },
+        { label: "UK Tories / CDU", e: 28, s: 34, type: "intl" },
+        { label: "Reform / RN / AfD", e: 34, s: 16, type: "intl" }
+    ];
 }
 
 function renderLandmarks() {
@@ -2718,16 +2944,7 @@ function renderLandmarks() {
         { label: "Ron Paul", e: 10, s: 62, type: "fig" },
         { label: "Milei", e: 8, s: 36, type: "fig" }
     ];
-    const intlPartyPoints = [
-        { label: "Die Linke / LFI", e: 86, s: 86, type: "intl" },
-        { label: "EU Greens", e: 74, s: 88, type: "intl" },
-        { label: "UK Labour / SPD", e: 66, s: 74, type: "intl" },
-        { label: "LibDems / LPC", e: 56, s: 76, type: "intl" },
-        { label: "Renaissance", e: 40, s: 68, type: "intl" },
-        { label: "FDP / ACT", e: 22, s: 64, type: "intl" },
-        { label: "UK Tories / CDU", e: 28, s: 34, type: "intl" },
-        { label: "Reform / RN / AfD", e: 34, s: 16, type: "intl" }
-    ];
+    const intlPartyPoints = getCountryPartyLandmarks(selectedCountry);
 
     let activePts = [];
     if (mapOverlayMode === "lens") {
@@ -2754,7 +2971,7 @@ function renderLandmarks() {
 }
 
 // ============================================================================
-// OVERFLOW-PROOF SCORECARD CANVAS GENERATOR (ADAPTS TO US vs. GLOBAL LENS)
+// OVERFLOW-PROOF SCORECARD CANVAS GENERATOR (ADAPTS TO US vs. COUNTRY LENS)
 // ============================================================================
 function fitCanvasText(ctx, text, maxWidth) {
     if (ctx.measureText(text).width <= maxWidth) return text;
@@ -2771,6 +2988,7 @@ function drawScorecardCanvas(res) {
     const ctx = canvas.getContext("2d");
     const W = canvas.width, H = canvas.height;
     const isGlobal = perspectiveLens === "global";
+    const cMeta = COUNTRY_PARLIAMENTS[selectedCountry] || COUNTRY_PARLIAMENTS.all;
 
     ctx.fillStyle = "#0d1017";
     ctx.fillRect(0, 0, W, H);
@@ -2787,15 +3005,15 @@ function drawScorecardCanvas(res) {
     ctx.font = "bold 13px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
     ctx.fillText(
         isGlobal
-            ? "GLOBAL POLITICAL INVENTORY · 🌍 INTERNATIONAL LENS RESULTS"
+            ? `GLOBAL POLITICAL INVENTORY · ${cMeta.flag} ${cMeta.name.toUpperCase()} PARLIAMENT LENS`
             : "GLOBAL POLITICAL INVENTORY · 🇺🇸 US POLITICAL LENS RESULTS",
         56, 66
     );
 
     const headlineName = isGlobal ? res.topIntl.name : res.topMatch.name;
     const sublineText = isGlobal
-        ? `Global: ${res.globalLabel} (${res.globalLeftScore}/100) · US: ${res.usLabel} (${res.usLeftScore}/100)`
-        : `US: ${res.usLabel} (${res.usLeftScore}/100) · Global: ${res.globalLabel} (${res.globalLeftScore}/100)`;
+        ? `${cMeta.name}: ${res.globalLabel} (${res.globalLeftScore}/100) · US: ${res.usLabel} (${res.usLeftScore}/100)`
+        : `US: ${res.usLabel} (${res.usLeftScore}/100) · ${cMeta.name}: ${res.globalLabel} (${res.globalLeftScore}/100)`;
 
     ctx.fillStyle = "#ffffff";
     ctx.font = "800 36px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
@@ -2812,7 +3030,7 @@ function drawScorecardCanvas(res) {
     ctx.fillStyle = "#f3f4f6";
     ctx.font = "bold 15.5px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
     ctx.fillText(
-        `${isGlobal ? "Global" : "US"} Spectrum: ${activeSpecLabel} (${activeSpecScore}/100)`,
+        `${isGlobal ? cMeta.name : "US"} Spectrum: ${activeSpecLabel} (${activeSpecScore}/100)`,
         leftX, 184
     );
 
@@ -2830,7 +3048,7 @@ function drawScorecardCanvas(res) {
     ctx.fillRect(markerX - 3, 190, 6, 25);
 
     if (friendComparison) {
-        const fSpec = getUsAndGlobalSpectrumData(friendComparison.econLeft, friendComparison.socialProg);
+        const fSpec = getUsAndGlobalSpectrumData(friendComparison.econLeft, friendComparison.socialProg, selectedCountry);
         const fSc = isGlobal ? fSpec.globalScore : fSpec.usScore;
         const fMarkerX = leftX + ((100 - fSc) / 100) * leftW;
         ctx.fillStyle = "#f43f5e";
@@ -2867,7 +3085,7 @@ function drawScorecardCanvas(res) {
     const bottomCards = [
         { title: "CLOSEST US CAUCUS", name: res.topCaucus.name, sub: res.topCaucus.sub, pct: res.topCaucus.matchPct, accent: "#34d399" },
         { title: "CLOSEST LEADER", name: res.topFigure.name, sub: res.topFigure.sub, pct: res.topFigure.matchPct, accent: "#fbbf24" },
-        { title: "INTERNATIONAL PARTY", name: res.topIntl.name, sub: res.topIntl.sub, pct: res.topIntl.matchPct, accent: "#a78bfa" }
+        { title: selectedCountry === "all" ? "INTERNATIONAL PARTY" : `${cMeta.name.toUpperCase()} PARTY`, name: res.topIntl.name, sub: res.topIntl.sub, pct: res.topIntl.matchPct, accent: "#a78bfa" }
     ];
 
     bottomCards.forEach((bc, i) => {
@@ -2951,15 +3169,15 @@ function drawScorecardCanvas(res) {
     ctx.textAlign = "right";
     ctx.fillText("Econ Right", boxX + boxSize - 10, boxY + boxSize / 2 - 8);
 
+    const countryRefs = getCountryPartyLandmarks(selectedCountry).map(pt => ({
+        n: pt.label,
+        e: pt.e,
+        s: pt.s,
+        align: pt.e <= 26 ? "right" : "left"
+    }));
+
     const canvasRefs = isGlobal
-        ? [
-            { n: "Die Linke/LFI", e: 86, s: 86, align: "left" },
-            { n: "UK Labour/SPD", e: 66, s: 74, align: "left" },
-            { n: "Renaissance", e: 40, s: 68, align: "left" },
-            { n: "FDP / ACT", e: 22, s: 64, align: "right" },
-            { n: "Tories / CDU", e: 28, s: 34, align: "right" },
-            { n: "Reform / RN", e: 34, s: 16, align: "left" }
-        ]
+        ? countryRefs
         : [
             { n: "Sanders", e: 86, s: 84, align: "left" },
             { n: "Obama", e: 62, s: 76, align: "left" },
@@ -3053,10 +3271,11 @@ function copyShareLink() {
 function copyTextSummary() {
     if (!lastComputedResult) return;
     const r = lastComputedResult;
+    const cMeta = COUNTRY_PARLIAMENTS[selectedCountry] || COUNTRY_PARLIAMENTS.all;
     const lines = [
         `🧭 Global Political Inventory Results`,
         `• 🇺🇸 US Spectrum: ${r.topMatch.name} (${r.usLabel} · ${r.usLeftScore}/100)`,
-        `• 🌍 Global Spectrum: ${r.topIntl.name} (${r.globalLabel} · ${r.globalLeftScore}/100)`,
+        `• ${cMeta.flag} ${cMeta.name} Spectrum: ${r.topIntl.name} (${r.globalLabel} · ${r.globalLeftScore}/100)`,
         `• 4 Axes: Economic ${r.econLeft}/100 Left | Social ${r.socialProg}/100 Prog | Civil Lib ${r.civilLib}/100 | Globalist ${r.diploGlobal}/100`,
         `• Closest US Caucus: ${r.topCaucus.name} (${r.topCaucus.matchPct}%) | Closest Leader: ${r.topFigure.name} (${r.topFigure.matchPct}%)`
     ];
@@ -3076,7 +3295,8 @@ function copyTextSummary() {
 function downloadScorecardPNG() {
     const canvas = document.getElementById("scorecard-canvas");
     const link = document.createElement("a");
-    link.download = `political-inventory-${perspectiveLens}-scorecard.png`;
+    const suffix = perspectiveLens === "global" ? `${selectedCountry}-parliament` : "us";
+    link.download = `political-inventory-${suffix}-scorecard.png`;
     link.href = canvas.toDataURL("image/png");
     link.click();
 }
@@ -3087,7 +3307,7 @@ function nativeShare() {
     if (navigator.share) {
         navigator.share({
             title: `My Political Alignment: ${r.topMatch.name}`,
-            text: `US View: ${r.usLabel} (${r.usLeftScore}/100) | Global View: ${r.globalLabel} (${r.globalLeftScore}/100) on the 105-item Global Political Inventory.`,
+            text: `US View: ${r.usLabel} (${r.usLeftScore}/100) | Global Match: ${r.topIntl.name} (${r.globalLeftScore}/100) on the 105-item Global Political Inventory.`,
             url: window.location.href
         }).catch(() => {});
     } else {
@@ -3101,6 +3321,13 @@ function nativeShare() {
 (function init() {
     initHomeScreen();
     const params = new URLSearchParams(window.location.search);
+    if (params.has("country") && COUNTRY_PARLIAMENTS[params.get("country")]) {
+        selectedCountry = params.get("country");
+        ["all", "uk", "ca", "de", "fr", "au"].forEach(c => {
+            const btn = document.getElementById(`country-btn-${c}`);
+            if (btn) btn.classList.toggle("active", c === selectedCountry);
+        });
+    }
     if (params.has("lens") && params.get("lens") === "global") {
         perspectiveLens = "global";
         document.getElementById("lens-btn-us").className = "lens-pill-btn";
