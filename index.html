@@ -17,46 +17,131 @@
 
     <style>
         :root {
-            --bg: #111318;
-            --card-bg: #191c24;
-            --card-alt: #20242f;
-            --card-border: #2a2e39;
+            --bg: #0d1017;
+            --card-bg: #161922;
+            --card-alt: #1d222e;
+            --card-border: #282f3d;
             --text-main: #f3f4f6;
             --text-muted: #9ca3af;
             --accent-blue: #3b82f6;
             --accent-blue-light: #60a5fa;
-            --accent-green: #10b981;
+            --accent-teal: #10b981;
+            --accent-teal-light: #34d399;
             --accent-amber: #f59e0b;
+            --accent-amber-light: #fbbf24;
+            --accent-purple: #8b5cf6;
+            --accent-purple-light: #a78bfa;
             --accent-red: #ef4444;
-            --btn-bg: #222631;
-            --btn-hover: #2c313f;
+            --btn-bg: #1f2430;
+            --btn-hover: #282f3e;
         }
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; scroll-behavior: smooth; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg);
             color: var(--text-main);
             margin: 0;
-            padding: 24px 16px 70px 16px;
+            padding: 20px 16px 70px 16px;
             display: flex;
             justify-content: center;
             line-height: 1.55;
         }
-        .app-wrapper { max-width: 800px; width: 100%; }
+        .app-wrapper { max-width: 840px; width: 100%; }
         .card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 12px;
+            border-radius: 14px;
             padding: 24px;
             margin-bottom: 18px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+            box-shadow: 0 10px 28px rgba(0,0,0,0.4);
         }
+
+        /* DEDICATED RESUME & COMPLETED INTERCEPT VIEWS */
+        #resume-view, #completed-intercept-view { display: none; }
+        .resume-card {
+            text-align: center;
+            padding: 40px 28px;
+            background: radial-gradient(circle at top, #1f2a3d 0%, var(--card-bg) 75%);
+            border-color: rgba(59, 130, 246, 0.35);
+        }
+        .completed-intercept-card {
+            text-align: center;
+            padding: 40px 28px;
+            background: radial-gradient(circle at top, #16302b 0%, var(--card-bg) 75%);
+            border-color: rgba(16, 185, 129, 0.35);
+        }
+        .resume-icon-badge {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            background: rgba(59, 130, 246, 0.14);
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            color: var(--accent-blue-light);
+            font-size: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+        }
+        .completed-icon-badge {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            background: rgba(16, 185, 129, 0.14);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            color: #34d399;
+            font-size: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+        }
+        .resume-status-box {
+            max-width: 560px;
+            margin: 22px auto 26px auto;
+            background: rgba(13, 16, 23, 0.65);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 18px 20px;
+            text-align: left;
+        }
+        .resume-status-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        .resume-status-top strong { color: #fff; font-size: 15px; }
+        .resume-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        @media (max-width: 520px) { .resume-meta-grid { grid-template-columns: 1fr; } }
+        .resume-meta-item { font-size: 12px; color: var(--text-muted); }
+        .resume-meta-item span { display: block; font-size: 14px; font-weight: 700; color: #e5e7eb; margin-top: 2px; }
+        .danger-cta {
+            background: rgba(239, 68, 68, 0.12);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            padding: 14px 22px;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .danger-cta:hover { background: rgba(239, 68, 68, 0.22); color: #fff; border-color: #ef4444; }
 
         /* HOME VIEW */
         .hero-card {
             text-align: center;
             padding: 36px 26px;
-            background: radial-gradient(circle at top, #23293a 0%, var(--card-bg) 75%);
+            background: radial-gradient(circle at top, #21283b 0%, var(--card-bg) 75%);
         }
         .eyebrow {
             font-size: 11px;
@@ -76,7 +161,7 @@
         }
         @media (max-width: 600px) { .stats-strip { grid-template-columns: repeat(2, 1fr); } }
         .stat-pill {
-            background: rgba(17, 19, 24, 0.6);
+            background: rgba(13, 16, 23, 0.6);
             border: 1px solid var(--card-border);
             border-radius: 10px;
             padding: 12px 10px;
@@ -101,6 +186,17 @@
             background: rgba(16, 185, 129, 0.15);
             color: #34d399;
             border: 1px solid rgba(16, 185, 129, 0.4);
+            padding: 14px 22px;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            display: none;
+        }
+        .completed-home-cta {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.4);
             padding: 14px 22px;
             font-size: 14px;
             font-weight: 700;
@@ -170,10 +266,11 @@
             letter-spacing: 0.06em;
             font-weight: 600;
         }
+        .autosave-pill { color: #34d399; font-size: 11px; text-transform: none; letter-spacing: 0; font-weight: 500; }
         .progress-track {
             width: 100%;
             height: 6px;
-            background: #262a36;
+            background: #232836;
             border-radius: 99px;
             overflow: hidden;
             margin-bottom: 20px;
@@ -268,12 +365,7 @@
             padding: 12px;
         }
         .stmt-btn.neutral-btn:hover { background: rgba(255,255,255,0.04); color: var(--text-main); }
-        .kbd-hint {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-align: center;
-            margin-top: 6px;
-        }
+        .kbd-hint { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 6px; }
         .nav-row {
             display: flex;
             justify-content: space-between;
@@ -294,13 +386,51 @@
         }
         .util-btn:hover { color: var(--text-main); border-color: #4b5563; background: rgba(255,255,255,0.04); }
         .util-btn.active-tab {
-            background: rgba(59, 130, 246, 0.16);
+            background: rgba(59, 130, 246, 0.18);
             color: #fff;
             border-color: var(--accent-blue-light);
+            font-weight: 600;
         }
 
-        /* RESULTS VIEW */
+        /* ========================================================= */
+        /* RESULTS VIEW — REDESIGNED COLORING & EASY NAVIGATION      */
+        /* ========================================================= */
         #results-view { display: none; }
+
+        /* Sticky Quick-Jump Bar for Easy Scrolling */
+        .results-sticky-nav {
+            position: sticky;
+            top: 10px;
+            z-index: 20;
+            background: rgba(22, 25, 34, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 8px 12px;
+            margin-bottom: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+            overflow-x: auto;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+        }
+        .jump-link {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 11px;
+            border-radius: 8px;
+            white-space: nowrap;
+            transition: all 0.15s ease;
+        }
+        .jump-link:hover {
+            background: rgba(59, 130, 246, 0.16);
+            color: #fff;
+        }
+
         .shared-banner {
             display: none;
             background: rgba(59, 130, 246, 0.12);
@@ -317,44 +447,85 @@
         }
         .primary-card {
             text-align: center;
-            padding: 32px 26px;
-            background: radial-gradient(circle at top, #232838 0%, var(--card-bg) 75%);
+            padding: 34px 28px;
+            background:
+                radial-gradient(circle at 20% 0%, rgba(59, 130, 246, 0.20), transparent 55%),
+                radial-gradient(circle at 80% 0%, rgba(16, 185, 129, 0.14), transparent 55%),
+                var(--card-bg);
+            border-color: rgba(96, 165, 250, 0.3);
         }
-        .primary-title { font-size: 28px; font-weight: 800; margin: 0 0 6px 0; color: #fff; }
-        .primary-sub { font-size: 14px; color: var(--accent-blue-light); margin: 0 0 18px 0; font-weight: 500; }
+        .primary-title { font-size: 30px; font-weight: 800; margin: 0 0 6px 0; color: #fff; letter-spacing: -0.01em; }
+        .primary-sub { font-size: 14px; color: var(--accent-blue-light); margin: 0 0 18px 0; font-weight: 600; }
         .primary-desc-box {
-            background: rgba(17, 19, 24, 0.55);
+            background: rgba(13, 16, 23, 0.65);
             border: 1px solid var(--card-border);
             border-radius: 10px;
-            padding: 16px 18px;
+            padding: 16px 20px;
             text-align: left;
-            font-size: 14px;
-            color: #d1d5db;
-            line-height: 1.6;
+            font-size: 14.5px;
+            color: #e2e8f0;
+            line-height: 1.65;
         }
-        .tags-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 14px; }
+        .tags-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 16px; }
         .pillar-tag {
             font-size: 12px;
-            padding: 4px 10px;
+            font-weight: 600;
+            padding: 5px 12px;
             border-radius: 99px;
-            background: #242936;
-            border: 1px solid #323846;
-            color: #e5e7eb;
+            background: rgba(59, 130, 246, 0.12);
+            border: 1px solid rgba(59, 130, 246, 0.28);
+            color: #dbeafe;
         }
+
+        /* Quick Top-3 Summary Strip inside Primary Card */
+        .top-matches-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 18px;
+            text-align: left;
+        }
+        @media (max-width: 640px) { .top-matches-strip { grid-template-columns: 1fr; } }
+        .top-mini-pill {
+            background: rgba(13, 16, 23, 0.55);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 11px 14px;
+        }
+        .top-mini-label {
+            font-size: 10.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            font-weight: 700;
+            display: block;
+            margin-bottom: 3px;
+        }
+        .top-mini-val {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 6px;
+        }
+        .top-mini-pct { color: var(--accent-teal-light); font-size: 12px; font-weight: 800; }
+
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
             flex-wrap: wrap;
             gap: 8px;
         }
-        .section-title { font-size: 15px; font-weight: 700; margin: 0; color: #f3f4f6; }
+        .section-title { font-size: 16px; font-weight: 700; margin: 0; color: #ffffff; }
 
         /* US Spectrum & Consistency */
         .spectrum-track {
             position: relative;
-            height: 14px;
+            height: 15px;
             border-radius: 99px;
             background: linear-gradient(90deg, #2563eb 0%, #60a5fa 30%, #e5e7eb 50%, #f87171 70%, #dc2626 100%);
             margin: 22px 0 8px 0;
@@ -362,11 +533,11 @@
         .spectrum-ReadoutMarker {
             position: absolute;
             top: -6px;
-            width: 4px;
-            height: 26px;
+            width: 5px;
+            height: 27px;
             background: #fff;
             border-radius: 2px;
-            box-shadow: 0 0 8px rgba(0,0,0,0.9);
+            box-shadow: 0 0 8px rgba(0,0,0,0.95);
             transform: translateX(-50%);
             transition: left 0.4s ease;
             z-index: 2;
@@ -376,8 +547,8 @@
             top: -4px;
             left: 52%;
             width: 2px;
-            height: 22px;
-            background: rgba(17, 19, 24, 0.85);
+            height: 23px;
+            background: rgba(13, 16, 23, 0.85);
             transform: translateX(-50%);
             z-index: 1;
         }
@@ -388,56 +559,67 @@
             color: var(--text-muted);
             margin-bottom: 12px;
         }
-        .spectrum-summary { font-size: 13px; color: var(--text-muted); margin: 0 0 12px 0; }
+        .spectrum-summary { font-size: 13.5px; color: var(--text-muted); margin: 0 0 12px 0; }
         .spectrum-summary strong { color: var(--text-main); }
         .pew-benchmark-box {
             background: var(--card-alt);
             border: 1px solid var(--card-border);
+            border-left: 3px solid var(--accent-blue);
             border-radius: 9px;
             padding: 12px 14px;
             font-size: 13px;
             color: #cbd5e1;
             margin-bottom: 10px;
         }
+        .pew-benchmark-box.consistency-box { border-left-color: var(--accent-teal); }
         .pew-benchmark-box:last-child { margin-bottom: 0; }
         .pew-benchmark-box strong { color: #fff; }
 
-        /* 2D Compass Box */
+        /* 2D Compass + Side-by-Side Axis Layout on Desktop */
+        .compass-WrapperGrid {
+            display: grid;
+            grid-template-columns: 370px 1fr;
+            gap: 22px;
+            align-items: start;
+        }
+        @media (max-width: 740px) {
+            .compass-WrapperGrid { grid-template-columns: 1fr; }
+        }
         .compass-wrapper { display: flex; flex-direction: column; align-items: center; }
         .compass-box {
             position: relative;
-            width: 380px;
-            height: 380px;
+            width: 360px;
+            height: 360px;
             max-width: 100%;
-            border-radius: 8px;
+            border-radius: 10px;
             border: 1px solid #374151;
             background:
-                radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.22), transparent 55%),
-                radial-gradient(circle at 85% 15%, rgba(16, 185, 129, 0.16), transparent 55%),
-                radial-gradient(circle at 15% 85%, rgba(239, 68, 68, 0.16), transparent 55%),
-                radial-gradient(circle at 85% 85%, rgba(245, 158, 11, 0.20), transparent 55%),
-                #20242f;
+                radial-gradient(circle at 18% 18%, rgba(59, 130, 246, 0.28), transparent 55%),
+                radial-gradient(circle at 82% 18%, rgba(16, 185, 129, 0.22), transparent 55%),
+                radial-gradient(circle at 18% 82%, rgba(239, 68, 68, 0.22), transparent 55%),
+                radial-gradient(circle at 82% 82%, rgba(245, 158, 11, 0.25), transparent 55%),
+                #181c26;
             overflow: hidden;
         }
         .compass-grid-lines {
             position: absolute;
             inset: 0;
             background-image:
-                linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+                linear-gradient(to right, rgba(255,255,255,0.045) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.045) 1px, transparent 1px);
             background-size: 25% 25%;
             pointer-events: none;
         }
-        .compass-axis-x { position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: rgba(255,255,255,0.22); }
-        .compass-axis-y { position: absolute; left: 50%; top: 0; width: 1px; height: 100%; background: rgba(255,255,255,0.22); }
+        .compass-axis-x { position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: rgba(255,255,255,0.25); }
+        .compass-axis-y { position: absolute; left: 50%; top: 0; width: 1px; height: 100%; background: rgba(255,255,255,0.25); }
         .c-label {
             position: absolute;
             font-size: 11px;
-            color: #d1d5db;
-            font-weight: 600;
+            color: #e5e7eb;
+            font-weight: 700;
             pointer-events: none;
-            background: rgba(25, 28, 36, 0.78);
-            padding: 2px 6px;
+            background: rgba(15, 18, 26, 0.82);
+            padding: 2px 7px;
             border-radius: 4px;
             z-index: 2;
         }
@@ -449,21 +631,21 @@
             position: absolute;
             width: 7px;
             height: 7px;
-            background: rgba(255,255,255,0.42);
+            background: rgba(255,255,255,0.48);
             border-radius: 50%;
             transform: translate(-50%, -50%);
             pointer-events: none;
         }
         .landmark-dot.figure-dot {
             background: #fbbf24;
-            border: 1px solid rgba(0,0,0,0.6);
+            border: 1px solid rgba(0,0,0,0.7);
             width: 8px;
             height: 8px;
         }
         .landmark-label {
             position: absolute;
             font-size: 9.5px;
-            color: rgba(255,255,255,0.68);
+            color: rgba(255,255,255,0.75);
             transform: translate(-50%, 5px);
             white-space: nowrap;
             pointer-events: none;
@@ -482,27 +664,37 @@
             transition: left 0.4s ease, top 0.4s ease;
             z-index: 4;
         }
-        .compass-caption { margin-top: 14px; font-size: 13px; color: var(--text-muted); text-align: center; }
+        .compass-caption { margin-top: 12px; font-size: 12.5px; color: var(--text-muted); text-align: center; }
         .compass-caption strong { color: var(--text-main); }
 
-        /* Scales */
-        .scale-block { padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
-        .scale-block:first-of-type { padding-top: 4px; }
-        .scale-block:last-of-type { border-bottom: none; padding-bottom: 0; }
-        .scale-header { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; margin-bottom: 7px; }
-        .scale-pole { color: var(--text-muted); font-size: 12px; font-weight: 500; }
-        .scale-title { font-weight: 700; color: var(--text-main); font-size: 13px; }
-        .scale-bar-bg { width: 100%; height: 9px; background: #262a36; border-radius: 99px; overflow: hidden; margin-bottom: 8px; }
-        .scale-bar-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #60a5fa); border-radius: 99px; }
-        .scale-exp { font-size: 13px; color: #cbd5e1; margin: 0; line-height: 1.5; }
+        /* Color-Coded 4-Axis Scales */
+        .scale-block {
+            background: var(--card-alt);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 13px 15px;
+            margin-bottom: 10px;
+        }
+        .scale-block:last-of-type { margin-bottom: 0; }
+        .scale-header { display: flex; justify-content: space-between; align-items: baseline; font-size: 12.5px; margin-bottom: 6px; }
+        .scale-pole { color: #d1d5db; font-size: 12px; font-weight: 600; }
+        .scale-title { font-weight: 800; color: #ffffff; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.04em; }
+        .scale-bar-bg { width: 100%; height: 9px; background: #141720; border-radius: 99px; overflow: hidden; margin-bottom: 7px; }
+        .scale-bar-fill { height: 100%; border-radius: 99px; }
+        .scale-exp { font-size: 12.5px; color: #cbd5e1; margin: 0; line-height: 1.48; }
 
         /* Topic Stance Breakdown Grid */
-        .cat-breakdown-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        @media (max-width: 650px) { .cat-breakdown-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 440px) { .cat-breakdown-grid { grid-template-columns: 1fr; } }
-        .cat-mini-card { background: var(--card-alt); border: 1px solid var(--card-border); border-radius: 8px; padding: 12px; }
-        .cat-mini-title { font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 4px; }
-        .cat-mini-stance { font-size: 12px; color: var(--accent-blue-light); font-weight: 600; margin-bottom: 6px; }
+        .cat-breakdown-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+        @media (max-width: 760px) { .cat-breakdown-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 520px) { .cat-breakdown-grid { grid-template-columns: repeat(2, 1fr); } }
+        .cat-mini-card {
+            background: var(--card-alt);
+            border: 1px solid var(--card-border);
+            border-radius: 9px;
+            padding: 11px 12px;
+        }
+        .cat-mini-title { font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+        .cat-mini-stance { font-size: 11.5px; font-weight: 700; margin-bottom: 6px; }
 
         /* Policy Divergence / Disagreements Section */
         .divergence-intro { font-size: 13px; color: var(--text-muted); margin: 0 0 14px 0; line-height: 1.5; }
@@ -510,11 +702,11 @@
             background: var(--card-alt);
             border: 1px solid var(--card-border);
             border-radius: 10px;
-            padding: 16px;
+            padding: 15px;
             margin-bottom: 12px;
         }
         .divergence-card:last-child { margin-bottom: 0; }
-        .div-top-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+        .div-top-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
         .div-topic-wrap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .div-cat-tag {
             font-size: 11px;
@@ -524,45 +716,92 @@
             padding: 2px 8px;
             border-radius: 5px;
         }
-        .div-topic-title { font-size: 15px; font-weight: 700; color: #fff; }
+        .div-topic-title { font-size: 14.5px; font-weight: 700; color: #fff; }
         .div-badge { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 99px; }
         .div-badge.major { color: #fca5a5; background: rgba(239, 68, 68, 0.16); border: 1px solid rgba(239, 68, 68, 0.35); }
         .div-badge.moderate { color: #fde68a; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); }
         .div-compare-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
         @media (max-width: 620px) { .div-compare-grid { grid-template-columns: 1fr; } }
-        .div-stance-box { border-radius: 8px; padding: 12px; font-size: 13px; line-height: 1.48; }
+        .div-stance-box { border-radius: 8px; padding: 11px 13px; font-size: 13px; line-height: 1.48; }
         .div-stance-box.user-box { background: rgba(59, 130, 246, 0.10); border: 1px solid rgba(59, 130, 246, 0.30); color: #e5e7eb; }
         .div-stance-box.party-box { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.09); color: #cbd5e1; }
-        .div-stance-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; display: block; }
+        .div-stance-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; display: block; }
         .div-stance-box.user-box .div-stance-label { color: #60a5fa; }
         .div-stance-box.party-box .div-stance-label { color: #9ca3af; }
-        .div-axis-note { margin-top: 9px; font-size: 12px; color: var(--text-muted); }
+        .div-axis-note { margin-top: 8px; font-size: 12px; color: var(--text-muted); }
         .div-axis-note strong { color: #d1d5db; }
 
-        /* Closest Matches Lists */
-        .match-item { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
-        .match-item:last-child { border-bottom: none; padding-bottom: 0; }
-        .match-rank {
-            font-size: 13px;
+        /* Tabbed Match Explorer (Eliminates Endless Vertical Scroll) */
+        .match-tabs-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 12px;
+        }
+        .match-tab-btn {
+            background: var(--btn-bg);
+            border: 1px solid var(--card-border);
             color: var(--text-muted);
-            width: 22px;
-            height: 22px;
+            padding: 9px 15px;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .match-tab-btn:hover { color: #fff; border-color: #4b5563; }
+        .match-tab-btn.active {
+            background: rgba(59, 130, 246, 0.18);
+            color: #ffffff;
+            border-color: var(--accent-blue-light);
+        }
+        .match-panel-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent-blue-light);
+            margin: 18px 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: none;
+        }
+        .match-grid-2col {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        @media (max-width: 680px) { .match-grid-2col { grid-template-columns: 1fr; } }
+        .match-item {
+            background: var(--card-alt);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .match-rank {
+            font-size: 12px;
+            color: #fff;
+            min-width: 24px;
+            height: 24px;
             border-radius: 6px;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.08);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            margin-top: 2px;
+            font-weight: 800;
+            margin-top: 1px;
         }
-        .match-content { flex: 1; }
-        .match-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px; }
-        .match-name { font-size: 15px; font-weight: 700; color: #fff; }
-        .match-pct { font-size: 13px; font-weight: 700; color: var(--accent-blue-light); }
-        .match-sub { font-size: 12px; color: var(--accent-blue-light); margin-bottom: 6px; font-weight: 500; }
-        .match-desc { font-size: 13px; color: var(--text-muted); margin: 0 0 9px 0; line-height: 1.48; }
-        .match-bar-bg { width: 100%; height: 5px; background: #262a36; border-radius: 99px; overflow: hidden; }
-        .match-bar-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #60a5fa); border-radius: 99px; }
+        .match-content { flex: 1; min-width: 0; }
+        .match-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 2px; }
+        .match-name { font-size: 14.5px; font-weight: 700; color: #fff; }
+        .match-pct { font-size: 13px; font-weight: 800; }
+        .match-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; }
+        .match-desc { font-size: 12.5px; color: #cbd5e1; margin: 0 0 10px 0; line-height: 1.46; }
+        .match-bar-bg { width: 100%; height: 5px; background: #141720; border-radius: 99px; overflow: hidden; }
+        .match-bar-fill { height: 100%; border-radius: 99px; }
 
         /* Share & Export Card */
         .share-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
@@ -582,7 +821,7 @@
         .share-action-btn:hover { background: var(--btn-hover); border-color: var(--accent-blue-light); }
         .scorecard-preview-wrap {
             text-align: center;
-            background: #14171f;
+            background: #11141c;
             border: 1px solid var(--card-border);
             border-radius: 10px;
             padding: 14px;
@@ -594,7 +833,95 @@
 
 <div class="app-wrapper">
 
-    <!-- 1. LANDING / HOME VIEW -->
+    <!-- ========================================================= -->
+    <!-- 0A. DEDICATED WELCOME BACK / UNFINISHED SESSION SCREEN    -->
+    <!-- ========================================================= -->
+    <div id="resume-view">
+        <div class="card resume-card">
+            <div class="resume-icon-badge">⏳</div>
+            <div class="eyebrow">UNFINISHED ASSESSMENT FOUND</div>
+            <h1 class="hero-title">Welcome Back</h1>
+            <p class="hero-sub" style="margin-bottom:0;">
+                Your previous Political Inventory session was automatically saved in your browser. Would you like to pick up right where you left off or start a fresh test?
+            </p>
+
+            <div class="resume-status-box">
+                <div class="resume-status-top">
+                    <strong id="resume-q-label">Stopped at Question 1 of 105</strong>
+                    <span id="resume-pct-label" style="color: var(--accent-blue-light); font-weight:700;">0% Complete</span>
+                </div>
+                <div class="progress-track" style="margin-bottom: 0;">
+                    <div class="progress-fill" id="resume-progress-bar"></div>
+                </div>
+                <div class="resume-meta-grid">
+                    <div class="resume-meta-item">
+                        Current Topic
+                        <span id="resume-topic-name">—</span>
+                    </div>
+                    <div class="resume-meta-item">
+                        Questions Answered
+                        <span id="resume-answered-count">0 / 105</span>
+                    </div>
+                    <div class="resume-meta-item">
+                        Last Saved
+                        <span id="resume-time-ago">Just now</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-row">
+                <button class="primary-cta" onclick="resumeSavedQuiz()">▶ Continue Where You Left Off</button>
+                <button class="danger-cta" onclick="confirmRestartQuiz()">↺ Discard & Start Fresh</button>
+                <button class="secondary-cta" onclick="showMainHomeWithoutClearing()">View Home Screen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- 0B. DEDICATED COMPLETED RESULT FOUND SCREEN               -->
+    <!-- ========================================================= -->
+    <div id="completed-intercept-view">
+        <div class="card completed-intercept-card">
+            <div class="completed-icon-badge">✓</div>
+            <div class="eyebrow" style="color: #34d399;">COMPLETED ASSESSMENT SAVED IN BROWSER</div>
+            <h1 class="hero-title">Your Results Are Ready</h1>
+            <p class="hero-sub" style="margin-bottom:0;">
+                You previously completed the 105-item Global Political Inventory. Would you like to open your saved results dashboard or retake the test from the beginning?
+            </p>
+
+            <div class="resume-status-box">
+                <div class="resume-status-top">
+                    <strong id="comp-primary-name" style="font-size: 18px; color: #ffffff;">Loading...</strong>
+                    <span id="comp-us-badge" style="color: #34d399; font-weight:700;">—</span>
+                </div>
+                <div id="comp-family-sub" style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">—</div>
+                <div class="resume-meta-grid">
+                    <div class="resume-meta-item">
+                        Economic × Social
+                        <span id="comp-coords">—</span>
+                    </div>
+                    <div class="resume-meta-item">
+                        Libertarian × Globalist
+                        <span id="comp-secondary-coords">—</span>
+                    </div>
+                    <div class="resume-meta-item">
+                        Completed
+                        <span id="comp-time-ago">Recently</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-row">
+                <button class="primary-cta" onclick="openSavedCompletedResult()">📊 View Your Completed Results</button>
+                <button class="secondary-cta" style="color:#fff; border-color:#4b5563;" onclick="startNewQuiz()">↺ Retake Full 105-Item Test</button>
+                <button class="danger-cta" onclick="clearSavedCompletedAndGoHome()">🗑️ Clear Saved Result</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 1. LANDING / HOME VIEW                     -->
+    <!-- ========================================== -->
     <div id="home-view">
         <div class="card hero-card">
             <div class="eyebrow">EMPIRICAL POLITICAL INVENTORY</div>
@@ -610,6 +937,7 @@
             </div>
             <div class="cta-row">
                 <button class="resume-cta" id="resume-btn" onclick="resumeSavedQuiz()">▶ Resume Saved Progress</button>
+                <button class="completed-home-cta" id="view-completed-home-btn" onclick="openSavedCompletedResult()">📊 View Your Last Completed Result</button>
                 <button class="primary-cta" onclick="startNewQuiz()">Begin Full Assessment (105 Items)</button>
                 <button class="secondary-cta" onclick="simulateRandom()">Preview Sample Results</button>
             </div>
@@ -648,10 +976,13 @@
         </div>
     </div>
 
-    <!-- 2. QUIZ VIEW -->
+    <!-- ========================================== -->
+    <!-- 2. QUIZ VIEW                               -->
+    <!-- ========================================== -->
     <div id="quiz-view" class="card">
         <div class="quiz-top-bar">
             <span id="q-counter">Question 1 of 105</span>
+            <span class="autosave-pill" id="autosave-indicator">✓ Progress Auto-Saved</span>
             <span id="q-pct">0% Complete</span>
         </div>
         <div class="progress-track">
@@ -661,7 +992,7 @@
             <span class="topic-badge" id="q-category">Economics</span>
             <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
                 <button class="priority-btn" id="priority-btn" onclick="togglePriority()">☆ High Priority (2x Weight)</button>
-                <button class="util-btn" onclick="goHome()">Home</button>
+                <button class="util-btn" onclick="showMainHomeWithoutClearing()">Pause / Home</button>
             </div>
         </div>
         <h2 class="q-title" id="q-topic">Loading...</h2>
@@ -670,24 +1001,53 @@
         <div class="kbd-hint">Keyboard shortcuts: <strong>1 / 2 / 3</strong> to pick A / B / C · <strong>4</strong> or <strong>Space</strong> for Unsure · <strong>W</strong> for 2x Priority · <strong>←</strong> Previous</div>
         <div class="nav-row">
             <button class="util-btn" id="prev-btn" onclick="prevQuestion()" style="visibility:hidden;">← Previous Question</button>
-            <button class="util-btn" onclick="startNewQuiz()">Reset Progress</button>
+            <button class="util-btn" onclick="confirmRestartQuiz()">Restart from Question 1</button>
         </div>
     </div>
 
-    <!-- 3. RESULTS VIEW -->
+    <!-- ========================================== -->
+    <!-- 3. RESULTS VIEW                            -->
+    <!-- ========================================== -->
     <div id="results-view">
+
+        <!-- Sticky Quick-Jump Bar -->
+        <nav class="results-sticky-nav">
+            <a class="jump-link" href="#sec-overview">Overview</a>
+            <a class="jump-link" href="#sec-compass">Compass & 4 Axes</a>
+            <a class="jump-link" href="#sec-domains">10 Domains</a>
+            <a class="jump-link" href="#sec-divergences">Disagreements</a>
+            <a class="jump-link" href="#sec-matches">Matches & Leaders</a>
+            <a class="jump-link" href="#sec-share">Scorecard & Share</a>
+        </nav>
+
         <div class="shared-banner" id="shared-banner">
             <span>You are viewing a shared Political Inventory result dashboard.</span>
             <button class="util-btn" style="color:#fff; border-color:#60a5fa;" onclick="startNewQuiz()">Take the 105-Item Test Yourself →</button>
         </div>
 
         <!-- 1. Primary Alignment Card -->
-        <div class="card primary-card">
+        <div class="card primary-card" id="sec-overview">
             <div class="eyebrow">PRIMARY ALIGNMENT</div>
             <h1 class="primary-title" id="primary-name">Loading...</h1>
             <p class="primary-sub" id="primary-family">Loading...</p>
             <div class="primary-desc-box" id="primary-desc"></div>
             <div class="tags-row" id="primary-tags"></div>
+
+            <!-- At-a-glance Top 3 Matches Strip -->
+            <div class="top-matches-strip">
+                <div class="top-mini-pill">
+                    <span class="top-mini-label">Closest US Caucus</span>
+                    <div class="top-mini-val"><span id="glance-caucus">—</span><span class="top-mini-pct" id="glance-caucus-pct"></span></div>
+                </div>
+                <div class="top-mini-pill">
+                    <span class="top-mini-label">Closest Political Leader</span>
+                    <div class="top-mini-val"><span id="glance-figure">—</span><span class="top-mini-pct" id="glance-figure-pct"></span></div>
+                </div>
+                <div class="top-mini-pill">
+                    <span class="top-mini-label">Closest International Party</span>
+                    <div class="top-mini-val"><span id="glance-intl">—</span><span class="top-mini-pct" id="glance-intl-pct"></span></div>
+                </div>
+            </div>
         </div>
 
         <!-- 2. US Political Spectrum & Empirical Voter Benchmark -->
@@ -707,54 +1067,50 @@
             </div>
             <p class="spectrum-summary" id="us-spectrum-text"></p>
             <div class="pew-benchmark-box" id="pew-benchmark-text"></div>
-            <div class="pew-benchmark-box" id="consistency-benchmark-text"></div>
+            <div class="pew-benchmark-box consistency-box" id="consistency-benchmark-text"></div>
         </div>
 
-        <!-- 3. 2D Political Compass -->
-        <div class="card">
+        <!-- 3. Side-by-Side 2D Political Compass + 4-Axis Scales -->
+        <div class="card" id="sec-compass">
             <div class="section-header">
-                <h3 class="section-title">Political Compass (Economic × Social)</h3>
+                <h3 class="section-title">Political Compass & 4-Axis Diagnostic Breakdown</h3>
                 <div style="display:flex; gap:6px; flex-wrap:wrap;">
                     <button class="util-btn active-tab" id="map-mode-both" onclick="setMapOverlay('both')" style="padding: 4px 10px; font-size: 12px;">All Landmarks</button>
-                    <button class="util-btn" id="map-mode-figures" onclick="setMapOverlay('figures')" style="padding: 4px 10px; font-size: 12px;">Political Figures</button>
-                    <button class="util-btn" id="map-mode-ideologies" onclick="setMapOverlay('ideologies')" style="padding: 4px 10px; font-size: 12px;">Ideologies</button>
+                    <button class="util-btn" id="map-mode-figures" onclick="setMapOverlay('figures')" style="padding: 4px 10px; font-size: 12px;">Figures Only</button>
+                    <button class="util-btn" id="map-mode-ideologies" onclick="setMapOverlay('ideologies')" style="padding: 4px 10px; font-size: 12px;">Ideologies Only</button>
                     <button class="util-btn" id="map-mode-none" onclick="setMapOverlay('none')" style="padding: 4px 10px; font-size: 12px;">Clean Grid</button>
                 </div>
             </div>
-            <div class="compass-wrapper">
-                <div class="compass-box" id="compass-box">
-                    <div class="compass-grid-lines"></div>
-                    <div class="compass-axis-x"></div>
-                    <div class="compass-axis-y"></div>
-                    <span class="c-label top">Progressive</span>
-                    <span class="c-label bottom">Traditional</span>
-                    <span class="c-label left">Economic Left</span>
-                    <span class="c-label right">Economic Right</span>
-                    <div id="landmarks-layer"></div>
-                    <div class="compass-dot" id="compass-dot" style="left:50%; top:50%;" title="Your Position"></div>
+            <div class="compass-WrapperGrid">
+                <div class="compass-wrapper">
+                    <div class="compass-box" id="compass-box">
+                        <div class="compass-grid-lines"></div>
+                        <div class="compass-axis-x"></div>
+                        <div class="compass-axis-y"></div>
+                        <span class="c-label top">Progressive</span>
+                        <span class="c-label bottom">Traditional</span>
+                        <span class="c-label left">Economic Left</span>
+                        <span class="c-label right">Economic Right</span>
+                        <div id="landmarks-layer"></div>
+                        <div class="compass-dot" id="compass-dot" style="left:50%; top:50%;" title="Your Position"></div>
+                    </div>
+                    <div class="compass-caption" id="compass-caption"></div>
                 </div>
-                <div class="compass-caption" id="compass-caption"></div>
+                <div id="scales-container"></div>
             </div>
         </div>
 
-        <!-- 4. Detailed 4-Axis Scales -->
-        <div class="card">
-            <div class="section-header">
-                <h3 class="section-title">4-Axis Breakdown & Diagnostic Explanations</h3>
-            </div>
-            <div id="scales-container"></div>
-        </div>
-
-        <!-- 5. Policy Domain Breakdown -->
-        <div class="card">
+        <!-- 4. Policy Domain Breakdown -->
+        <div class="card" id="sec-domains">
             <div class="section-header">
                 <h3 class="section-title">Your Stance Across All 10 Policy Domains</h3>
+                <span style="font-size: 12px; color: var(--text-muted);">Color-coded from Left/Prog (Blue) to Right/Trad (Red)</span>
             </div>
             <div class="cat-breakdown-grid" id="cat-breakdown-grid"></div>
         </div>
 
-        <!-- 6. Policy Disagreement & Heterodox Views Breakdown -->
-        <div class="card" id="divergence-card-wrapper">
+        <!-- 5. Policy Disagreement & Heterodox Views Breakdown -->
+        <div class="card" id="sec-divergences">
             <div class="section-header">
                 <h3 class="section-title">Where You Differ From Your #1 Match</h3>
                 <div style="display:flex; gap:6px; flex-wrap:wrap;">
@@ -766,35 +1122,40 @@
             <div id="divergence-list"></div>
         </div>
 
-        <!-- 7. Closest Ideologies -->
-        <div class="card">
-            <div class="section-header"><h3 class="section-title">Closest Ideologies</h3></div>
-            <div id="list-ideologies"></div>
-        </div>
-
-        <!-- 8. Closest Prominent Political Figures -->
-        <div class="card">
+        <!-- 6. Consolidated Tabbed Match Explorer (Ideologies, Leaders, US Caucuses, International) -->
+        <div class="card" id="sec-matches">
             <div class="section-header">
-                <h3 class="section-title">Closest Political Figures & Leaders</h3>
-                <span style="font-size: 12px; color: var(--text-muted);">Historical & Modern Comparison</span>
+                <h3 class="section-title">Ideological, Caucus, Leader & International Matches</h3>
+                <span style="font-size: 12px; color: var(--text-muted);">Switch tabs or view all side-by-side</span>
             </div>
-            <div id="list-figures"></div>
+            <div class="match-tabs-bar">
+                <button class="match-tab-btn active" id="tab-btn-ideologies" onclick="switchMatchTab('ideologies')">🧭 Ideologies (6)</button>
+                <button class="match-tab-btn" id="tab-btn-caucuses" onclick="switchMatchTab('caucuses')">🏛️ US Caucuses & Parties (6)</button>
+                <button class="match-tab-btn" id="tab-btn-figures" onclick="switchMatchTab('figures')">👤 Political Leaders (6)</button>
+                <button class="match-tab-btn" id="tab-btn-international" onclick="switchMatchTab('international')">🌍 International Parties (6)</button>
+                <button class="match-tab-btn" id="tab-btn-all" onclick="switchMatchTab('all')">📋 Show All</button>
+            </div>
+
+            <div id="panel-ideologies">
+                <div class="match-panel-title">Closest Political Ideologies</div>
+                <div class="match-grid-2col" id="list-ideologies"></div>
+            </div>
+            <div id="panel-caucuses" style="display:none;">
+                <div class="match-panel-title">Closest US Parties & Congressional Caucuses</div>
+                <div class="match-grid-2col" id="list-caucuses"></div>
+            </div>
+            <div id="panel-figures" style="display:none;">
+                <div class="match-panel-title">Closest Political Figures & Leaders</div>
+                <div class="match-grid-2col" id="list-figures"></div>
+            </div>
+            <div id="panel-international" style="display:none;">
+                <div class="match-panel-title">Closest International Parties</div>
+                <div class="match-grid-2col" id="list-international"></div>
+            </div>
         </div>
 
-        <!-- 9. Closest US Parties & Caucuses -->
-        <div class="card">
-            <div class="section-header"><h3 class="section-title">Closest US Parties & Congressional Caucuses</h3></div>
-            <div id="list-caucuses"></div>
-        </div>
-
-        <!-- 10. Closest International Parties -->
-        <div class="card">
-            <div class="section-header"><h3 class="section-title">Closest International Parties</h3></div>
-            <div id="list-international"></div>
-        </div>
-
-        <!-- 11. Share & Export Visual Scorecard -->
-        <div class="card">
+        <!-- 7. Share & Export Visual Scorecard -->
+        <div class="card" id="sec-share">
             <div class="section-header">
                 <h3 class="section-title">Share Your Results & Download Visual Scorecard</h3>
                 <span style="font-size: 12px; color: var(--text-muted);">Shared links display this full dashboard</span>
@@ -806,14 +1167,15 @@
                 <button class="share-action-btn" onclick="nativeShare()">📤 Share via Device / Social</button>
             </div>
             <div class="scorecard-preview-wrap">
-                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Live Visual Scorecard Preview (Right-click or tap Download above to save image)</div>
-                <canvas id="scorecard-canvas" width="1200" height="630"></canvas>
+                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Live Visual Scorecard Preview (Auto-fits long party names without clipping)</div>
+                <canvas id="scorecard-canvas" width="1200" height="650"></canvas>
             </div>
         </div>
 
-        <div style="display:flex; gap:12px; margin-top: 14px;">
-            <button class="util-btn" style="flex:1; padding:13px; font-weight:700;" onclick="goHome()">← Return to Home Screen</button>
-            <button class="util-btn" style="flex:1; padding:13px; font-weight:700;" onclick="startNewQuiz()">Retake Full 105-Item Test</button>
+        <div style="display:flex; gap:12px; margin-top: 14px; flex-wrap:wrap;">
+            <button class="util-btn" style="flex:1; padding:13px; font-weight:700;" onclick="showMainHomeWithoutClearing()">← Return to Home Screen</button>
+            <button class="util-btn" style="flex:1; padding:13px; font-weight:700;" onclick="startNewQuiz()">↺ Retake Full 105-Item Test</button>
+            <button class="util-btn" style="padding:13px 18px; color:#fca5a5; border-color:rgba(239,68,68,0.35);" onclick="clearSavedCompletedAndGoHome()">Clear Saved Result</button>
         </div>
     </div>
 </div>
@@ -822,6 +1184,8 @@
 <script src="data.js"></script>
 <script>
 const STORAGE_KEY = "gpi_saved_state_v2";
+const COMPLETED_STORAGE_KEY = "gpi_completed_state_v2";
+
 let currentIndex = 0;
 let answers = new Array(QUESTION_BANK.length).fill(null);
 let priorities = new Array(QUESTION_BANK.length).fill(false);
@@ -864,35 +1228,157 @@ function decodeAnswersCompact(str, totalLen) {
 }
 
 // ============================================================================
-// LOCALSTORAGE AUTO-SAVE & HOME SCREEN INIT
+// LOCALSTORAGE: IN-PROGRESS & COMPLETED RESULTS PERSISTENCE
 // ============================================================================
+function getSavedState() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed || !Array.isArray(parsed.answers)) return null;
+        const answeredCount = parsed.answers.filter(a => a !== null).length;
+        if (answeredCount > 0 && answeredCount < QUESTION_BANK.length) {
+            return { ...parsed, answeredCount };
+        }
+        return null;
+    } catch (e) {
+        return null;
+    }
+}
+
 function saveProgressToStorage() {
     try {
         const payload = { currentIndex, answers, priorities, ts: Date.now() };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+        const ind = document.getElementById("autosave-indicator");
+        if (ind) ind.textContent = "✓ Saved Q" + (currentIndex + 1);
     } catch (e) {}
 }
 
 function clearSavedStorage() {
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-    checkResumeButton();
+    checkHomeActionButtons();
 }
 
-function checkResumeButton() {
-    const btn = document.getElementById("resume-btn");
+function getSavedCompletedResult() {
     try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) { btn.style.display = "none"; return; }
+        const raw = localStorage.getItem(COMPLETED_STORAGE_KEY);
+        if (!raw) return null;
         const parsed = JSON.parse(raw);
-        const answeredCount = (parsed.answers || []).filter(a => a !== null).length;
-        if (answeredCount > 0 && answeredCount < QUESTION_BANK.length) {
-            btn.style.display = "inline-block";
-            btn.textContent = `▶ Resume Saved Progress (Question ${parsed.currentIndex + 1} of ${QUESTION_BANK.length})`;
-        } else {
-            btn.style.display = "none";
-        }
+        if (!parsed || typeof parsed.econLeft !== "number") return null;
+        return parsed;
     } catch (e) {
-        btn.style.display = "none";
+        return null;
+    }
+}
+
+function saveCompletedResultToStorage(payload) {
+    try {
+        localStorage.setItem(COMPLETED_STORAGE_KEY, JSON.stringify({
+            ...payload,
+            ts: Date.now()
+        }));
+    } catch (e) {}
+    checkHomeActionButtons();
+}
+
+function clearSavedCompletedAndGoHome() {
+    try { localStorage.removeItem(COMPLETED_STORAGE_KEY); } catch (e) {}
+    showMainHomeWithoutClearing();
+}
+
+function formatTimeAgo(ts) {
+    if (!ts) return "Recently";
+    const diffSec = Math.max(1, Math.floor((Date.now() - ts) / 1000));
+    if (diffSec < 60) return "Just now";
+    const diffMin = Math.floor(diffSec / 60);
+    if (diffMin < 60) return `${diffMin} min${diffMin === 1 ? "" : "s"} ago`;
+    const diffHr = Math.floor(diffMin / 60);
+    if (diffHr < 24) return `${diffHr} hour${diffHr === 1 ? "" : "s"} ago`;
+    const diffDays = Math.floor(diffHr / 24);
+    return `${diffDays} day${diffDays === 1 ? "" : "s"} ago`;
+}
+
+function hideAllViews() {
+    document.getElementById("resume-view").style.display = "none";
+    document.getElementById("completed-intercept-view").style.display = "none";
+    document.getElementById("home-view").style.display = "none";
+    document.getElementById("quiz-view").style.display = "none";
+    document.getElementById("results-view").style.display = "none";
+}
+
+function showDedicatedResumeScreen(saved) {
+    const total = QUESTION_BANK.length;
+    const qIdx = Math.min(total - 1, Math.max(0, saved.currentIndex || 0));
+    const pct = Math.round((saved.answeredCount / total) * 100);
+    const qItem = QUESTION_BANK[qIdx];
+    const prioCount = (saved.priorities || []).filter(Boolean).length;
+
+    document.getElementById("resume-q-label").textContent = `Stopped at Question ${qIdx + 1} of ${total}`;
+    document.getElementById("resume-pct-label").textContent = `${pct}% Complete`;
+    document.getElementById("resume-progress-bar").style.width = `${pct}%`;
+    document.getElementById("resume-topic-name").textContent = qItem ? `${qItem[0]} · ${qItem[1]}` : "Policy Trade-Off";
+    document.getElementById("resume-answered-count").textContent =
+        `${saved.answeredCount} of ${total}` + (prioCount > 0 ? ` (${prioCount} ★)` : "");
+    document.getElementById("resume-time-ago").textContent = formatTimeAgo(saved.ts);
+
+    hideAllViews();
+    document.getElementById("resume-view").style.display = "block";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function showCompletedInterceptScreen(completed) {
+    document.getElementById("comp-primary-name").textContent = completed.primaryName || "Saved Political Alignment";
+    document.getElementById("comp-us-badge").textContent = `${completed.usLabel || "US Spectrum"} (${completed.usLeftScore ?? 50}/100)`;
+    document.getElementById("comp-family-sub").textContent = completed.primaryFamily || "";
+    document.getElementById("comp-coords").textContent = `Econ: ${completed.econLeft}/100 · Social: ${completed.socialProg}/100`;
+    document.getElementById("comp-secondary-coords").textContent = `Lib: ${completed.civilLib}/100 · Global: ${completed.diploGlobal}/100`;
+    document.getElementById("comp-time-ago").textContent = formatTimeAgo(completed.ts);
+
+    hideAllViews();
+    document.getElementById("completed-intercept-view").style.display = "block";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function openSavedCompletedResult() {
+    const comp = getSavedCompletedResult();
+    if (!comp) {
+        showMainHomeWithoutClearing();
+        return;
+    }
+    if (Array.isArray(comp.answers) && comp.answers.length === QUESTION_BANK.length) {
+        answers = comp.answers.slice();
+    }
+    if (Array.isArray(comp.priorities) && comp.priorities.length === QUESTION_BANK.length) {
+        priorities = comp.priorities.slice();
+    }
+    computeAndDisplayResults({
+        econLeft: comp.econLeft,
+        socialProg: comp.socialProg,
+        civilLib: comp.civilLib,
+        diploGlobal: comp.diploGlobal,
+        catScores: comp.catScores || []
+    }, false, false);
+}
+
+function checkHomeActionButtons() {
+    const resumeBtn = document.getElementById("resume-btn");
+    const compBtn = document.getElementById("view-completed-home-btn");
+    const saved = getSavedState();
+    const completed = getSavedCompletedResult();
+
+    if (saved) {
+        resumeBtn.style.display = "inline-block";
+        resumeBtn.textContent = `▶ Continue Saved Test (Question ${saved.currentIndex + 1} of ${QUESTION_BANK.length})`;
+    } else {
+        resumeBtn.style.display = "none";
+    }
+
+    if (completed) {
+        compBtn.style.display = "inline-block";
+        compBtn.textContent = `📊 View Completed Result (${completed.primaryName || "Saved"})`;
+    } else {
+        compBtn.style.display = "none";
     }
 }
 
@@ -907,19 +1393,20 @@ function initHomeScreen() {
             <p class="topic-card-desc">${cat.desc}</p>
         </div>
     `).join("");
-    checkResumeButton();
+    checkHomeActionButtons();
 }
 
-function goHome() {
+function showMainHomeWithoutClearing() {
     if (window.history.replaceState) {
         window.history.replaceState({}, document.title, window.location.pathname);
     }
-    checkResumeButton();
-    document.getElementById("quiz-view").style.display = "none";
-    document.getElementById("results-view").style.display = "none";
+    checkHomeActionButtons();
+    hideAllViews();
     document.getElementById("home-view").style.display = "block";
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
+
+function confirmRestartQuiz() { startNewQuiz(); }
 
 function startNewQuiz() {
     if (window.history.replaceState) {
@@ -929,25 +1416,20 @@ function startNewQuiz() {
     currentIndex = 0;
     answers.fill(null);
     priorities.fill(false);
-    document.getElementById("home-view").style.display = "none";
-    document.getElementById("results-view").style.display = "none";
+    hideAllViews();
     document.getElementById("quiz-view").style.display = "block";
     renderQuestion();
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function resumeSavedQuiz() {
-    try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (raw) {
-            const parsed = JSON.parse(raw);
-            currentIndex = parsed.currentIndex || 0;
-            answers = parsed.answers || new Array(QUESTION_BANK.length).fill(null);
-            priorities = parsed.priorities || new Array(QUESTION_BANK.length).fill(false);
-        }
-    } catch (e) {}
-    document.getElementById("home-view").style.display = "none";
-    document.getElementById("results-view").style.display = "none";
+    const saved = getSavedState();
+    if (saved) {
+        currentIndex = Math.min(QUESTION_BANK.length - 1, Math.max(0, saved.currentIndex || 0));
+        answers = saved.answers || new Array(QUESTION_BANK.length).fill(null);
+        priorities = saved.priorities || new Array(QUESTION_BANK.length).fill(false);
+    }
+    hideAllViews();
     document.getElementById("quiz-view").style.display = "block";
     renderQuestion();
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1001,7 +1483,6 @@ function togglePriority() {
 
 function selectAnswer(choiceIdx) {
     answers[currentIndex] = choiceIdx;
-    saveProgressToStorage();
     if (currentIndex + 1 < QUESTION_BANK.length) {
         currentIndex++;
         saveProgressToStorage();
@@ -1009,7 +1490,7 @@ function selectAnswer(choiceIdx) {
         window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
         clearSavedStorage();
-        computeAndDisplayResults();
+        computeAndDisplayResults(null, false, true);
     }
 }
 
@@ -1043,7 +1524,7 @@ function simulateRandom() {
         else answers[i] = 2;
         priorities[i] = Math.random() < 0.12;
     }
-    computeAndDisplayResults(null, false);
+    computeAndDisplayResults(null, false, false);
 }
 
 // ============================================================================
@@ -1051,37 +1532,37 @@ function simulateRandom() {
 // ============================================================================
 function getAxisExplanation(axisKey, score) {
     if (axisKey === "econ") {
-        if (score >= 75) return "You strongly favor public investment, universal social programs, progressive taxation on wealth, and strong labor union protections over unregulated market outcomes.";
-        if (score >= 56) return "You lean center-left on economics: supporting a market economy balanced by a strong social safety net, consumer regulations, and progressive taxes.";
-        if (score >= 45) return "You hold a balanced, mixed-economy view—supporting private enterprise and fiscal discipline alongside targeted public safety nets and infrastructure.";
-        if (score >= 26) return "You lean center-right on economics: favoring lower taxes, deregulation, market competition, and private-sector growth over government expansion.";
-        return "You strongly favor laissez-faire free markets, low taxes, private property rights, and minimal government intervention in business and labor.";
+        if (score >= 75) return "You strongly favor public investment, universal social programs, progressive taxation on wealth, and strong labor union protections.";
+        if (score >= 56) return "You lean center-left on economics: supporting a market economy balanced by a strong social safety net and progressive taxes.";
+        if (score >= 45) return "You hold a balanced, mixed-economy view—supporting private enterprise alongside targeted public safety nets and infrastructure.";
+        if (score >= 26) return "You lean center-right on economics: favoring lower taxes, deregulation, market competition, and private-sector growth.";
+        return "You strongly favor laissez-faire free markets, low taxes, private property rights, and minimal government intervention.";
     }
     if (axisKey === "social") {
-        if (score >= 75) return "You hold strongly progressive social views—championing reproductive freedom, LGBTQ+ equality, secular governance, and systemic civil-rights reforms.";
-        if (score >= 56) return "You lean socially liberal, favoring personal autonomy, inclusive institutions, and civil rights while remaining pragmatic on cultural debates.";
-        if (score >= 45) return "You sit near the cultural center, balancing individual freedom and equal opportunity with respect for community norms and institutional stability.";
+        if (score >= 75) return "You hold strongly progressive social views—championing reproductive freedom, LGBTQ+ equality, secular governance, and civil rights.";
+        if (score >= 56) return "You lean socially liberal, favoring personal autonomy, inclusive institutions, and civil rights while remaining pragmatic.";
+        if (score >= 45) return "You sit near the cultural center, balancing individual freedom with respect for community norms and institutional stability.";
         if (score >= 26) return "You lean socially conservative, valuing traditional family structures, religious heritage, merit-based standards, and community order.";
-        return "You strongly uphold traditional moral, religious, and family values, favoring laws that protect cultural heritage and biological norms.";
+        return "You strongly uphold traditional moral, religious, and family values, favoring laws that protect cultural heritage.";
     }
     if (axisKey === "auth") {
-        if (score >= 75) return "You are strongly civil-libertarian: prioritizing digital privacy, free expression, due process, criminal justice reform, and strict limits on state surveillance or mandates.";
-        if (score >= 56) return "You lean toward personal liberty and skepticism of government overreach, preferring rehabilitation and warrant protections over heavy policing.";
-        if (score >= 45) return "You balance civil liberties with public order—supporting constitutional due process alongside practical law enforcement and public safety rules.";
-        if (score >= 26) return "You lean toward law and order, favoring well-funded policing, stricter criminal sentencing, and strong state authority to maintain public safety.";
-        return "You strongly prioritize public order, national security, strict criminal penalties, and decisive state authority to deter crime and social disorder.";
+        if (score >= 75) return "You are strongly civil-libertarian: prioritizing digital privacy, free expression, due process, criminal justice reform, and limits on state power.";
+        if (score >= 56) return "You lean toward personal liberty and skepticism of government overreach, preferring rehabilitation and warrant protections.";
+        if (score >= 45) return "You balance civil liberties with public order—supporting constitutional due process alongside practical law enforcement.";
+        if (score >= 26) return "You lean toward law and order, favoring well-funded policing, stricter criminal sentencing, and strong state authority.";
+        return "You strongly prioritize public order, national security, strict criminal penalties, and decisive state authority to deter crime.";
     }
     if (axisKey === "diplo") {
-        if (score >= 75) return "You favor an internationalist outlook: supporting global cooperation, climate agreements, welcoming immigration policies, and multilateral diplomacy.";
+        if (score >= 75) return "You favor an internationalist outlook: supporting global cooperation, climate agreements, welcoming immigration, and multilateral diplomacy.";
         if (score >= 56) return "You lean globalist/cooperative, valuing strong democratic alliances, international trade, and regulated legal immigration.";
-        if (score >= 45) return "You balance national interests with international engagement—supporting allies and trade while enforcing secure, orderly borders.";
-        if (score >= 26) return "You lean nationalist, prioritizing domestic manufacturing, stricter border enforcement, and avoiding costly foreign entanglements.";
-        return "You strongly favor an 'America First' sovereigntist approach: strict border security, protective tariffs, reshoring industry, and rejecting globalist treaties.";
+        if (score >= 45) return "You balance national interests with international engagement—supporting allies and trade while enforcing secure borders.";
+        if (score >= 26) return "You lean nationalist, prioritizing domestic manufacturing, stricter border enforcement, and avoiding foreign entanglements.";
+        return "You strongly favor an 'America First' sovereigntist approach: strict border security, protective tariffs, and reshoring industry.";
     }
     return "";
 }
 
-function getConsistencyDiagnostic(econLeft, socialProg, civilLib, diploGlobal) {
+function getConsistencyDiagnostic(econLeft, socialProg) {
     const econSocialGap = Math.abs(econLeft - socialProg);
     if (econLeft >= 60 && socialProg <= 40) {
         return `<strong>Cross-Pressured / Communitarian Profile (Gap: ${econSocialGap} pts):</strong> Unlike standard US partisan sorting, you combine <strong>Economic Left / Populist</strong> views on labor and safety nets with <strong>Socially Traditional</strong> cultural stances.`;
@@ -1093,6 +1574,27 @@ function getConsistencyDiagnostic(econLeft, socialProg, civilLib, diploGlobal) {
         return `<strong>Pragmatic Centrist Profile:</strong> Your economic (${econLeft}/100) and cultural (${socialProg}/100) scores sit in close equilibrium near the center, favoring case-by-case moderation over partisan orthodoxy.`;
     }
     return `<strong>High Ideological Alignment (Gap: ${econSocialGap} pts):</strong> Your economic (${econLeft}/100) and social/cultural (${socialProg}/100) coordinates reinforce each other along the primary left-right axis.`;
+}
+
+// ============================================================================
+// TABBED MATCH EXPLORER SWITCHER
+// ============================================================================
+function switchMatchTab(tabName) {
+    const tabs = ["ideologies", "caucuses", "figures", "international"];
+    ["ideologies", "caucuses", "figures", "international", "all"].forEach(t => {
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (btn) btn.classList.toggle("active", t === tabName);
+    });
+
+    const titles = document.querySelectorAll(".match-panel-title");
+    titles.forEach(el => { el.style.display = tabName === "all" ? "block" : "none"; });
+
+    tabs.forEach(t => {
+        const panel = document.getElementById(`panel-${t}`);
+        if (panel) {
+            panel.style.display = (tabName === "all" || tabName === t) ? "block" : "none";
+        }
+    });
 }
 
 // ============================================================================
@@ -1121,8 +1623,6 @@ function renderDivergences() {
         return;
     }
 
-    // Convert targetProfile's 0-100 coordinates to the raw [-2, +2] statement scale
-    // Remember: 100 = -2 (Left/Prog/Lib/Global), 0 = +2 (Right/Trad/Auth/Nat)
     const profVec = [
         ((50 - targetProfile.e) / 50) * 2,
         ((50 - targetProfile.s) / 50) * 2,
@@ -1140,7 +1640,6 @@ function renderDivergences() {
         const stmts = q[3];
         const userStmt = stmts[userChoiceIdx];
 
-        // Find which statement the target profile would naturally endorse (closest in 4D vector space)
         let bestPartyIdx = 0;
         let bestPartyDist = Infinity;
         stmts.forEach((st, idx) => {
@@ -1229,7 +1728,7 @@ function renderDivergences() {
 // ============================================================================
 // MAIN SCORING & RESULTS RENDERING ENGINE
 // ============================================================================
-function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false) {
+function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false, shouldPersistCompletion = false) {
     let econLeft, socialProg, civilLib, diploGlobal, catScores = [];
 
     if (overrideScores) {
@@ -1279,13 +1778,13 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
             const entry = catMap[c.id];
             return toLeftScale(entry.val, entry.max);
         });
+    }
 
-        if (window.history.replaceState) {
-            const cParam = catScores.join(".");
-            const ansEncoded = encodeAnswersCompact(answers);
-            const params = `?e=${econLeft}&s=${socialProg}&a=${civilLib}&d=${diploGlobal}&c=${cParam}&ans=${ansEncoded}`;
-            window.history.replaceState({}, document.title, window.location.pathname + params);
-        }
+    if (window.history.replaceState) {
+        const cParam = (catScores || []).join(".");
+        const ansEncoded = encodeAnswersCompact(answers);
+        const params = `?e=${econLeft}&s=${socialProg}&a=${civilLib}&d=${diploGlobal}&c=${cParam}&ans=${ansEncoded}`;
+        window.history.replaceState({}, document.title, window.location.pathname + params);
     }
 
     document.getElementById("shared-banner").style.display = isFromSharedUrl ? "flex" : "none";
@@ -1315,7 +1814,7 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
         `<strong>Pew Research Political Typology Match: ${bestPew.name}</strong> — ${bestPew.desc}`;
 
     document.getElementById("consistency-benchmark-text").innerHTML =
-        getConsistencyDiagnostic(econLeft, socialProg, civilLib, diploGlobal);
+        getConsistencyDiagnostic(econLeft, socialProg);
 
     // 2. 2D Political Compass
     const dotX = Math.max(4, Math.min(96, 100 - econLeft));
@@ -1325,16 +1824,16 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
     dot.style.top = `${dotY}%`;
 
     document.getElementById("compass-caption").innerHTML =
-        `Economic: <strong>${econLeft}/100</strong> (higher = more left) · Social: <strong>${socialProg}/100</strong> (higher = more progressive)`;
+        `Economic: <strong>${econLeft}/100</strong> (Left) · Social: <strong>${socialProg}/100</strong> (Progressive)`;
 
     renderLandmarks();
 
-    // 3. Detailed 4-Axis Scales
+    // 3. Color-Coded 4-Axis Scales
     const scalesData = [
-        { key: "econ", name: "Economic Axis", leftName: "Public / Left", rightName: "Market / Right", leftPct: econLeft },
-        { key: "social", name: "Social & Cultural Axis", leftName: "Progressive", rightName: "Traditional", leftPct: socialProg },
-        { key: "auth", name: "Civil Liberties & Order Axis", leftName: "Libertarian", rightName: "Authoritarian / Order", leftPct: civilLib },
-        { key: "diplo", name: "Foreign & Trade Axis", leftName: "Globalist / International", rightName: "Nationalist / America First", leftPct: diploGlobal }
+        { key: "econ", name: "Economic Axis", leftName: "Public / Left", rightName: "Market / Right", leftPct: econLeft, grad: "linear-gradient(90deg, #2563eb, #60a5fa)" },
+        { key: "social", name: "Social & Cultural Axis", leftName: "Progressive", rightName: "Traditional", leftPct: socialProg, grad: "linear-gradient(90deg, #059669, #34d399)" },
+        { key: "auth", name: "Civil Liberties & Order Axis", leftName: "Libertarian", rightName: "Order / State", leftPct: civilLib, grad: "linear-gradient(90deg, #d97706, #fbbf24)" },
+        { key: "diplo", name: "Foreign & Trade Axis", leftName: "Globalist", rightName: "Nationalist", leftPct: diploGlobal, grad: "linear-gradient(90deg, #7c3aed, #a78bfa)" }
     ];
 
     document.getElementById("scales-container").innerHTML = scalesData.map(sc => `
@@ -1345,29 +1844,45 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
                 <span class="scale-pole">${sc.rightName}: ${100 - sc.leftPct}%</span>
             </div>
             <div class="scale-bar-bg">
-                <div class="scale-bar-fill" style="width: ${sc.leftPct}%;"></div>
+                <div class="scale-bar-fill" style="width: ${sc.leftPct}%; background: ${sc.grad};"></div>
             </div>
             <p class="scale-exp">${getAxisExplanation(sc.key, sc.leftPct)}</p>
         </div>
     `).join("");
 
-    // 4. Category Breakdown Grid
+    // 4. Color-Coded Category Breakdown Grid
     if (!catScores || catScores.length !== CATEGORY_META.length) {
         catScores = CATEGORY_META.map(() => usLeftScore);
     }
     document.getElementById("cat-breakdown-grid").innerHTML = CATEGORY_META.map((cat, idx) => {
         const sc = catScores[idx];
-        let stanceText = "Centrist / Balanced (50%)";
-        if (sc >= 75) stanceText = `Strongly Left / Prog (${sc}%)`;
-        else if (sc >= 56) stanceText = `Leans Left / Prog (${sc}%)`;
-        else if (sc <= 25) stanceText = `Strongly Right / Trad (${100 - sc}%)`;
-        else if (sc <= 44) stanceText = `Leans Right / Trad (${100 - sc}%)`;
+        let stanceText = "Centrist (50%)";
+        let colorHex = "#9ca3af";
+        let barGrad = "linear-gradient(90deg, #64748b, #94a3b8)";
+
+        if (sc >= 72) {
+            stanceText = `Strong Left/Prog (${sc}%)`;
+            colorHex = "#60a5fa";
+            barGrad = "linear-gradient(90deg, #2563eb, #60a5fa)";
+        } else if (sc >= 55) {
+            stanceText = `Leans Left/Prog (${sc}%)`;
+            colorHex = "#34d399";
+            barGrad = "linear-gradient(90deg, #059669, #34d399)";
+        } else if (sc <= 28) {
+            stanceText = `Strong Right/Trad (${100 - sc}%)`;
+            colorHex = "#f87171";
+            barGrad = "linear-gradient(90deg, #dc2626, #f87171)";
+        } else if (sc <= 45) {
+            stanceText = `Leans Right/Trad (${100 - sc}%)`;
+            colorHex = "#fbbf24";
+            barGrad = "linear-gradient(90deg, #d97706, #fbbf24)";
+        }
         return `
             <div class="cat-mini-card">
                 <div class="cat-mini-title">${cat.id}</div>
-                <div class="cat-mini-stance">${stanceText}</div>
+                <div class="cat-mini-stance" style="color:${colorHex};">${stanceText}</div>
                 <div class="match-bar-bg">
-                    <div class="match-bar-fill" style="width:${sc}%;"></div>
+                    <div class="match-bar-fill" style="width:${sc}%; background:${barGrad};"></div>
                 </div>
             </div>
         `;
@@ -1399,29 +1914,37 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
         `<span class="pillar-tag">${tag}</span>`
     ).join("");
 
+    // Populate Quick Top-3 Summary Strip inside Primary Card
+    document.getElementById("glance-caucus").textContent = caucuses[0].name;
+    document.getElementById("glance-caucus-pct").textContent = `${caucuses[0].matchPct}%`;
+    document.getElementById("glance-figure").textContent = figures[0].name;
+    document.getElementById("glance-figure-pct").textContent = `${figures[0].matchPct}%`;
+    document.getElementById("glance-intl").textContent = intl[0].name;
+    document.getElementById("glance-intl-pct").textContent = `${intl[0].matchPct}%`;
+
     document.title = `${topMatch.name} (${usLeftScore}/100) — Global Political Inventory`;
 
-    const renderList = (arr, limit) => arr.slice(0, limit).map((item, idx) => `
+    const renderList = (arr, limit, accentHex, barGrad) => arr.slice(0, limit).map((item, idx) => `
         <div class="match-item">
             <div class="match-rank">${idx + 1}</div>
             <div class="match-content">
                 <div class="match-top">
                     <span class="match-name">${item.name}</span>
-                    <span class="match-pct">${item.matchPct}%</span>
+                    <span class="match-pct" style="color:${accentHex};">${item.matchPct}%</span>
                 </div>
                 <div class="match-sub">${item.sub}</div>
                 <p class="match-desc">${item.desc}</p>
                 <div class="match-bar-bg">
-                    <div class="match-bar-fill" style="width: ${item.matchPct}%;"></div>
+                    <div class="match-bar-fill" style="width: ${item.matchPct}%; background:${barGrad};"></div>
                 </div>
             </div>
         </div>
     `).join("");
 
-    document.getElementById("list-ideologies").innerHTML = renderList(ideologies, 6);
-    document.getElementById("list-figures").innerHTML = renderList(figures, 6);
-    document.getElementById("list-caucuses").innerHTML = renderList(caucuses, 6);
-    document.getElementById("list-international").innerHTML = renderList(intl, 6);
+    document.getElementById("list-ideologies").innerHTML = renderList(ideologies, 6, "#60a5fa", "linear-gradient(90deg, #2563eb, #60a5fa)");
+    document.getElementById("list-caucuses").innerHTML = renderList(caucuses, 6, "#34d399", "linear-gradient(90deg, #059669, #34d399)");
+    document.getElementById("list-figures").innerHTML = renderList(figures, 6, "#fbbf24", "linear-gradient(90deg, #d97706, #fbbf24)");
+    document.getElementById("list-international").innerHTML = renderList(intl, 6, "#a78bfa", "linear-gradient(90deg, #7c3aed, #a78bfa)");
 
     lastComputedResult = {
         topMatch,
@@ -1436,17 +1959,32 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
         topIntl: intl[0]
     };
 
+    if (shouldPersistCompletion) {
+        saveCompletedResultToStorage({
+            primaryName: topMatch.name,
+            primaryFamily: topMatch.family,
+            usLabel,
+            usLeftScore,
+            econLeft,
+            socialProg,
+            civilLib,
+            diploGlobal,
+            catScores,
+            answers: answers.slice(),
+            priorities: priorities.slice()
+        });
+    }
+
     renderDivergences();
     drawScorecardCanvas(lastComputedResult);
 
-    document.getElementById("home-view").style.display = "none";
-    document.getElementById("quiz-view").style.display = "none";
+    hideAllViews();
     document.getElementById("results-view").style.display = "block";
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 // ============================================================================
-// 2D COMPASS LANDMARKS & SCORECARD CANVAS EXPORT
+// 2D COMPASS LANDMARKS (SMART BOUNDARY-SAFE LABELS)
 // ============================================================================
 function setMapOverlay(mode) {
     mapOverlayMode = mode;
@@ -1466,20 +2004,20 @@ function renderLandmarks() {
         { label: "SocDem", e: 72, s: 78, type: "ideo" },
         { label: "Center", e: 50, s: 52, type: "ideo" },
         { label: "Neolib", e: 34, s: 68, type: "ideo" },
-        { label: "Libertarian", e: 12, s: 56, type: "ideo" },
+        { label: "Libertarian", e: 12, s: 58, type: "ideo" },
         { label: "Populist Right", e: 36, s: 15, type: "ideo" },
         { label: "Conservative", e: 22, s: 22, type: "ideo" }
     ];
     const figurePoints = [
-        { label: "Sanders", e: 86, s: 86, type: "fig" },
+        { label: "Sanders", e: 86, s: 84, type: "fig" },
         { label: "AOC", e: 88, s: 92, type: "fig" },
         { label: "FDR", e: 76, s: 64, type: "fig" },
         { label: "Obama", e: 62, s: 76, type: "fig" },
         { label: "Clinton", e: 46, s: 64, type: "fig" },
         { label: "Reagan", e: 18, s: 22, type: "fig" },
         { label: "Trump", e: 34, s: 16, type: "fig" },
-        { label: "Ron Paul", e: 8, s: 52, type: "fig" },
-        { label: "Milei", e: 6, s: 36, type: "fig" }
+        { label: "Ron Paul", e: 10, s: 62, type: "fig" },
+        { label: "Milei", e: 8, s: 36, type: "fig" }
     ];
 
     let activePts = [];
@@ -1496,39 +2034,55 @@ function renderLandmarks() {
     }).join("");
 }
 
+// ============================================================================
+// OVERFLOW-PROOF SCORECARD CANVAS GENERATOR (1200x650)
+// ============================================================================
+function fitCanvasText(ctx, text, maxWidth) {
+    if (ctx.measureText(text).width <= maxWidth) return text;
+    let trimmed = text;
+    while (trimmed.length > 4 && ctx.measureText(trimmed + "…").width > maxWidth) {
+        trimmed = trimmed.slice(0, -1);
+    }
+    return trimmed + "…";
+}
+
 function drawScorecardCanvas(res) {
     if (!res) return;
     const canvas = document.getElementById("scorecard-canvas");
     const ctx = canvas.getContext("2d");
     const W = canvas.width, H = canvas.height;
 
-    ctx.fillStyle = "#111318";
+    // 1. Deep Dark Background
+    ctx.fillStyle = "#0d1017";
     ctx.fillRect(0, 0, W, H);
 
-    ctx.fillStyle = "#191c24";
-    ctx.strokeStyle = "#2a2e39";
+    // 2. Main Card Container
+    ctx.fillStyle = "#161922";
+    ctx.strokeStyle = "#282f3d";
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.roundRect(24, 24, W - 48, H - 48, 16);
     ctx.fill();
     ctx.stroke();
 
+    // 3. Header Section
     ctx.fillStyle = "#60a5fa";
-    ctx.font = "bold 14px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
-    ctx.fillText("GLOBAL POLITICAL INVENTORY · 105-ITEM EMPIRICAL RESULTS", 56, 68);
+    ctx.font = "bold 13px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
+    ctx.fillText("GLOBAL POLITICAL INVENTORY · 105-ITEM EMPIRICAL RESULTS", 56, 66);
 
     ctx.fillStyle = "#ffffff";
-    ctx.font = "800 38px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
-    ctx.fillText(res.topMatch.name, 56, 116);
+    ctx.font = "800 36px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
+    ctx.fillText(fitCanvasText(ctx, res.topMatch.name, 650), 56, 112);
 
     ctx.fillStyle = "#9ca3af";
-    ctx.font = "500 18px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
-    ctx.fillText(res.topMatch.family, 56, 146);
+    ctx.font = "500 17px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
+    ctx.fillText(fitCanvasText(ctx, res.topMatch.family, 650), 56, 140);
 
-    const leftX = 56, leftW = 620;
+    // 4. Left Column: US Spectrum + Color-Coded 4 Axis Bars
+    const leftX = 56, leftW = 630;
     ctx.fillStyle = "#f3f4f6";
-    ctx.font = "bold 16px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
-    ctx.fillText(`US Political Spectrum: ${res.usLabel} (${res.usLeftScore}/100)`, leftX, 195);
+    ctx.font = "bold 15.5px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
+    ctx.fillText(`US Political Spectrum: ${res.usLabel} (${res.usLeftScore}/100)`, leftX, 184);
 
     const specGrad = ctx.createLinearGradient(leftX, 0, leftX + leftW, 0);
     specGrad.addColorStop(0, "#2563eb");
@@ -1536,64 +2090,119 @@ function drawScorecardCanvas(res) {
     specGrad.addColorStop(1, "#dc2626");
     ctx.fillStyle = specGrad;
     ctx.beginPath();
-    ctx.roundRect(leftX, 208, leftW, 14, 7);
+    ctx.roundRect(leftX, 196, leftW, 13, 6.5);
     ctx.fill();
 
     const markerX = leftX + ((100 - res.usLeftScore) / 100) * leftW;
     ctx.fillStyle = "#ffffff";
-    ctx.fillRect(markerX - 3, 202, 6, 26);
+    ctx.fillRect(markerX - 3, 190, 6, 25);
 
     const axes = [
-        { label: `Economic Left (${res.econLeft}%) vs. Right (${100 - res.econLeft}%)`, pct: res.econLeft, y: 268 },
-        { label: `Social Progressive (${res.socialProg}%) vs. Traditional (${100 - res.socialProg}%)`, pct: res.socialProg, y: 326 },
-        { label: `Civil Libertarian (${res.civilLib}%) vs. Order (${100 - res.civilLib}%)`, pct: res.civilLib, y: 384 },
-        { label: `Globalist (${res.diploGlobal}%) vs. Nationalist (${100 - res.diploGlobal}%)`, pct: res.diploGlobal, y: 442 }
+        { label: `Economic Left (${res.econLeft}%) vs. Right (${100 - res.econLeft}%)`, pct: res.econLeft, y: 248, color: "#3b82f6" },
+        { label: `Social Progressive (${res.socialProg}%) vs. Traditional (${100 - res.socialProg}%)`, pct: res.socialProg, y: 302, color: "#10b981" },
+        { label: `Civil Libertarian (${res.civilLib}%) vs. Order (${100 - res.civilLib}%)`, pct: res.civilLib, y: 356, color: "#f59e0b" },
+        { label: `Globalist (${res.diploGlobal}%) vs. Nationalist (${100 - res.diploGlobal}%)`, pct: res.diploGlobal, y: 410, color: "#8b5cf6" }
     ];
 
     axes.forEach(ax => {
-        ctx.fillStyle = "#d1d5db";
-        ctx.font = "600 15px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
+        ctx.fillStyle = "#e5e7eb";
+        ctx.font = "600 14.5px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
         ctx.fillText(ax.label, leftX, ax.y);
 
-        ctx.fillStyle = "#262a36";
+        ctx.fillStyle = "#222734";
         ctx.beginPath();
-        ctx.roundRect(leftX, ax.y + 10, leftW, 10, 5);
+        ctx.roundRect(leftX, ax.y + 9, leftW, 10, 5);
         ctx.fill();
 
-        ctx.fillStyle = "#3b82f6";
+        ctx.fillStyle = ax.color;
         ctx.beginPath();
-        ctx.roundRect(leftX, ax.y + 10, (ax.pct / 100) * leftW, 10, 5);
+        ctx.roundRect(leftX, ax.y + 9, Math.max(8, (ax.pct / 100) * leftW), 10, 5);
         ctx.fill();
     });
 
-    ctx.fillStyle = "#20242f";
+    // 5. Three Separate Bottom Match Cards (Guarantees Zero Text Overflow!)
+    const cardsY = 456, cardsH = 136;
+    const cardGap = 12;
+    const singleCardW = (leftW - cardGap * 2) / 3; // 202px each
+
+    const bottomCards = [
+        { title: "CLOSEST US CAUCUS", name: res.topCaucus.name, sub: res.topCaucus.sub, pct: res.topCaucus.matchPct, accent: "#34d399" },
+        { title: "CLOSEST LEADER", name: res.topFigure.name, sub: res.topFigure.sub, pct: res.topFigure.matchPct, accent: "#fbbf24" },
+        { title: "INTERNATIONAL PARTY", name: res.topIntl.name, sub: res.topIntl.sub, pct: res.topIntl.matchPct, accent: "#a78bfa" }
+    ];
+
+    bottomCards.forEach((bc, i) => {
+        const cx = leftX + i * (singleCardW + cardGap);
+        ctx.fillStyle = "#1d222e";
+        ctx.strokeStyle = "#2b3242";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.roundRect(cx, cardsY, singleCardW, cardsH, 10);
+        ctx.fill();
+        ctx.stroke();
+
+        // Top Eyebrow
+        ctx.fillStyle = "#9ca3af";
+        ctx.font = "700 10.5px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
+        ctx.fillText(bc.title, cx + 14, cardsY + 24);
+
+        // Match % Pill
+        ctx.fillStyle = bc.accent;
+        ctx.font = "800 22px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
+        ctx.fillText(`${bc.pct}% Match`, cx + 14, cardsY + 54);
+
+        // Party / Figure Name (Wrapped or Fitted cleanly across 2 lines)
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "700 14px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
+        ctx.fillText(fitCanvasText(ctx, bc.name, singleCardW - 28), cx + 14, cardsY + 84);
+
+        // Subtitle
+        ctx.fillStyle = "#9ca3af";
+        ctx.font = "500 11.5px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
+        ctx.fillText(fitCanvasText(ctx, bc.sub, singleCardW - 28), cx + 14, cardsY + 108);
+    });
+
+    // 6. Right Column: 2D Compass Box with Subtle Quadrant Glows & Boundary-Safe Labels
+    const boxSize = 406;
+    const boxX = W - boxSize - 56;
+    const boxY = 186;
+
+    ctx.save();
     ctx.beginPath();
-    ctx.roundRect(leftX, 492, leftW, 84, 10);
-    ctx.fill();
+    ctx.roundRect(boxX, boxY, boxSize, boxSize, 12);
+    ctx.clip();
 
-    ctx.fillStyle = "#9ca3af";
-    ctx.font = "600 13px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
-    ctx.fillText("CLOSEST CAUCUS, LEADER & INTERNATIONAL PARTY", leftX + 16, 516);
+    ctx.fillStyle = "#1a1e29";
+    ctx.fillRect(boxX, boxY, boxSize, boxSize);
 
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 15px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
-    ctx.fillText(`• US Caucus: ${res.topCaucus.name} (${res.topCaucus.matchPct}%)`, leftX + 16, 540);
-    ctx.fillText(`• Leader: ${res.topFigure.name} (${res.topFigure.matchPct}%)   |   Intl: ${res.topIntl.name} (${res.topIntl.matchPct}%)`, leftX + 16, 563);
+    // Subtle 4-quadrant radial tints matching the web UI
+    const drawQuadGlow = (gx, gy, rgba) => {
+        const g = ctx.createRadialGradient(gx, gy, 10, gx, gy, boxSize * 0.58);
+        g.addColorStop(0, rgba);
+        g.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = g;
+        ctx.fillRect(boxX, boxY, boxSize, boxSize);
+    };
+    drawQuadGlow(boxX + boxSize * 0.2, boxY + boxSize * 0.2, "rgba(59, 130, 246, 0.24)");
+    drawQuadGlow(boxX + boxSize * 0.8, boxY + boxSize * 0.2, "rgba(16, 185, 129, 0.18)");
+    drawQuadGlow(boxX + boxSize * 0.2, boxY + boxSize * 0.8, "rgba(239, 68, 68, 0.18)");
+    drawQuadGlow(boxX + boxSize * 0.8, boxY + boxSize * 0.8, "rgba(245, 158, 11, 0.22)");
 
-    const boxSize = 370;
-    const boxX = W - boxSize - 64;
-    const boxY = 185;
-
-    ctx.fillStyle = "#20242f";
-    ctx.strokeStyle = "#374151";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.roundRect(boxX, boxY, boxSize, boxSize, 10);
-    ctx.fill();
-    ctx.stroke();
-
-    ctx.strokeStyle = "rgba(255,255,255,0.2)";
+    // Grid lines (25% intervals)
+    ctx.strokeStyle = "rgba(255,255,255,0.05)";
     ctx.lineWidth = 1;
+    for (let step = 0.25; step < 1; step += 0.25) {
+        ctx.beginPath();
+        ctx.moveTo(boxX + boxSize * step, boxY);
+        ctx.lineTo(boxX + boxSize * step, boxY + boxSize);
+        ctx.moveTo(boxX, boxY + boxSize * step);
+        ctx.lineTo(boxX + boxSize, boxY + boxSize * step);
+        ctx.stroke();
+    }
+
+    // Center Crosshairs
+    ctx.strokeStyle = "rgba(255,255,255,0.24)";
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(boxX + boxSize / 2, boxY);
     ctx.lineTo(boxX + boxSize / 2, boxY + boxSize);
@@ -1601,8 +2210,9 @@ function drawScorecardCanvas(res) {
     ctx.lineTo(boxX + boxSize, boxY + boxSize / 2);
     ctx.stroke();
 
-    ctx.fillStyle = "#9ca3af";
-    ctx.font = "600 12px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
+    // Axis Labels inside 2D box (Placed safely above/below crosshairs)
+    ctx.fillStyle = "#cbd5e1";
+    ctx.font = "700 12px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
     ctx.textAlign = "center";
     ctx.fillText("Progressive", boxX + boxSize / 2, boxY + 20);
     ctx.fillText("Traditional", boxX + boxSize / 2, boxY + boxSize - 10);
@@ -1610,27 +2220,37 @@ function drawScorecardCanvas(res) {
     ctx.fillText("Econ Left", boxX + 10, boxY + boxSize / 2 - 8);
     ctx.textAlign = "right";
     ctx.fillText("Econ Right", boxX + boxSize - 10, boxY + boxSize / 2 - 8);
-    ctx.textAlign = "left";
 
+    // Plot key figures with smart boundary-aware text alignment so nothing overlaps or clips!
     const canvasFigs = [
-        { n: "Sanders", e: 86, s: 86 },
-        { n: "Obama", e: 62, s: 76 },
-        { n: "Reagan", e: 18, s: 22 },
-        { n: "Trump", e: 34, s: 16 },
-        { n: "Ron Paul", e: 8, s: 52 }
+        { n: "Sanders", e: 86, s: 84, align: "left" },
+        { n: "Obama", e: 62, s: 76, align: "left" },
+        { n: "Clinton", e: 46, s: 64, align: "left" },
+        { n: "Reagan", e: 18, s: 22, align: "right" },
+        { n: "Trump", e: 34, s: 16, align: "left" },
+        { n: "Ron Paul", e: 10, s: 62, align: "right" }
     ];
     canvasFigs.forEach(f => {
         const fx = boxX + ((100 - f.e) / 100) * boxSize;
         const fy = boxY + ((100 - f.s) / 100) * boxSize;
-        ctx.fillStyle = "rgba(251, 191, 36, 0.7)";
+        ctx.fillStyle = "#fbbf24";
         ctx.beginPath();
         ctx.arc(fx, fy, 4, 0, Math.PI * 2);
         ctx.fill();
-        ctx.fillStyle = "rgba(253, 230, 138, 0.75)";
-        ctx.font = "11px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
-        ctx.fillText(f.n, fx + 6, fy + 4);
-    });
 
+        ctx.fillStyle = "#fde68a";
+        ctx.font = "600 11.5px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
+        if (f.align === "right") {
+            ctx.textAlign = "right";
+            ctx.fillText(f.n, fx - 7, fy + 4);
+        } else {
+            ctx.textAlign = "left";
+            ctx.fillText(f.n, fx + 7, fy + 4);
+        }
+    });
+    ctx.textAlign = "left";
+
+    // User's Glowing Blue Dot
     const ux = boxX + ((100 - res.econLeft) / 100) * boxSize;
     const uy = boxY + ((100 - res.socialProg) / 100) * boxSize;
 
@@ -1640,6 +2260,15 @@ function drawScorecardCanvas(res) {
     ctx.fill();
     ctx.lineWidth = 3;
     ctx.strokeStyle = "#ffffff";
+    ctx.stroke();
+
+    ctx.restore();
+
+    // Border around 2D Compass Box
+    ctx.strokeStyle = "#374151";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(boxX, boxY, boxSize, boxSize, 12);
     ctx.stroke();
 }
 
@@ -1700,7 +2329,7 @@ function nativeShare() {
 }
 
 // ============================================================================
-// BOOTSTRAP ON PAGE LOAD
+// BOOTSTRAP ON PAGE LOAD (SHARED URL -> UNFINISHED -> COMPLETED -> HOME)
 // ============================================================================
 (function init() {
     initHomeScreen();
@@ -1718,7 +2347,21 @@ function nativeShare() {
             const decoded = decodeAnswersCompact(params.get("ans"), QUESTION_BANK.length);
             if (decoded) answers = decoded;
         }
-        computeAndDisplayResults({ econLeft: e, socialProg: s, civilLib: a, diploGlobal: d, catScores }, true);
+        computeAndDisplayResults({ econLeft: e, socialProg: s, civilLib: a, diploGlobal: d, catScores }, true, false);
+        return;
+    }
+
+    // 1. Check for unfinished in-progress assessment first
+    const savedInProgress = getSavedState();
+    if (savedInProgress) {
+        showDedicatedResumeScreen(savedInProgress);
+        return;
+    }
+
+    // 2. Otherwise check for a saved completed assessment result
+    const savedCompleted = getSavedCompletedResult();
+    if (savedCompleted) {
+        showCompletedInterceptScreen(savedCompleted);
     }
 })();
 </script>
