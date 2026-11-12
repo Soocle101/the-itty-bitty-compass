@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Political Inventory — 105-Item Empirical Political Compass</title>
-    <meta name="description" content="Take the 105-question empirical political compass test. Map your Economic, Social, Civil Liberties, and Diplomatic coordinates against US caucuses, global parties, Pew typologies, and political figures.">
+    <title>Global Political Inventory — US & Global Empirical Political Compass</title>
+    <meta name="description" content="Take the 105-question empirical political compass test. Toggle between the US Political Lens and Global/International Lens to see where you sit in American vs. world politics.">
 
     <!-- Open Graph / Discord / iMessage / Social Link Embeds -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Global Political Inventory — Empirical Political Compass & Party Matcher">
-    <meta property="og:description" content="View my full 4-axis political coordinates, 2D compass placement, key policy disagreements, closest US congressional caucuses, international parties, and political figures.">
+    <meta property="og:title" content="Global Political Inventory — US & International Political Compass">
+    <meta property="og:description" content="View my 4-axis political coordinates across both the US Spectrum and Global Overton Window, 2D compass placement, key policy disagreements, and party matches.">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Global Political Inventory — Empirical Political Compass">
-    <meta name="twitter:description" content="105 policy trade-offs mapped across 4 axes, US caucuses, Pew Research typologies, international parties, and prominent political figures.">
+    <meta name="twitter:title" content="Global Political Inventory — US & Global Political Compass">
+    <meta name="twitter:description" content="105 policy trade-offs mapped across US and International lenses, congressional caucuses, global parties, and political figures.">
     <meta name="theme-color" content="#3b82f6">
 
     <style>
@@ -371,9 +371,70 @@
         }
 
         /* ========================================================= */
-        /* RESULTS VIEW — UNBIASED PALETTE & FRIEND COMPARISON       */
+        /* RESULTS VIEW — US vs. GLOBAL LENS SWITCHER                */
         /* ========================================================= */
         #results-view { display: none; }
+
+        /* Dual Lens Switcher Banner */
+        .lens-switcher-bar {
+            background: #131722;
+            border: 1px solid #2d3548;
+            border-radius: 14px;
+            padding: 12px 16px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+        }
+        .lens-switcher-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .lens-switcher-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .lens-switcher-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .lens-pills-wrap {
+            display: flex;
+            background: #0d1017;
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 4px;
+            gap: 4px;
+        }
+        .lens-pill-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 9px 18px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.18s ease;
+        }
+        .lens-pill-btn:hover { color: #fff; }
+        .lens-pill-btn.active-us {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #ffffff;
+            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.45);
+        }
+        .lens-pill-btn.active-global {
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            color: #ffffff;
+            box-shadow: 0 2px 10px rgba(139, 92, 246, 0.45);
+        }
 
         .results-sticky-nav {
             position: sticky;
@@ -495,7 +556,7 @@
         }
         .section-title { font-size: 16px; font-weight: 700; margin: 0; color: #ffffff; }
 
-        /* US Spectrum & Friend Marker */
+        /* US vs Global Spectrum Card */
         .spectrum-track {
             position: relative;
             height: 15px;
@@ -537,6 +598,7 @@
             height: 23px;
             background: rgba(13, 16, 23, 0.85);
             transform: translateX(-50%);
+            transition: left 0.4s ease;
             z-index: 1;
         }
         .spectrum-labels {
@@ -559,6 +621,7 @@
             margin-bottom: 10px;
         }
         .pew-benchmark-box.consistency-box { border-left-color: var(--accent-purple); }
+        .pew-benchmark-box.overton-box { border-left-color: var(--accent-amber); }
         .pew-benchmark-box:last-child { margin-bottom: 0; }
         .pew-benchmark-box strong { color: #fff; }
 
@@ -627,6 +690,12 @@
             width: 8px;
             height: 8px;
         }
+        .landmark-dot.intl-dot {
+            background: #a78bfa;
+            border: 1px solid rgba(0,0,0,0.7);
+            width: 8px;
+            height: 8px;
+        }
         .landmark-label {
             position: absolute;
             font-size: 9.5px;
@@ -637,6 +706,7 @@
             text-shadow: 0 1px 3px rgba(0,0,0,0.95);
         }
         .landmark-label.figure-label { color: #fde68a; font-weight: 600; }
+        .landmark-label.intl-label { color: #ddd6fe; font-weight: 600; }
         .compass-svg-overlay {
             position: absolute;
             inset: 0;
@@ -713,18 +783,14 @@
         .scale-bar-fill { height: 100%; border-radius: 99px; }
         .scale-exp { font-size: 12.5px; color: #cbd5e1; margin: 0; line-height: 1.48; }
 
-        /* ========================================================= */
-        /* COMPARE WITH A FRIEND CARD                                */
-        /* ========================================================= */
+        /* COMPARE WITH A FRIEND CARD */
         .friend-input-row {
             display: grid;
             grid-template-columns: 160px 1fr auto;
             gap: 10px;
             margin-bottom: 12px;
         }
-        @media (max-width: 640px) {
-            .friend-input-row { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 640px) { .friend-input-row { grid-template-columns: 1fr; } }
         .friend-input {
             background: #12151e;
             border: 1px solid var(--card-border);
@@ -749,12 +815,7 @@
             transition: opacity 0.15s ease;
         }
         .friend-btn:hover { opacity: 0.92; }
-        .friend-error {
-            font-size: 12.5px;
-            color: #fca5a5;
-            margin-bottom: 10px;
-            display: none;
-        }
+        .friend-error { font-size: 12.5px; color: #fca5a5; margin-bottom: 10px; display: none; }
         #friend-comparison-panel { display: none; margin-top: 16px; }
         .friend-summary-banner {
             background: radial-gradient(circle at right top, rgba(244, 63, 94, 0.16), rgba(59, 130, 246, 0.12));
@@ -768,16 +829,8 @@
             flex-wrap: wrap;
             gap: 12px;
         }
-        .friend-compat-badge {
-            font-size: 22px;
-            font-weight: 800;
-            color: #fb7185;
-        }
-        .friend-axis-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
+        .friend-compat-badge { font-size: 22px; font-weight: 800; color: #fb7185; }
+        .friend-axis-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         @media (max-width: 640px) { .friend-axis-grid { grid-template-columns: 1fr; } }
         .friend-axis-card {
             background: var(--card-alt);
@@ -801,26 +854,9 @@
             margin-bottom: 6px;
         }
         .friend-dual-bar-row:last-child { margin-bottom: 0; }
-        .friend-who-label {
-            width: 72px;
-            font-weight: 700;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .friend-bar-track {
-            flex: 1;
-            height: 7px;
-            background: #141720;
-            border-radius: 99px;
-            overflow: hidden;
-        }
-        .friend-pct-val {
-            width: 36px;
-            text-align: right;
-            font-weight: 700;
-            color: #d1d5db;
-        }
+        .friend-who-label { width: 72px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .friend-bar-track { flex: 1; height: 7px; background: #141720; border-radius: 99px; overflow: hidden; }
+        .friend-pct-val { width: 36px; text-align: right; font-weight: 700; color: #d1d5db; }
 
         /* Topic Stance Breakdown Grid */
         .cat-breakdown-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
@@ -1068,11 +1104,11 @@
             <div class="eyebrow">EMPIRICAL POLITICAL INVENTORY</div>
             <h1 class="hero-title">Global Political Inventory</h1>
             <p class="hero-sub">
-                A comprehensive, blind-shuffled 105-item policy assessment. Instead of vague agree/disagree sliders, you choose between concrete policy trade-offs—mapping your coordinates across 4 dimensions, US congressional caucuses, Pew Research voter typologies, international parties, and historical political figures.
+                A comprehensive, blind-shuffled 105-item policy assessment. Toggle seamlessly between the <strong>US Political Lens</strong> and the <strong>Global / International Lens</strong> to see where you sit in American politics versus the international Overton window.
             </p>
             <div class="stats-strip">
                 <div class="stat-pill"><span class="stat-num">105</span><span class="stat-label">Policy Trade-Offs</span></div>
-                <div class="stat-pill"><span class="stat-num">10</span><span class="stat-label">Policy Domains</span></div>
+                <div class="stat-pill"><span class="stat-num">2 Lenses</span><span class="stat-label">US vs. Global View</span></div>
                 <div class="stat-pill"><span class="stat-num">4</span><span class="stat-label">Unbundled Axes</span></div>
                 <div class="stat-pill"><span class="stat-num">45+</span><span class="stat-label">Parties & Figures</span></div>
             </div>
@@ -1098,16 +1134,16 @@
             </div>
             <div class="method-grid">
                 <div class="method-box">
-                    <strong>1. Blind Statement Shuffling + 2x Priority</strong>
+                    <strong>1. Dual US vs. Global Overton Window Lenses</strong>
+                    Switch between the <em>US Political Lens</em> (benchmarked to Pew Typologies & Congressional Caucuses) and the <em>Global Lens</em> (calibrated to Western European/Commonwealth party baselines).
+                </div>
+                <div class="method-box">
+                    <strong>2. Blind Statement Shuffling + 2x Priority</strong>
                     Statements A, B, and C are dynamically randomized on every question so option order never telegraphs ideological direction. You can also toggle <em>★ High Priority (2x Weight)</em> on core issues.
                 </div>
                 <div class="method-box">
-                    <strong>2. Unbundled Economic & Civil-Liberty Scoring</strong>
+                    <strong>3. Unbundled Economic & Civil-Liberty Scoring</strong>
                     Supporting fiscal safety nets or market deregulation does not artificially skew your Civil Liberties score. The Authority axis measures only actual state coercion, surveillance, and mandates.
-                </div>
-                <div class="method-box">
-                    <strong>3. Congressional & International Party Data</strong>
-                    US caucus placements reflect DW-NOMINATE congressional roll-call patterns, while international party placements are calibrated to Chapel Hill Expert Survey (CHES) coordinates.
                 </div>
                 <div class="method-box">
                     <strong>4. Friend Comparison & Disagreement Engine</strong>
@@ -1151,6 +1187,18 @@
     <!-- ========================================== -->
     <div id="results-view">
 
+        <!-- US vs. GLOBAL LENS SWITCHER BAR (NEW) -->
+        <div class="lens-switcher-bar">
+            <div class="lens-switcher-info">
+                <span class="lens-switcher-title" id="active-lens-heading">🇺🇸 Active View: US Political Lens</span>
+                <span class="lens-switcher-sub" id="active-lens-subtitle">Calibrated to the US Electorate, Congressional Caucuses & Pew Typologies</span>
+            </div>
+            <div class="lens-pills-wrap">
+                <button class="lens-pill-btn active-us" id="lens-btn-us" onclick="setPerspectiveLens('us')">🇺🇸 US Political View</button>
+                <button class="lens-pill-btn" id="lens-btn-global" onclick="setPerspectiveLens('global')">🌍 Global / International View</button>
+            </div>
+        </div>
+
         <!-- Sticky Quick-Jump Bar -->
         <nav class="results-sticky-nav">
             <a class="jump-link" href="#sec-overview">Overview</a>
@@ -1169,7 +1217,7 @@
 
         <!-- 1. Primary Alignment Card -->
         <div class="card primary-card" id="sec-overview">
-            <div class="eyebrow">PRIMARY ALIGNMENT</div>
+            <div class="eyebrow" id="primary-eyebrow">PRIMARY ALIGNMENT (US LENS)</div>
             <h1 class="primary-title" id="primary-name">Loading...</h1>
             <p class="primary-sub" id="primary-family">Loading...</p>
             <div class="primary-desc-box" id="primary-desc"></div>
@@ -1177,37 +1225,38 @@
 
             <div class="top-matches-strip">
                 <div class="top-mini-pill">
-                    <span class="top-mini-label">Closest US Caucus</span>
+                    <span class="top-mini-label" id="glance-col1-label">Closest US Caucus</span>
                     <div class="top-mini-val"><span id="glance-caucus">—</span><span class="top-mini-pct" id="glance-caucus-pct"></span></div>
                 </div>
                 <div class="top-mini-pill">
-                    <span class="top-mini-label">Closest Political Leader</span>
+                    <span class="top-mini-label" id="glance-col2-label">Closest Political Leader</span>
                     <div class="top-mini-val"><span id="glance-figure">—</span><span class="top-mini-pct" id="glance-figure-pct"></span></div>
                 </div>
                 <div class="top-mini-pill">
-                    <span class="top-mini-label">Closest International Party</span>
+                    <span class="top-mini-label" id="glance-col3-label">Closest International Party</span>
                     <div class="top-mini-val"><span id="glance-intl">—</span><span class="top-mini-pct" id="glance-intl-pct"></span></div>
                 </div>
             </div>
         </div>
 
-        <!-- 2. US Political Spectrum & Empirical Voter Benchmark -->
+        <!-- 2. Political Spectrum & Overton Window Benchmark (Dynamic US vs. Global) -->
         <div class="card">
             <div class="section-header">
-                <h3 class="section-title">US Political Spectrum & Empirical Voter Benchmark</h3>
-                <span style="font-size: 12px; color: var(--text-muted);">Calibrated to US Electorate Polling</span>
+                <h3 class="section-title" id="spectrum-card-title">US Political Spectrum & Empirical Voter Benchmark</h3>
+                <span style="font-size: 12px; color: var(--text-muted);" id="spectrum-card-badge">Calibrated to US Electorate Polling</span>
             </div>
             <div class="spectrum-track">
-                <div class="spectrum-MedianMarker" title="Empirical Median US Voter (48/100)"></div>
+                <div class="spectrum-MedianMarker" id="spectrum-median-marker" style="left: 52%;" title="Empirical Median Voter"></div>
                 <div class="spectrum-FriendMarker" id="us-spectrum-friend-marker" title="Friend's Position"></div>
                 <div class="spectrum-ReadoutMarker" id="us-spectrum-marker" style="left: 50%;" title="Your Position"></div>
             </div>
             <div class="spectrum-labels">
-                <span>Left</span>
-                <span>Center (US Voter Median)</span>
-                <span>Right</span>
+                <span id="spectrum-left-label">US Left (100)</span>
+                <span id="spectrum-center-label">US Voter Median (48)</span>
+                <span id="spectrum-right-label">US Right (0)</span>
             </div>
             <p class="spectrum-summary" id="us-spectrum-text"></p>
+            <div class="pew-benchmark-box overton-box" id="overton-shift-text"></div>
             <div class="pew-benchmark-box" id="pew-benchmark-text"></div>
             <div class="pew-benchmark-box consistency-box" id="consistency-benchmark-text"></div>
         </div>
@@ -1215,11 +1264,12 @@
         <!-- 3. Side-by-Side 2D Political Compass + 4-Axis Scales -->
         <div class="card" id="sec-compass">
             <div class="section-header">
-                <h3 class="section-title">Political Compass & 4-Axis Diagnostic Breakdown</h3>
+                <h3 class="section-title" id="compass-card-title">Political Compass & 4-Axis Diagnostic Breakdown</h3>
                 <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                    <button class="util-btn active-tab" id="map-mode-both" onclick="setMapOverlay('both')" style="padding: 4px 10px; font-size: 12px;">All Landmarks</button>
+                    <button class="util-btn active-tab" id="map-mode-lens" onclick="setMapOverlay('lens')" style="padding: 4px 10px; font-size: 12px;">Active Lens Landmarks</button>
+                    <button class="util-btn" id="map-mode-both" onclick="setMapOverlay('both')" style="padding: 4px 10px; font-size: 12px;">All Landmarks</button>
                     <button class="util-btn" id="map-mode-figures" onclick="setMapOverlay('figures')" style="padding: 4px 10px; font-size: 12px;">Figures Only</button>
-                    <button class="util-btn" id="map-mode-ideologies" onclick="setMapOverlay('ideologies')" style="padding: 4px 10px; font-size: 12px;">Ideologies Only</button>
+                    <button class="util-btn" id="map-mode-intl" onclick="setMapOverlay('intl')" style="padding: 4px 10px; font-size: 12px;">Global Parties</button>
                     <button class="util-btn" id="map-mode-none" onclick="setMapOverlay('none')" style="padding: 4px 10px; font-size: 12px;">Clean Grid</button>
                 </div>
             </div>
@@ -1249,7 +1299,7 @@
             </div>
         </div>
 
-        <!-- 4. COMPARE WITH A FRIEND CARD (NEW) -->
+        <!-- 4. COMPARE WITH A FRIEND CARD -->
         <div class="card" id="sec-compare">
             <div class="section-header">
                 <h3 class="section-title">Compare With a Friend on the 2D Compass</h3>
@@ -1294,6 +1344,7 @@
                 <div style="display:flex; gap:6px; flex-wrap:wrap;">
                     <button class="util-btn active-tab" id="div-mode-ideology" onclick="setDivergenceTarget('ideology')" style="padding: 4px 10px; font-size: 12px;">vs. #1 Ideology</button>
                     <button class="util-btn" id="div-mode-caucus" onclick="setDivergenceTarget('caucus')" style="padding: 4px 10px; font-size: 12px;">vs. #1 US Caucus</button>
+                    <button class="util-btn" id="div-mode-intl" onclick="setDivergenceTarget('intl')" style="padding: 4px 10px; font-size: 12px;">vs. #1 Global Party</button>
                     <button class="util-btn" id="div-mode-friend" onclick="setDivergenceTarget('friend')" style="padding: 4px 10px; font-size: 12px; display:none; border-color: rgba(244,63,94,0.45); color:#fda4af;">vs. Friend</button>
                 </div>
             </div>
@@ -1305,13 +1356,13 @@
         <div class="card" id="sec-matches">
             <div class="section-header">
                 <h3 class="section-title">Ideological, Caucus, Leader & International Matches</h3>
-                <span style="font-size: 12px; color: var(--text-muted);">Switch tabs or view all side-by-side</span>
+                <span style="font-size: 12px; color: var(--text-muted);">Automatically highlights your active lens</span>
             </div>
             <div class="match-tabs-bar">
                 <button class="match-tab-btn active" id="tab-btn-ideologies" onclick="switchMatchTab('ideologies')">🧭 Ideologies (6)</button>
                 <button class="match-tab-btn" id="tab-btn-caucuses" onclick="switchMatchTab('caucuses')">🏛️ US Caucuses & Parties (6)</button>
-                <button class="match-tab-btn" id="tab-btn-figures" onclick="switchMatchTab('figures')">👤 Political Leaders (6)</button>
                 <button class="match-tab-btn" id="tab-btn-international" onclick="switchMatchTab('international')">🌍 International Parties (6)</button>
+                <button class="match-tab-btn" id="tab-btn-figures" onclick="switchMatchTab('figures')">👤 Political Leaders (6)</button>
                 <button class="match-tab-btn" id="tab-btn-all" onclick="switchMatchTab('all')">📋 Show All</button>
             </div>
 
@@ -1323,13 +1374,13 @@
                 <div class="match-panel-title">Closest US Parties & Congressional Caucuses</div>
                 <div class="match-grid-2col" id="list-caucuses"></div>
             </div>
-            <div id="panel-figures" style="display:none;">
-                <div class="match-panel-title">Closest Political Figures & Leaders</div>
-                <div class="match-grid-2col" id="list-figures"></div>
-            </div>
             <div id="panel-international" style="display:none;">
                 <div class="match-panel-title">Closest International Parties</div>
                 <div class="match-grid-2col" id="list-international"></div>
+            </div>
+            <div id="panel-figures" style="display:none;">
+                <div class="match-panel-title">Closest Political Figures & Leaders</div>
+                <div class="match-grid-2col" id="list-figures"></div>
             </div>
         </div>
 
@@ -1337,16 +1388,16 @@
         <div class="card" id="sec-share">
             <div class="section-header">
                 <h3 class="section-title">Share Your Results & Download Visual Scorecard</h3>
-                <span style="font-size: 12px; color: var(--text-muted);">Shared links display this full dashboard (including active friend comparisons)</span>
+                <span style="font-size: 12px; color: var(--text-muted);">Scorecard updates automatically for US vs. Global Lens</span>
             </div>
             <div class="share-grid">
                 <button class="share-action-btn" id="btn-copy-link" onclick="copyShareLink()">🔗 Copy Interactive Results Link</button>
-                <button class="share-action-btn" id="btn-copy-summary" onclick="copyTextSummary()">📋 Copy Formatted Text Summary</button>
+                <button class="share-action-btn" id="btn-copy-summary" onclick="copyTextSummary()">📋 Copy US & Global Text Summary</button>
                 <button class="share-action-btn" onclick="downloadScorecardPNG()">🖼️ Download High-Res PNG Scorecard</button>
                 <button class="share-action-btn" onclick="nativeShare()">📤 Share via Device / Social</button>
             </div>
             <div class="scorecard-preview-wrap">
-                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Live Visual Scorecard Preview (Automatically includes your friend's dot when comparing)</div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Live Visual Scorecard Preview (Reflects your active US or Global Lens + Friend comparison)</div>
                 <canvas id="scorecard-canvas" width="1200" height="650"></canvas>
             </div>
         </div>
@@ -1370,10 +1421,22 @@ let answers = new Array(QUESTION_BANK.length).fill(null);
 let priorities = new Array(QUESTION_BANK.length).fill(false);
 let shuffleSeed = Math.floor(Math.random() * 900000) + 100000;
 let currentDisplayedOrder = [0, 1, 2];
-let mapOverlayMode = "both";
+let perspectiveLens = "us"; // 'us' or 'global'
+let mapOverlayMode = "lens";
 let divergenceTargetMode = "ideology";
 let lastComputedResult = null;
-let friendComparison = null; // Holds { name, econLeft, socialProg, civilLib, diploGlobal, answers, topMatch }
+let friendComparison = null;
+
+// Global Party Family Typologies (Chapel Hill Expert Survey / Comparative Manifesto Baseline)
+const GLOBAL_FAMILIES = [
+    { name: "Democratic Socialist / Eco-Socialist Left (~9% of Western Electorates)", e: 86, s: 88, desc: "Represented by parties like La France Insoumise, Die Linke, and the Red-Green Alliance—advocating public ownership, wealth taxes, and rapid decarbonization." },
+    { name: "Green / Left-Libertarian (~10% of Western Electorates)", e: 74, s: 88, desc: "Represented by European and Commonwealth Green parties—combining environmental transition and social progressivism with civil liberties." },
+    { name: "Social Democratic / Labour Mainstream (~22% of Western Electorates)", e: 66, s: 74, desc: "The traditional center-left governing bloc (UK Labour, German SPD, Canadian NDP, Australian ALP) supporting universal healthcare, collective bargaining, and regulated markets." },
+    { name: "Social Liberal / Centrist Reform (~14% of Western Electorates)", e: 54, s: 76, desc: "Represented by UK Liberal Democrats, Canadian Liberals, and Dutch D66—favoring internationalism, civil rights, and regulated market economies." },
+    { name: "Market-Liberal / Technocratic Center-Right (~12% of Western Electorates)", e: 36, s: 66, desc: "Represented by French Renaissance and German FDP—combining free trade, deregulation, and fiscal restraint with socially liberal norms." },
+    { name: "Christian Democratic / Mainstream Conservative (~20% of Western Electorates)", e: 30, s: 34, desc: "The traditional center-right governing bloc (German CDU, UK Conservatives, Canadian CPC) pairing market enterprise with cultural stability and security alliances." },
+    { name: "National Populist / Sovereigntist Right (~13% of Western Electorates)", e: 34, s: 16, desc: "Represented by National Rally, Reform UK, Fratelli d'Italia, and AfD—prioritizing strict border enforcement, national sovereignty, and cultural traditionalism." }
+];
 
 // ============================================================================
 // DETERMINISTIC BLIND STATEMENT SHUFFLER
@@ -1420,6 +1483,39 @@ function decodeAnswersCompact(str, totalLen) {
         if (idx < totalLen) res[idx++] = a2 === 3 ? -1 : a2;
     }
     return res;
+}
+
+// ============================================================================
+// US vs. GLOBAL OVERTON WINDOW CONVERSION HELPERS
+// ============================================================================
+function getUsAndGlobalSpectrumData(econLeft, socialProg) {
+    // Raw composite (0 = Max Right, 100 = Max Left)
+    const rawComposite = Math.round(econLeft * 0.55 + socialProg * 0.45);
+
+    // In the US, the economic Overton window sits slightly to the right (Median = 48).
+    // In Western Europe / Commonwealth democracies, universal healthcare & paid leave are baseline center-right/center status quo,
+    // placing the developed Global Median at ~58 on our raw policy scale.
+    // Therefore, relative to a Global 50/100 center, a user's score shifts ~8 points toward the Right/Center.
+    const usScore = rawComposite;
+    const globalRelativeScore = Math.max(0, Math.min(100, Math.round(rawComposite - 8)));
+
+    const getLabel = (sc, isGlobal) => {
+        if (sc >= 80) return isGlobal ? "Global Far Left / Socialist" : "US Far Left";
+        if (sc >= 62) return isGlobal ? "Global Left / Social Democratic" : "US Left / Progressive";
+        if (sc >= 53) return isGlobal ? "Global Center-Left" : "US Center-Left / Liberal";
+        if (sc <= 20) return isGlobal ? "Global Far Right" : "US Far Right";
+        if (sc <= 38) return isGlobal ? "Global Right / Conservative" : "US Right / Conservative";
+        if (sc <= 47) return isGlobal ? "Global Center-Right / Market Liberal" : "US Center-Right";
+        return isGlobal ? "Global Centrist / Social Liberal" : "US Center / Moderate";
+    };
+
+    return {
+        usScore,
+        usLabel: getLabel(usScore, false),
+        globalScore: globalRelativeScore,
+        globalLabel: getLabel(globalRelativeScore, true),
+        rawComposite
+    };
 }
 
 // ============================================================================
@@ -1775,11 +1871,139 @@ function getConsistencyDiagnostic(econLeft, socialProg) {
 }
 
 // ============================================================================
+// US vs. GLOBAL PERSPECTIVE LENS SWITCHER
+// ============================================================================
+function setPerspectiveLens(lens) {
+    perspectiveLens = lens === "global" ? "global" : "us";
+    const usBtn = document.getElementById("lens-btn-us");
+    const glBtn = document.getElementById("lens-btn-global");
+    usBtn.className = "lens-pill-btn" + (perspectiveLens === "us" ? " active-us" : "");
+    glBtn.className = "lens-pill-btn" + (perspectiveLens === "global" ? " active-global" : "");
+
+    if (perspectiveLens === "us") {
+        document.getElementById("active-lens-heading").textContent = "🇺🇸 Active View: US Political Lens";
+        document.getElementById("active-lens-subtitle").textContent = "Calibrated to the US Electorate, Congressional Caucuses & Pew Typologies";
+        switchMatchTab("caucuses");
+        if (divergenceTargetMode === "intl") setDivergenceTarget("caucus");
+    } else {
+        document.getElementById("active-lens-heading").textContent = "🌍 Active View: Global / International Lens";
+        document.getElementById("active-lens-subtitle").textContent = "Calibrated to Western European / Commonwealth Party Baselines & CHES Data";
+        switchMatchTab("international");
+        if (divergenceTargetMode === "caucus") setDivergenceTarget("intl");
+    }
+
+    syncUrlLensParam();
+    applyActiveLensToResultsUI();
+}
+
+function syncUrlLensParam() {
+    if (!window.history.replaceState || !lastComputedResult) return;
+    const params = new URLSearchParams(window.location.search);
+    params.set("lens", perspectiveLens);
+    window.history.replaceState({}, document.title, window.location.pathname + "?" + params.toString());
+}
+
+function applyActiveLensToResultsUI() {
+    if (!lastComputedResult) return;
+    const r = lastComputedResult;
+    const specData = getUsAndGlobalSpectrumData(r.econLeft, r.socialProg);
+
+    if (perspectiveLens === "us") {
+        // US Lens Header & Glance Strip
+        document.getElementById("primary-eyebrow").textContent = "PRIMARY ALIGNMENT · 🇺🇸 US POLITICAL LENS";
+        document.getElementById("primary-name").textContent = r.topMatch.name;
+        document.getElementById("primary-family").textContent = `${specData.usLabel} (${specData.usScore}/100 in US) · ${r.topMatch.family}`;
+        document.getElementById("primary-desc").textContent = r.topMatch.desc;
+
+        document.getElementById("glance-col1-label").textContent = "Closest US Caucus";
+        document.getElementById("glance-caucus").textContent = r.topCaucus.name;
+        document.getElementById("glance-caucus-pct").textContent = `${r.topCaucus.matchPct}%`;
+
+        document.getElementById("glance-col2-label").textContent = "Closest Political Leader";
+        document.getElementById("glance-figure").textContent = r.topFigure.name;
+        document.getElementById("glance-figure-pct").textContent = `${r.topFigure.matchPct}%`;
+
+        document.getElementById("glance-col3-label").textContent = "International Equivalent";
+        document.getElementById("glance-intl").textContent = r.topIntl.name;
+        document.getElementById("glance-intl-pct").textContent = `${r.topIntl.matchPct}%`;
+
+        // US Spectrum Bar
+        document.getElementById("spectrum-card-title").textContent = "US Political Spectrum & Empirical Voter Benchmark";
+        document.getElementById("spectrum-card-badge").textContent = "Calibrated to US Electorate Polling (Median = 48)";
+        document.getElementById("spectrum-median-marker").style.left = "52%"; // 100 - 48
+        document.getElementById("us-spectrum-marker").style.left = `${100 - specData.usScore}%`;
+        document.getElementById("spectrum-left-label").textContent = "US Left (100)";
+        document.getElementById("spectrum-center-label").textContent = "US Voter Median (48)";
+        document.getElementById("spectrum-right-label").textContent = "US Right (0)";
+
+        document.getElementById("us-spectrum-text").innerHTML =
+            `In the United States: <strong>${specData.usLabel} (${specData.usScore}/100)</strong> · In Global/International Politics: <strong>${specData.globalLabel} (${specData.globalScore}/100)</strong>`;
+
+        document.getElementById("overton-shift-text").innerHTML =
+            `<strong>US vs. Global Overton Window Comparison:</strong> Because the US economic center sits ~8 points to the right of Western Europe, your raw policy score places you at <strong>${specData.usScore}/100 (${specData.usLabel})</strong> in America vs. <strong>${specData.globalScore}/100 (${specData.globalLabel})</strong> internationally.`;
+
+        const pewSorted = PEW_TYPOLOGIES.map(pt => {
+            const d = Math.sqrt(Math.pow(r.econLeft - pt.e, 2) + Math.pow(r.socialProg - pt.s, 2));
+            return { ...pt, d };
+        }).sort((a,b) => a.d - b.d);
+        const bestPew = pewSorted[0];
+        document.getElementById("pew-benchmark-text").innerHTML =
+            `<strong>Pew Research US Typology Match: ${bestPew.name}</strong> — ${bestPew.desc}`;
+    } else {
+        // GLOBAL / INTERNATIONAL LENS Header & Glance Strip
+        document.getElementById("primary-eyebrow").textContent = "PRIMARY ALIGNMENT · 🌍 GLOBAL / INTERNATIONAL LENS";
+        document.getElementById("primary-name").textContent = r.topIntl.name;
+        document.getElementById("primary-family").textContent = `${specData.globalLabel} (${specData.globalScore}/100 Global) · ${r.topIntl.sub}`;
+        document.getElementById("primary-desc").textContent = `${r.topIntl.desc} Internationally, your policy choices align with the ${r.topMatch.name} tradition.`;
+
+        document.getElementById("glance-col1-label").textContent = "Closest Global Party";
+        document.getElementById("glance-caucus").textContent = r.topIntl.name;
+        document.getElementById("glance-caucus-pct").textContent = `${r.topIntl.matchPct}%`;
+
+        document.getElementById("glance-col2-label").textContent = "Global Ideological Family";
+        document.getElementById("glance-figure").textContent = r.topMatch.name;
+        document.getElementById("glance-figure-pct").textContent = `${r.topMatch.matchPct}%`;
+
+        document.getElementById("glance-col3-label").textContent = "US Caucus Counterpart";
+        document.getElementById("glance-intl").textContent = r.topCaucus.name;
+        document.getElementById("glance-intl-pct").textContent = `${r.topCaucus.matchPct}%`;
+
+        // Global Spectrum Bar
+        document.getElementById("spectrum-card-title").textContent = "Global / International Spectrum & Overton Window Benchmark";
+        document.getElementById("spectrum-card-badge").textContent = "Calibrated to Western European & Commonwealth Baselines";
+        document.getElementById("spectrum-median-marker").style.left = "50%";
+        document.getElementById("us-spectrum-marker").style.left = `${100 - specData.globalScore}%`;
+        document.getElementById("spectrum-left-label").textContent = "Global Left (100)";
+        document.getElementById("spectrum-center-label").textContent = "Developed World Median (50)";
+        document.getElementById("spectrum-right-label").textContent = "Global Right (0)";
+
+        document.getElementById("us-spectrum-text").innerHTML =
+            `Internationally: <strong>${specData.globalLabel} (${specData.globalScore}/100)</strong> · In the United States: <strong>${specData.usLabel} (${specData.usScore}/100)</strong>`;
+
+        document.getElementById("overton-shift-text").innerHTML =
+            `<strong>Global vs. US Overton Window Shift:</strong> In Western Europe, Canada, and Australia—where universal healthcare and paid leave are baseline center-right/center norms—your position shifts from <strong>${specData.usScore}/100 (${specData.usLabel})</strong> in the US to <strong>${specData.globalScore}/100 (${specData.globalLabel})</strong> internationally.`;
+
+        const glSorted = GLOBAL_FAMILIES.map(gf => {
+            const d = Math.sqrt(Math.pow(r.econLeft - gf.e, 2) + Math.pow(r.socialProg - gf.s, 2));
+            return { ...gf, d };
+        }).sort((a,b) => a.d - b.d);
+        const bestGl = glSorted[0];
+        document.getElementById("pew-benchmark-text").innerHTML =
+            `<strong>International Party Family Match (CHES): ${bestGl.name}</strong> — ${bestGl.desc}`;
+    }
+
+    renderLandmarks();
+    renderFriendComparisonUI();
+    renderDivergences();
+    drawScorecardCanvas(r);
+}
+
+// ============================================================================
 // TABBED MATCH EXPLORER SWITCHER
 // ============================================================================
 function switchMatchTab(tabName) {
-    const tabs = ["ideologies", "caucuses", "figures", "international"];
-    ["ideologies", "caucuses", "figures", "international", "all"].forEach(t => {
+    const tabs = ["ideologies", "caucuses", "international", "figures"];
+    ["ideologies", "caucuses", "international", "figures", "all"].forEach(t => {
         const btn = document.getElementById(`tab-btn-${t}`);
         if (btn) btn.classList.toggle("active", t === tabName);
     });
@@ -1796,7 +2020,7 @@ function switchMatchTab(tabName) {
 }
 
 // ============================================================================
-// COMPARE WITH A FRIEND ENGINE (URL PARSER, 2D OVERLAY & AXIS COMPARISON)
+// COMPARE WITH A FRIEND ENGINE
 // ============================================================================
 function getTopIdeologyForCoords(e, s, a, d) {
     const maxDist = 200;
@@ -1867,9 +2091,7 @@ function clearFriendComparison() {
     document.getElementById("friend-url-input").value = "";
     document.getElementById("friend-error-msg").style.display = "none";
     if (divergenceTargetMode === "friend") {
-        divergenceTargetMode = "ideology";
-        document.getElementById("div-mode-ideology").classList.add("active-tab");
-        document.getElementById("div-mode-friend").classList.remove("active-tab");
+        setDivergenceTarget("ideology");
     }
     syncUrlWithFriendParams();
     renderFriendComparisonUI();
@@ -1928,7 +2150,6 @@ function renderFriendComparisonUI() {
     const fx = Math.max(4, Math.min(96, 100 - f.econLeft));
     const fy = Math.max(4, Math.min(96, 100 - f.socialProg));
 
-    // Plot Friend Dot, Tag, and Dashed Connector Line on 2D Compass
     fDot.style.left = `${fx}%`;
     fDot.style.top = `${fy}%`;
     fDot.style.display = "block";
@@ -1946,13 +2167,12 @@ function renderFriendComparisonUI() {
     document.getElementById("legend-friend-name").textContent = `${f.name} (${f.econLeft}/100 Econ, ${f.socialProg}/100 Soc)`;
     legendEl.style.display = "flex";
 
-    // Plot Friend Marker on US Spectrum Bar
-    const fUsLeft = Math.round(f.econLeft * 0.55 + f.socialProg * 0.45);
-    specFriendMarker.style.left = `${100 - fUsLeft}%`;
-    specFriendMarker.title = `${f.name}'s US Spectrum Position (${fUsLeft}/100)`;
+    const fSpec = getUsAndGlobalSpectrumData(f.econLeft, f.socialProg);
+    const activeFriendSpecScore = perspectiveLens === "global" ? fSpec.globalScore : fSpec.usScore;
+    specFriendMarker.style.left = `${100 - activeFriendSpecScore}%`;
+    specFriendMarker.title = `${f.name}'s Position (${activeFriendSpecScore}/100)`;
     specFriendMarker.style.display = "block";
 
-    // Calculate 4-Axis Ideological Similarity % between User and Friend
     const dist = Math.sqrt(
         Math.pow(u.econLeft - f.econLeft, 2) * 1.35 +
         Math.pow(u.socialProg - f.socialProg, 2) * 1.35 +
@@ -1964,7 +2184,7 @@ function renderFriendComparisonUI() {
     document.getElementById("friend-headline-text").textContent =
         `You (${u.topMatch.name}) vs. ${f.name} (${f.topMatch.name})`;
     document.getElementById("friend-subline-text").textContent =
-        `Your US Score: ${u.usLeftScore}/100 · ${f.name}'s US Score: ${fUsLeft}/100`;
+        `US Score: You ${u.usLeftScore}/100 vs. ${f.name} ${fSpec.usScore}/100 · Global Score: You ${u.globalLeftScore}/100 vs. ${f.name} ${fSpec.globalScore}/100`;
     document.getElementById("friend-compat-score").textContent = `${compatPct}% Ideological Alignment`;
 
     const axisPairs = [
@@ -2006,13 +2226,14 @@ function renderFriendComparisonUI() {
 }
 
 // ============================================================================
-// POLICY DISAGREEMENT & HETERODOX VIEWS ENGINE (SUPPORTS IDEOLOGY, CAUCUS & FRIEND)
+// POLICY DISAGREEMENT & HETERODOX VIEWS ENGINE (IDEOLOGY, US CAUCUS, GLOBAL PARTY, FRIEND)
 // ============================================================================
 function setDivergenceTarget(mode) {
     divergenceTargetMode = mode;
-    document.getElementById("div-mode-ideology").classList.toggle("active-tab", mode === "ideology");
-    document.getElementById("div-mode-caucus").classList.toggle("active-tab", mode === "caucus");
-    document.getElementById("div-mode-friend").classList.toggle("active-tab", mode === "friend");
+    ["ideology", "caucus", "intl", "friend"].forEach(m => {
+        const btn = document.getElementById(`div-mode-${m}`);
+        if (btn) btn.classList.toggle("active-tab", m === mode);
+    });
     renderDivergences();
 }
 
@@ -2023,7 +2244,6 @@ function renderDivergences() {
 
     const hasDetailedAnswers = answers.some(a => a !== null && a >= 0);
 
-    // Direct Question-by-Question Friend Comparison Mode
     if (divergenceTargetMode === "friend" && friendComparison) {
         const f = friendComparison;
         if (!hasDetailedAnswers) {
@@ -2050,7 +2270,6 @@ function renderDivergences() {
             if (friendHasAnswers && f.answers[qIdx] !== null && f.answers[qIdx] >= 0) {
                 fIdx = f.answers[qIdx];
             } else {
-                // Estimate friend's stance from their 4D coordinates if their link didn't include &ans=
                 let bestD = Infinity;
                 stmts.forEach((st, idx) => {
                     const d = Math.sqrt(
@@ -2130,10 +2349,9 @@ function renderDivergences() {
         return;
     }
 
-    // Standard Ideology or Caucus Disagreement Mode
-    const targetProfile = divergenceTargetMode === "ideology"
-        ? lastComputedResult.topMatch
-        : lastComputedResult.topCaucus;
+    let targetProfile = lastComputedResult.topMatch;
+    if (divergenceTargetMode === "caucus") targetProfile = lastComputedResult.topCaucus;
+    else if (divergenceTargetMode === "intl") targetProfile = lastComputedResult.topIntl;
 
     if (!hasDetailedAnswers) {
         introEl.innerHTML = `Take or preview the test questions to see your exact statement-by-statement disagreements with <strong>${targetProfile.name}</strong>.`;
@@ -2215,7 +2433,7 @@ function renderDivergences() {
         return;
     }
 
-    introEl.innerHTML = `Even though <strong>${targetProfile.name}</strong> is your closest overall match (${targetProfile.matchPct}%), your answers differed from their typical platform on <strong>${diffs.length} topics</strong>. Here are your top policy divergences:`;
+    introEl.innerHTML = `Even though <strong>${targetProfile.name}</strong> is your closest match (${targetProfile.matchPct}%), your answers differed from their typical platform on <strong>${diffs.length} topics</strong>. Here are your top policy divergences:`;
 
     listEl.innerHTML = topDiffs.map(d => `
         <div class="divergence-card">
@@ -2301,7 +2519,7 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
     if (window.history.replaceState) {
         const cParam = (catScores || []).join(".");
         const ansEncoded = encodeAnswersCompact(answers);
-        let params = `?e=${econLeft}&s=${socialProg}&a=${civilLib}&d=${diploGlobal}&c=${cParam}&ans=${ansEncoded}`;
+        let params = `?e=${econLeft}&s=${socialProg}&a=${civilLib}&d=${diploGlobal}&c=${cParam}&ans=${ansEncoded}&lens=${perspectiveLens}`;
         if (friendComparison) {
             params += `&fe=${friendComparison.econLeft}&fs=${friendComparison.socialProg}&fa=${friendComparison.civilLib}&fd=${friendComparison.diploGlobal}&fn=${encodeURIComponent(friendComparison.name)}`;
         }
@@ -2310,28 +2528,7 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
 
     document.getElementById("shared-banner").style.display = isFromSharedUrl ? "flex" : "none";
 
-    const usLeftScore = Math.round(econLeft * 0.55 + socialProg * 0.45);
-    const usRightPos = 100 - usLeftScore;
-    document.getElementById("us-spectrum-marker").style.left = `${usRightPos}%`;
-
-    let usLabel = "Center / Moderate";
-    if (usLeftScore >= 80) usLabel = "Far Left";
-    else if (usLeftScore >= 62) usLabel = "Left / Progressive";
-    else if (usLeftScore >= 53) usLabel = "Center-Left";
-    else if (usLeftScore <= 20) usLabel = "Far Right";
-    else if (usLeftScore <= 38) usLabel = "Right / Conservative";
-    else if (usLeftScore <= 47) usLabel = "Center-Right";
-
-    document.getElementById("us-spectrum-text").innerHTML =
-        `You: <strong>${usLabel} (${usLeftScore}/100)</strong> · Typical American voter sits near the center (48/100)`;
-
-    const pewSorted = PEW_TYPOLOGIES.map(pt => {
-        const d = Math.sqrt(Math.pow(econLeft - pt.e, 2) + Math.pow(socialProg - pt.s, 2));
-        return { ...pt, d };
-    }).sort((a,b) => a.d - b.d);
-    const bestPew = pewSorted[0];
-    document.getElementById("pew-benchmark-text").innerHTML =
-        `<strong>Pew Research Political Typology Match: ${bestPew.name}</strong> — ${bestPew.desc}`;
+    const specData = getUsAndGlobalSpectrumData(econLeft, socialProg);
 
     document.getElementById("consistency-benchmark-text").innerHTML =
         getConsistencyDiagnostic(econLeft, socialProg);
@@ -2344,8 +2541,6 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
 
     document.getElementById("compass-caption").innerHTML =
         `Economic: <strong>${econLeft}/100</strong> (Left) · Social: <strong>${socialProg}/100</strong> (Progressive)`;
-
-    renderLandmarks();
 
     const scalesData = [
         { key: "econ", name: "Economic Axis", leftName: "Public / Left", rightName: "Market / Right", leftPct: econLeft, grad: "linear-gradient(90deg, #2563eb, #60a5fa)" },
@@ -2369,7 +2564,7 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
     `).join("");
 
     if (!catScores || catScores.length !== CATEGORY_META.length) {
-        catScores = CATEGORY_META.map(() => usLeftScore);
+        catScores = CATEGORY_META.map(() => specData.usScore);
     }
     document.getElementById("cat-breakdown-grid").innerHTML = CATEGORY_META.map((cat, idx) => {
         const sc = catScores[idx];
@@ -2423,21 +2618,11 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
     const intl = scoredProfiles.filter(p => p.group === "international").sort((a,b) => b.matchPct - a.matchPct);
 
     const topMatch = ideologies[0];
-    document.getElementById("primary-name").textContent = topMatch.name;
-    document.getElementById("primary-family").textContent = topMatch.family;
-    document.getElementById("primary-desc").textContent = topMatch.desc;
     document.getElementById("primary-tags").innerHTML = (topMatch.pillars || []).map(tag =>
         `<span class="pillar-tag">${tag}</span>`
     ).join("");
 
-    document.getElementById("glance-caucus").textContent = caucuses[0].name;
-    document.getElementById("glance-caucus-pct").textContent = `${caucuses[0].matchPct}%`;
-    document.getElementById("glance-figure").textContent = figures[0].name;
-    document.getElementById("glance-figure-pct").textContent = `${figures[0].matchPct}%`;
-    document.getElementById("glance-intl").textContent = intl[0].name;
-    document.getElementById("glance-intl-pct").textContent = `${intl[0].matchPct}%`;
-
-    document.title = `${topMatch.name} (${usLeftScore}/100) — Global Political Inventory`;
+    document.title = `${topMatch.name} (US: ${specData.usScore}/100 | Global: ${specData.globalScore}/100) — Global Political Inventory`;
 
     const renderList = (arr, limit, accentHex, barGrad) => arr.slice(0, limit).map((item, idx) => `
         <div class="match-item">
@@ -2463,8 +2648,10 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
 
     lastComputedResult = {
         topMatch,
-        usLabel,
-        usLeftScore,
+        usLabel: specData.usLabel,
+        usLeftScore: specData.usScore,
+        globalLabel: specData.globalLabel,
+        globalLeftScore: specData.globalScore,
         econLeft,
         socialProg,
         civilLib,
@@ -2478,8 +2665,8 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
         saveCompletedResultToStorage({
             primaryName: topMatch.name,
             primaryFamily: topMatch.family,
-            usLabel,
-            usLeftScore,
+            usLabel: specData.usLabel,
+            usLeftScore: specData.usScore,
             econLeft,
             socialProg,
             civilLib,
@@ -2490,9 +2677,7 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
         });
     }
 
-    renderFriendComparisonUI();
-    renderDivergences();
-    drawScorecardCanvas(lastComputedResult);
+    applyActiveLensToResultsUI();
 
     hideAllViews();
     document.getElementById("results-view").style.display = "block";
@@ -2500,11 +2685,11 @@ function computeAndDisplayResults(overrideScores = null, isFromSharedUrl = false
 }
 
 // ============================================================================
-// 2D COMPASS LANDMARKS
+// 2D COMPASS LANDMARKS (SUPPORTS LENS-SPECIFIC US vs. GLOBAL LANDMARKS)
 // ============================================================================
 function setMapOverlay(mode) {
     mapOverlayMode = mode;
-    ["both", "figures", "ideologies", "none"].forEach(m => {
+    ["lens", "both", "figures", "intl", "none"].forEach(m => {
         const btn = document.getElementById(`map-mode-${m}`);
         if (btn) btn.classList.toggle("active-tab", m === mode);
     });
@@ -2515,19 +2700,17 @@ function renderLandmarks() {
     const layer = document.getElementById("landmarks-layer");
     if (mapOverlayMode === "none") { layer.innerHTML = ""; return; }
 
-    const ideoPoints = [
-        { label: "DSA", e: 88, s: 90, type: "ideo" },
-        { label: "SocDem", e: 72, s: 78, type: "ideo" },
-        { label: "Center", e: 50, s: 52, type: "ideo" },
-        { label: "Neolib", e: 34, s: 68, type: "ideo" },
-        { label: "Libertarian", e: 12, s: 58, type: "ideo" },
-        { label: "Populist Right", e: 36, s: 15, type: "ideo" },
-        { label: "Conservative", e: 22, s: 22, type: "ideo" }
+    const usCaucusPoints = [
+        { label: "DSA", e: 90, s: 92, type: "ideo" },
+        { label: "Prog Caucus", e: 78, s: 86, type: "ideo" },
+        { label: "New Dems", e: 58, s: 72, type: "ideo" },
+        { label: "Blue Dogs", e: 48, s: 52, type: "ideo" },
+        { label: "Main Street GOP", e: 32, s: 38, type: "ideo" },
+        { label: "Freedom Caucus", e: 18, s: 12, type: "ideo" },
+        { label: "Libertarian (US)", e: 10, s: 58, type: "ideo" }
     ];
     const figurePoints = [
         { label: "Sanders", e: 86, s: 84, type: "fig" },
-        { label: "AOC", e: 88, s: 92, type: "fig" },
-        { label: "FDR", e: 76, s: 64, type: "fig" },
         { label: "Obama", e: 62, s: 76, type: "fig" },
         { label: "Clinton", e: 46, s: 64, type: "fig" },
         { label: "Reagan", e: 18, s: 22, type: "fig" },
@@ -2535,23 +2718,43 @@ function renderLandmarks() {
         { label: "Ron Paul", e: 10, s: 62, type: "fig" },
         { label: "Milei", e: 8, s: 36, type: "fig" }
     ];
+    const intlPartyPoints = [
+        { label: "Die Linke / LFI", e: 86, s: 86, type: "intl" },
+        { label: "EU Greens", e: 74, s: 88, type: "intl" },
+        { label: "UK Labour / SPD", e: 66, s: 74, type: "intl" },
+        { label: "LibDems / LPC", e: 56, s: 76, type: "intl" },
+        { label: "Renaissance", e: 40, s: 68, type: "intl" },
+        { label: "FDP / ACT", e: 22, s: 64, type: "intl" },
+        { label: "UK Tories / CDU", e: 28, s: 34, type: "intl" },
+        { label: "Reform / RN / AfD", e: 34, s: 16, type: "intl" }
+    ];
 
     let activePts = [];
-    if (mapOverlayMode === "both") activePts = [...ideoPoints, ...figurePoints];
-    else if (mapOverlayMode === "figures") activePts = figurePoints;
-    else if (mapOverlayMode === "ideologies") activePts = ideoPoints;
+    if (mapOverlayMode === "lens") {
+        activePts = perspectiveLens === "global"
+            ? [...intlPartyPoints]
+            : [...usCaucusPoints, ...figurePoints.slice(0, 6)];
+    } else if (mapOverlayMode === "both") {
+        activePts = [...usCaucusPoints.slice(0, 4), ...figurePoints.slice(0, 5), ...intlPartyPoints.slice(0, 5)];
+    } else if (mapOverlayMode === "figures") {
+        activePts = figurePoints;
+    } else if (mapOverlayMode === "intl") {
+        activePts = intlPartyPoints;
+    }
 
     layer.innerHTML = activePts.map(pt => {
         const x = 100 - pt.e;
         const y = 100 - pt.s;
-        const dotCls = pt.type === "fig" ? "landmark-dot figure-dot" : "landmark-dot";
-        const lblCls = pt.type === "fig" ? "landmark-label figure-label" : "landmark-label";
+        let dotCls = "landmark-dot";
+        let lblCls = "landmark-label";
+        if (pt.type === "fig") { dotCls += " figure-dot"; lblCls += " figure-label"; }
+        else if (pt.type === "intl") { dotCls += " intl-dot"; lblCls += " intl-label"; }
         return `<div class="${dotCls}" style="left:${x}%; top:${y}%;"></div><div class="${lblCls}" style="left:${x}%; top:${y}%;">${pt.label}</div>`;
     }).join("");
 }
 
 // ============================================================================
-// OVERFLOW-PROOF SCORECARD CANVAS GENERATOR (SUPPORTS FRIEND DOT OVERLAY)
+// OVERFLOW-PROOF SCORECARD CANVAS GENERATOR (ADAPTS TO US vs. GLOBAL LENS)
 // ============================================================================
 function fitCanvasText(ctx, text, maxWidth) {
     if (ctx.measureText(text).width <= maxWidth) return text;
@@ -2567,34 +2770,51 @@ function drawScorecardCanvas(res) {
     const canvas = document.getElementById("scorecard-canvas");
     const ctx = canvas.getContext("2d");
     const W = canvas.width, H = canvas.height;
+    const isGlobal = perspectiveLens === "global";
 
     ctx.fillStyle = "#0d1017";
     ctx.fillRect(0, 0, W, H);
 
     ctx.fillStyle = "#161922";
-    ctx.strokeStyle = "#282f3d";
+    ctx.strokeStyle = isGlobal ? "#4c1d95" : "#282f3d";
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.roundRect(24, 24, W - 48, H - 48, 16);
     ctx.fill();
     ctx.stroke();
 
-    ctx.fillStyle = "#60a5fa";
+    ctx.fillStyle = isGlobal ? "#a78bfa" : "#60a5fa";
     ctx.font = "bold 13px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
-    ctx.fillText("GLOBAL POLITICAL INVENTORY · 105-ITEM EMPIRICAL RESULTS", 56, 66);
+    ctx.fillText(
+        isGlobal
+            ? "GLOBAL POLITICAL INVENTORY · 🌍 INTERNATIONAL LENS RESULTS"
+            : "GLOBAL POLITICAL INVENTORY · 🇺🇸 US POLITICAL LENS RESULTS",
+        56, 66
+    );
+
+    const headlineName = isGlobal ? res.topIntl.name : res.topMatch.name;
+    const sublineText = isGlobal
+        ? `Global: ${res.globalLabel} (${res.globalLeftScore}/100) · US: ${res.usLabel} (${res.usLeftScore}/100)`
+        : `US: ${res.usLabel} (${res.usLeftScore}/100) · Global: ${res.globalLabel} (${res.globalLeftScore}/100)`;
 
     ctx.fillStyle = "#ffffff";
     ctx.font = "800 36px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
-    ctx.fillText(fitCanvasText(ctx, res.topMatch.name, 650), 56, 112);
+    ctx.fillText(fitCanvasText(ctx, headlineName, 650), 56, 112);
 
     ctx.fillStyle = "#9ca3af";
-    ctx.font = "500 17px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
-    ctx.fillText(fitCanvasText(ctx, res.topMatch.family, 650), 56, 140);
+    ctx.font = "500 16.5px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
+    ctx.fillText(fitCanvasText(ctx, sublineText, 650), 56, 140);
 
     const leftX = 56, leftW = 630;
+    const activeSpecScore = isGlobal ? res.globalLeftScore : res.usLeftScore;
+    const activeSpecLabel = isGlobal ? res.globalLabel : res.usLabel;
+
     ctx.fillStyle = "#f3f4f6";
     ctx.font = "bold 15.5px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
-    ctx.fillText(`US Political Spectrum: ${res.usLabel} (${res.usLeftScore}/100)`, leftX, 184);
+    ctx.fillText(
+        `${isGlobal ? "Global" : "US"} Spectrum: ${activeSpecLabel} (${activeSpecScore}/100)`,
+        leftX, 184
+    );
 
     const specGrad = ctx.createLinearGradient(leftX, 0, leftX + leftW, 0);
     specGrad.addColorStop(0, "#2563eb");
@@ -2605,13 +2825,14 @@ function drawScorecardCanvas(res) {
     ctx.roundRect(leftX, 196, leftW, 13, 6.5);
     ctx.fill();
 
-    const markerX = leftX + ((100 - res.usLeftScore) / 100) * leftW;
+    const markerX = leftX + ((100 - activeSpecScore) / 100) * leftW;
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(markerX - 3, 190, 6, 25);
 
     if (friendComparison) {
-        const fUs = Math.round(friendComparison.econLeft * 0.55 + friendComparison.socialProg * 0.45);
-        const fMarkerX = leftX + ((100 - fUs) / 100) * leftW;
+        const fSpec = getUsAndGlobalSpectrumData(friendComparison.econLeft, friendComparison.socialProg);
+        const fSc = isGlobal ? fSpec.globalScore : fSpec.usScore;
+        const fMarkerX = leftX + ((100 - fSc) / 100) * leftW;
         ctx.fillStyle = "#f43f5e";
         ctx.fillRect(fMarkerX - 3, 190, 6, 25);
     }
@@ -2730,23 +2951,33 @@ function drawScorecardCanvas(res) {
     ctx.textAlign = "right";
     ctx.fillText("Econ Right", boxX + boxSize - 10, boxY + boxSize / 2 - 8);
 
-    const canvasFigs = [
-        { n: "Sanders", e: 86, s: 84, align: "left" },
-        { n: "Obama", e: 62, s: 76, align: "left" },
-        { n: "Clinton", e: 46, s: 64, align: "left" },
-        { n: "Reagan", e: 18, s: 22, align: "right" },
-        { n: "Trump", e: 34, s: 16, align: "left" },
-        { n: "Ron Paul", e: 10, s: 62, align: "right" }
-    ];
-    canvasFigs.forEach(f => {
+    const canvasRefs = isGlobal
+        ? [
+            { n: "Die Linke/LFI", e: 86, s: 86, align: "left" },
+            { n: "UK Labour/SPD", e: 66, s: 74, align: "left" },
+            { n: "Renaissance", e: 40, s: 68, align: "left" },
+            { n: "FDP / ACT", e: 22, s: 64, align: "right" },
+            { n: "Tories / CDU", e: 28, s: 34, align: "right" },
+            { n: "Reform / RN", e: 34, s: 16, align: "left" }
+        ]
+        : [
+            { n: "Sanders", e: 86, s: 84, align: "left" },
+            { n: "Obama", e: 62, s: 76, align: "left" },
+            { n: "Clinton", e: 46, s: 64, align: "left" },
+            { n: "Reagan", e: 18, s: 22, align: "right" },
+            { n: "Trump", e: 34, s: 16, align: "left" },
+            { n: "Ron Paul", e: 10, s: 62, align: "right" }
+        ];
+
+    canvasRefs.forEach(f => {
         const fx = boxX + ((100 - f.e) / 100) * boxSize;
         const fy = boxY + ((100 - f.s) / 100) * boxSize;
-        ctx.fillStyle = "#fbbf24";
+        ctx.fillStyle = isGlobal ? "#a78bfa" : "#fbbf24";
         ctx.beginPath();
         ctx.arc(fx, fy, 4, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = "#fde68a";
+        ctx.fillStyle = isGlobal ? "#ddd6fe" : "#fde68a";
         ctx.font = "600 11.5px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
         if (f.align === "right") {
             ctx.textAlign = "right";
@@ -2761,7 +2992,6 @@ function drawScorecardCanvas(res) {
     const ux = boxX + ((100 - res.econLeft) / 100) * boxSize;
     const uy = boxY + ((100 - res.socialProg) / 100) * boxSize;
 
-    // Draw Friend Dot + Connector Line on Canvas if active
     if (friendComparison) {
         const fCx = boxX + ((100 - friendComparison.econLeft) / 100) * boxSize;
         const fCy = boxY + ((100 - friendComparison.socialProg) / 100) * boxSize;
@@ -2825,22 +3055,20 @@ function copyTextSummary() {
     const r = lastComputedResult;
     const lines = [
         `🧭 Global Political Inventory Results`,
-        `Primary Alignment: ${r.topMatch.name} (${r.usLabel} · ${r.usLeftScore}/100)`,
-        `• Economic: ${r.econLeft}/100 Left | Social: ${r.socialProg}/100 Progressive`,
-        `• Civil Liberties: ${r.civilLib}/100 Libertarian | Diplomatic: ${r.diploGlobal}/100 Globalist`,
-        `• Closest US Caucus: ${r.topCaucus.name} (${r.topCaucus.matchPct}%)`,
-        `• Closest Political Figure: ${r.topFigure.name} (${r.topFigure.matchPct}%)`,
-        `• Closest Intl Party: ${r.topIntl.name} (${r.topIntl.matchPct}%)`
+        `• 🇺🇸 US Spectrum: ${r.topMatch.name} (${r.usLabel} · ${r.usLeftScore}/100)`,
+        `• 🌍 Global Spectrum: ${r.topIntl.name} (${r.globalLabel} · ${r.globalLeftScore}/100)`,
+        `• 4 Axes: Economic ${r.econLeft}/100 Left | Social ${r.socialProg}/100 Prog | Civil Lib ${r.civilLib}/100 | Globalist ${r.diploGlobal}/100`,
+        `• Closest US Caucus: ${r.topCaucus.name} (${r.topCaucus.matchPct}%) | Closest Leader: ${r.topFigure.name} (${r.topFigure.matchPct}%)`
     ];
     if (friendComparison) {
         lines.push(`• Compared with ${friendComparison.name}: ${friendComparison.topMatch.name} (Econ ${friendComparison.econLeft}/100, Social ${friendComparison.socialProg}/100)`);
     }
-    lines.push(`View my full interactive compass: ${window.location.href}`);
+    lines.push(`View my US & Global political compass: ${window.location.href}`);
 
     navigator.clipboard.writeText(lines.join("\n")).then(() => {
         const btn = document.getElementById("btn-copy-summary");
         const old = btn.textContent;
-        btn.textContent = "✅ Copied Text Summary!";
+        btn.textContent = "✅ Copied US & Global Summary!";
         setTimeout(() => { btn.textContent = old; }, 2200);
     });
 }
@@ -2848,7 +3076,7 @@ function copyTextSummary() {
 function downloadScorecardPNG() {
     const canvas = document.getElementById("scorecard-canvas");
     const link = document.createElement("a");
-    link.download = "political-inventory-scorecard.png";
+    link.download = `political-inventory-${perspectiveLens}-scorecard.png`;
     link.href = canvas.toDataURL("image/png");
     link.click();
 }
@@ -2859,7 +3087,7 @@ function nativeShare() {
     if (navigator.share) {
         navigator.share({
             title: `My Political Alignment: ${r.topMatch.name}`,
-            text: `I scored ${r.topMatch.name} (Econ: ${r.econLeft}/100, Social: ${r.socialProg}/100) on the 105-item Global Political Inventory.`,
+            text: `US View: ${r.usLabel} (${r.usLeftScore}/100) | Global View: ${r.globalLabel} (${r.globalLeftScore}/100) on the 105-item Global Political Inventory.`,
             url: window.location.href
         }).catch(() => {});
     } else {
@@ -2868,11 +3096,16 @@ function nativeShare() {
 }
 
 // ============================================================================
-// BOOTSTRAP ON PAGE LOAD (SHARED URL -> UNFINISHED -> COMPLETED -> HOME)
+// BOOTSTRAP ON PAGE LOAD
 // ============================================================================
 (function init() {
     initHomeScreen();
     const params = new URLSearchParams(window.location.search);
+    if (params.has("lens") && params.get("lens") === "global") {
+        perspectiveLens = "global";
+        document.getElementById("lens-btn-us").className = "lens-pill-btn";
+        document.getElementById("lens-btn-global").className = "lens-pill-btn active-global";
+    }
     if (params.has("e") && params.has("s") && params.has("a") && params.has("d")) {
         const e = Math.max(0, Math.min(100, parseInt(params.get("e"), 10) || 50));
         const s = Math.max(0, Math.min(100, parseInt(params.get("s"), 10) || 50));
@@ -2886,7 +3119,6 @@ function nativeShare() {
             const decoded = decodeAnswersCompact(params.get("ans"), QUESTION_BANK.length);
             if (decoded) answers = decoded;
         }
-        // Check if URL also includes a Friend Comparison overlay
         if (params.has("fe") && params.has("fs")) {
             const fe = Math.max(0, Math.min(100, parseInt(params.get("fe"), 10) || 50));
             const fs = Math.max(0, Math.min(100, parseInt(params.get("fs"), 10) || 50));
